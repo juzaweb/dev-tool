@@ -24,6 +24,6 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::prefix(config('juzaweb.admin_prefix'))
             ->middleware('admin')
-            ->group(__DIR__.'/../routes/admin.php');
+            ->group(__DIR__.'/../../routes/admin.php');
     }
 }
