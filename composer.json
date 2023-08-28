@@ -18,6 +18,7 @@
         "php": "^8.0|^8.1"
     },
     "require-dev": {
-        "roave/security-advisories": "dev-latest"
+        "roave/security-advisories": "dev-latest",
+        "juzaweb/modules": "dev-latest"
     }
 }
