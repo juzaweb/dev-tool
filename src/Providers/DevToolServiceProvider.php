@@ -100,6 +100,6 @@ class DevToolServiceProvider extends ServiceProvider
      */
     public function setupStubPath(): void
     {
-        Stub::setBasePath(__DIR__ . '/../stubs/plugin');
+        Stub::setBasePath(__DIR__ . '/../../stubs/plugin');
     }
 }

@@ -1,11 +1,11 @@
 {
-    "name": "juzaweb/modules",
-    "description": "Modules for Juzaweb CMS",
+    "name": "juzaweb/dev-tool",
+    "description": "Develop Tool for Juzaweb CMS",
     "license": "GPL-2.0",
     "extra": {
         "laravel": {
             "providers": [
-                "Juzaweb\\CMS\\Providers\\CmsServiceProvider"
+                "Juzaweb\\DevTool\\Providers\\DevToolServiceProvider"
             ]
         }
     },
