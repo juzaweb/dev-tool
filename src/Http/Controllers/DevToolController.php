@@ -19,8 +19,6 @@ use Juzaweb\CMS\Contracts\LocalThemeRepositoryContract;
 
 class DevToolController extends Controller
 {
-    protected string $template = 'inertia';
-
     public function __construct(
         protected LocalPluginRepositoryContract $pluginRepository,
         protected LocalThemeRepositoryContract $themeRepository
@@ -33,7 +31,7 @@ class DevToolController extends Controller
         $title = __('Dev Tool');
 
         return $this->view(
-            'dev-tool/index',
+            'cms::backend.dev-tool/index',
             compact('title')
         );
     }

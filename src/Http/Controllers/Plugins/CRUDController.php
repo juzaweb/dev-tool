@@ -16,7 +16,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 use Inertia\Response;
 use Juzaweb\CMS\Contracts\LocalPluginRepositoryContract;
 use Juzaweb\DevTool\Http\Controllers\Controller;
