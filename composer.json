@@ -1,5 +1,6 @@
 {
     "name": "juzaweb/dev-tool",
+    "homepage": "https://juzaweb.com",
     "description": "Develop Tool for Juzaweb CMS",
     "license": "GPL-2.0",
     "extra": {
