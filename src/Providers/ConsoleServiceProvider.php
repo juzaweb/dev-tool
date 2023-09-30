@@ -3,9 +3,7 @@
 namespace Juzaweb\DevTool\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Juzaweb\DevTool\Commands\CacheSizeCommand;
 use Juzaweb\DevTool\Commands\FindFillableColumnCommand;
-use Juzaweb\DevTool\Commands\MakeAdminCommand;
 use Juzaweb\DevTool\Commands\Plugin;
 use Juzaweb\DevTool\Commands\Plugin\ActionMakeCommand;
 use Juzaweb\DevTool\Commands\Plugin\CommandMakeCommand;
@@ -72,14 +70,12 @@ class ConsoleServiceProvider extends ServiceProvider
         ActionMakeCommand::class,
         Plugin\DatatableMakeCommand::class,
         Resource\JuzawebResouceMakeCommand::class,
-        MakeAdminCommand::class,
         Theme\GenerateDataThemeCommand::class,
         Theme\DownloadStyleCommand::class,
         Theme\DownloadTemplateCommand::class,
         Plugin\UpdateCommand::class,
         Theme\ThemeUpdateCommand::class,
         Theme\MakeBlockCommand::class,
-        CacheSizeCommand::class,
         Plugin\Translation\ImportTranslationCommand::class,
         Plugin\Translation\TranslateViaGoogleCommand::class,
         Plugin\Translation\ExportTranslationCommand::class,
