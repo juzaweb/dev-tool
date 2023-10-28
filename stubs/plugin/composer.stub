@@ -1,5 +1,7 @@
 {
     "name": "$LOWER_NAME$",
+    "type": "juzaweb-plugin",
+    "license": "MIT",
     "description": "$DESCRIPTION$",
     "extra": {
         "juzaweb": {
