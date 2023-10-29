@@ -18,5 +18,9 @@
         "psr-4": {
             "$MODULE_NAMESPACE$\\": "src/"
         }
+    },
+    "require-dev": {
+        "juzaweb/modules": "^1.0",
+        "juzaweb/dev-tool": "^1.0"
     }
 }
