@@ -28,7 +28,12 @@ class GithubReleaseModuleCommand extends Command
         $token = $this->getGithubToken();
         $repo = $this->runCmd('git config --get remote.origin.url | sed \'s/.*[:|\/]\([^/]*\/[^/]*\)\.git$/\1/\'');
         $lastTag = $this->runCmd('git describe --abbrev=0 --tags');
-        $body = $this->runCmd("git log --no-merges --pretty=format:\"* %s\" {$lastTag}..HEAD | sort | uniq");
+        if (empty($lastTag)) {
+            $body = $this->runCmd("git log --no-merges --pretty=format:\"* %s\" | sort | uniq");
+        } else {
+            $body = $this->runCmd("git log --no-merges --pretty=format:\"* %s\" {$lastTag}..HEAD | sort | uniq");
+        }
+
         $newTag = $this->getReleaseVersion($lastTag);
 
         $this->info("Release v{$newTag}");
@@ -71,6 +76,10 @@ class GithubReleaseModuleCommand extends Command
     {
         if ($version = $this->option('ver')) {
             return $version;
+        }
+
+        if (empty($lastTag)) {
+            return '1.0.0';
         }
 
         $split = explode('.', $lastTag);
