@@ -7,8 +7,6 @@
         "juzaweb": {
             "name": "$LOWER_NAME$",
             "domain": "$MODULE_DOMAIN$",
-            "cms_min": "$CMS_MIN_VERSION$",
-            "version": "$VERSION$",
             "providers": [
                 "$MODULE_NAMESPACE$\\$PROVIDER_NAMESPACE$\\$MODULE_NAME$ServiceProvider"
             ]
@@ -20,7 +18,7 @@
         }
     },
     "require-dev": {
-        "juzaweb/modules": "^1.0",
-        "juzaweb/dev-tool": "^1.0"
+         "juzaweb/modules": "^1.0",
+         "juzaweb/dev-tool": "^1.0"
     }
 }
