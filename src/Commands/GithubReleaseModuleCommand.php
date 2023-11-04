@@ -55,7 +55,12 @@ class GithubReleaseModuleCommand extends Command
             )
             ->throw();
 
-        File::prepend(base_path($this->argument('path')."/changelog.md"), "### v{$newTag} \n{$body}\n\n");
+        if ($this->option('changelog')) {
+            File::prepend(
+                base_path($this->argument('path')."/changelog.md"),
+                "### v{$newTag} \n{$body}\n\n"
+            );
+        }
 
         $this->info('Released url: '. $release->json()['html_url']);
     }
@@ -120,7 +125,8 @@ class GithubReleaseModuleCommand extends Command
     protected function getOptions(): array
     {
         return [
-            ['ver', null, InputOption::VALUE_OPTIONAL, 'Version to release.', null],
+            ['ver', null, InputOption::VALUE_OPTIONAL, 'Version to release. Auto increment version if not set', null],
+            ['changelog', null, InputOption::VALUE_OPTIONAL, 'Write to changelog.md. Default: true', true],
         ];
     }
 }
