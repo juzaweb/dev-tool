@@ -87,6 +87,7 @@ class ConsoleServiceProvider extends ServiceProvider
         FindFillableColumnCommand::class,
         Resource\CRUDMakeCommand::class,
         GithubReleaseModuleCommand::class,
+        Theme\ThemeActiveCommand::class,
     ];
 
     /**
