@@ -52,7 +52,7 @@ class GithubReleaseModuleCommand extends Command
 
         File::prepend(base_path($this->argument('path')."/changelog.md"), "### v{$newTag} \n{$body}\n\n");
 
-        $this->info($release->json());
+        $this->info('Released url: '. $release->json()['html_url']);
     }
 
     protected function getGithubToken(): string
