@@ -37,7 +37,7 @@ class DumpCommand extends Command
         }
     }
 
-    public function dump($module)
+    public function dump($module): void
     {
         $module = $this->laravel['plugins']->findOrFail($module);
 
@@ -53,7 +53,7 @@ class DumpCommand extends Command
      *
      * @return array
      */
-    protected function getArguments()
+    protected function getArguments(): array
     {
         return [
             ['module', InputArgument::OPTIONAL, 'Plugin name.'],
