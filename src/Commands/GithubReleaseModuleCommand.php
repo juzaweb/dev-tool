@@ -25,12 +25,7 @@ class GithubReleaseModuleCommand extends Command
 
     public function handle(): void
     {
-        $token = $this->ask('Please enter your github token: ');
-        if (! $token) {
-            $this->error('Please enter your github token.');
-            return;
-        }
-
+        $token = $this->getGithubToken();
         $repo = $this->runCmd('git config --get remote.origin.url | sed \'s/.*[:|\/]\([^/]*\/[^/]*\)\.git$/\1/\'');
         $lastTag = $this->runCmd('git describe --abbrev=0 --tags');
         $body = $this->runCmd("git log --no-merges --pretty=format:\"* %s\" {$lastTag}..HEAD | sort | uniq");
@@ -58,6 +53,18 @@ class GithubReleaseModuleCommand extends Command
         File::prepend(base_path($this->argument('path')."/changelog.md"), "### v{$newTag} \n{$body}\n\n");
 
         $this->info($release->json());
+    }
+
+    protected function getGithubToken(): string
+    {
+        $token = config('dev-tool.release.github_token');
+        if (empty($token)) {
+            do {
+                $token = $this->ask('Please enter your github token: ');
+            } while (empty($token));
+        }
+
+        return $token;
     }
 
     protected function getReleaseVersion(string $lastTag): string

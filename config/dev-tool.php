@@ -4,6 +4,10 @@ return [
     // Enable dev tool in production
     'enable' => (bool) env('JW_DEV_TOOL_ENABLE', false),
 
+    'release' => [
+        'github_token' => env('JW_RELEASE_GITHUB_TOKEN'),
+    ],
+
     'themes' => [
         'options' => [
             'post-types' => [
