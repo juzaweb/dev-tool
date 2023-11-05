@@ -30,9 +30,9 @@ class GithubReleaseModuleCommand extends Command
         $lastTag = $this->getLastTag();
 
         if (empty($lastTag)) {
-            $body = $this->runCmd("git log --no-merges --pretty=format:\"* %s\" | sort | uniq");
+            $body = $this->runCmd("git log --no-merges --pretty=format:\"* %s\" | uniq");
         } else {
-            $body = $this->runCmd("git log --no-merges --pretty=format:\"* %s\" {$lastTag}..HEAD | sort | uniq");
+            $body = $this->runCmd("git log --no-merges --pretty=format:\"* %s\" {$lastTag}..HEAD | uniq");
         }
 
         if (empty($body)) {
