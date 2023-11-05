@@ -27,7 +27,8 @@ class GithubReleaseModuleCommand extends Command
     {
         $token = $this->getGithubToken();
         $repo = $this->runCmd('git config --get remote.origin.url | sed \'s/.*[:|\/]\([^/]*\/[^/]*\)\.git$/\1/\'');
-        $lastTag = $this->runCmd('git describe --abbrev=0 --tags');
+        $lastTag = $this->getLastTag();
+
         if (empty($lastTag)) {
             $body = $this->runCmd("git log --no-merges --pretty=format:\"* %s\" | sort | uniq");
         } else {
@@ -63,6 +64,17 @@ class GithubReleaseModuleCommand extends Command
         }
 
         $this->info('Released url: '. $release->json()['html_url']);
+    }
+
+    protected function getLastTag(): string
+    {
+        try {
+            $lastTag = $this->runCmd('git describe --abbrev=0 --tags');
+        } catch (\Exception $e) {
+            $lastTag = '';
+        }
+
+        return $lastTag;
     }
 
     protected function getGithubToken(): string
