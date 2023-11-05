@@ -35,6 +35,19 @@ class GithubReleaseModuleCommand extends Command
             $body = $this->runCmd("git log --no-merges --pretty=format:\"* %s\" {$lastTag}..HEAD | sort | uniq");
         }
 
+        if (empty($body)) {
+            $this->info('Nothing to release');
+            return;
+        }
+
+        $body = collect(explode("\n", $body))
+            ->filter(
+                function ($item) {
+                    return !empty($item) && !str_contains($item, ':construction:');
+                }
+            )
+            ->implode("\n");
+
         $newTag = $this->getReleaseVersion($lastTag);
 
         $this->info("Release v{$newTag}");
