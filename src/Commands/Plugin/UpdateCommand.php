@@ -5,7 +5,7 @@ namespace Juzaweb\DevTool\Commands\Plugin;
 use Illuminate\Console\Command;
 use Juzaweb\CMS\Support\Plugin;
 use Juzaweb\CMS\Support\Updater\PluginUpdater;
-use Juzaweb\CMS\Traits\ModuleCommandTrait;
+use Juzaweb\DevTool\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 

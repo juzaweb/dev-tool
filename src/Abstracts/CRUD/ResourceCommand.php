@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Juzaweb\CMS\Support\Config\GenerateConfigReader;
 use Juzaweb\CMS\Support\Plugin;
-use Juzaweb\CMS\Traits\ModuleCommandTrait;
+use Juzaweb\DevTool\Traits\ModuleCommandTrait;
 
 abstract class ResourceCommand extends Command
 {

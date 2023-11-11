@@ -6,8 +6,8 @@ use Illuminate\Support\Str;
 use Juzaweb\CMS\Support\Config\GenerateConfigReader;
 use Juzaweb\CMS\Support\Plugin;
 use Juzaweb\CMS\Support\Stub;
-use Juzaweb\CMS\Traits\ModuleCommandTrait;
 use Juzaweb\DevTool\Abstracts\GeneratorCommand;
+use Juzaweb\DevTool\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -134,7 +134,7 @@ class ControllerMakeCommand extends GeneratorCommand
     {
         return [
             ['controller', InputArgument::REQUIRED, 'The name of the controller class.'],
-            ['module', InputArgument::OPTIONAL, 'The name of plugin will be used.'],
+            ['module', InputArgument::OPTIONAL, 'The name of plugin will be used.', null],
         ];
     }
 

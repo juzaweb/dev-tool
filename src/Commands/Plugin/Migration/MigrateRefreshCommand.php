@@ -3,7 +3,7 @@
 namespace Juzaweb\DevTool\Commands\Plugin\Migration;
 
 use Illuminate\Console\Command;
-use Juzaweb\CMS\Traits\ModuleCommandTrait;
+use Juzaweb\DevTool\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
