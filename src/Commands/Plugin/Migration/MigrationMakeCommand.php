@@ -126,7 +126,7 @@ class MigrationMakeCommand extends GeneratorCommand
         );
     }
 
-    public function getClass()
+    public function getClass(): string
     {
         return $this->getClassName();
     }
@@ -134,7 +134,7 @@ class MigrationMakeCommand extends GeneratorCommand
     /**
      * @return string
      */
-    private function getClassName()
+    private function getClassName(): string
     {
         return Str::studly($this->argument('name'));
     }
@@ -144,7 +144,7 @@ class MigrationMakeCommand extends GeneratorCommand
      *
      * @return SchemaParser
      */
-    public function getSchemaParser()
+    public function getSchemaParser(): SchemaParser
     {
         return new SchemaParser($this->option('fields'));
     }
@@ -168,7 +168,7 @@ class MigrationMakeCommand extends GeneratorCommand
     /**
      * @return string
      */
-    private function getFileName()
+    private function getFileName(): string
     {
         return date('Y_m_d_His_').$this->getSchemaName();
     }
@@ -176,7 +176,7 @@ class MigrationMakeCommand extends GeneratorCommand
     /**
      * @return array|string
      */
-    private function getSchemaName()
+    private function getSchemaName(): array|string
     {
         return $this->argument('name');
     }
