@@ -1,6 +1,6 @@
 <?php
 
-namespace Juzaweb\DevTool\Commands\Plugin;
+namespace Juzaweb\DevTool\Commands\Plugin\Makers;
 
 use Illuminate\Support\Str;
 use Juzaweb\CMS\Support\Config\GenerateConfigReader;
@@ -9,7 +9,7 @@ use Juzaweb\DevTool\Abstracts\GeneratorCommand;
 use Juzaweb\DevTool\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
 
-class PolicyMakeCommand extends GeneratorCommand
+class FactoryMakeCommand extends GeneratorCommand
 {
     use ModuleCommandTrait;
 
@@ -25,21 +25,14 @@ class PolicyMakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'plugin:make-policy';
+    protected $name = 'plugin:make-factory';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a new policy class for the specified plugin.';
-
-    public function getDefaultNamespace(): string
-    {
-        $module = $this->laravel['plugins'];
-
-        return $module->config('paths.generator.policies.namespace') ?: $module->config('paths.generator.policies.path', 'Policies');
-    }
+    protected $description = 'Create a new model factory for the specified plugin.';
 
     /**
      * Get the console command arguments.
@@ -49,7 +42,7 @@ class PolicyMakeCommand extends GeneratorCommand
     protected function getArguments()
     {
         return [
-            ['name', InputArgument::REQUIRED, 'The name of the policy class.'],
+            ['name', InputArgument::REQUIRED, 'The name of the factory.'],
             ['module', InputArgument::OPTIONAL, 'The name of plugin will be used.'],
         ];
     }
@@ -59,12 +52,7 @@ class PolicyMakeCommand extends GeneratorCommand
      */
     protected function getTemplateContents()
     {
-        $module = $this->laravel['plugins']->findOrFail($this->getModuleName());
-
-        return (new Stub('/policy.plain.stub', [
-            'NAMESPACE' => $this->getClassNamespace($module),
-            'CLASS' => $this->getClass(),
-        ]))->render();
+        return (new Stub('/factory.stub'))->render();
     }
 
     /**
@@ -74,9 +62,9 @@ class PolicyMakeCommand extends GeneratorCommand
     {
         $path = $this->laravel['plugins']->getModulePath($this->getModuleName());
 
-        $policyPath = GenerateConfigReader::read('policies');
+        $factoryPath = GenerateConfigReader::read('factory');
 
-        return $path . $policyPath->getPath() . '/' . $this->getFileName() . '.php';
+        return $path . $factoryPath->getPath() . '/' . $this->getFileName();
     }
 
     /**
@@ -84,6 +72,6 @@ class PolicyMakeCommand extends GeneratorCommand
      */
     private function getFileName()
     {
-        return Str::studly($this->argument('name'));
+        return Str::studly($this->argument('name')) . '.php';
     }
 }

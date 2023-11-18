@@ -65,13 +65,13 @@ class MigrateCommand extends Command
         $path = str_replace(base_path(), '', (new Migrator($module, $this->getLaravel()))->getPath());
 
         if ($this->option('subpath')) {
-            $path = $path . "/" . $this->option("subpath");
+            $path .= "/".$this->option("subpath");
         }
 
         $this->call(
             'migrate',
             [
-                '--path' => $path,
+                '--path' => "{$path}/*",
                 '--database' => $this->option('database'),
                 '--pretend' => $this->option('pretend'),
                 '--force' => $this->option('force'),

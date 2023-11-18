@@ -1,6 +1,6 @@
 <?php
 
-namespace Juzaweb\DevTool\Commands\Plugin;
+namespace Juzaweb\DevTool\Commands\Plugin\Statuses;
 
 use Illuminate\Console\Command;
 use Juzaweb\CMS\Support\Plugin;

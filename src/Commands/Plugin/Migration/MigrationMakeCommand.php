@@ -9,6 +9,8 @@ use Juzaweb\CMS\Support\Migrations\SchemaParser;
 use Juzaweb\CMS\Support\Stub;
 use Juzaweb\DevTool\Abstracts\GeneratorCommand;
 use Juzaweb\DevTool\Traits\ModuleCommandTrait;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -47,7 +49,7 @@ class MigrationMakeCommand extends GeneratorCommand
      *
      * @return array
      */
-    protected function getArguments()
+    protected function getArguments(): array
     {
         return [
             ['name', InputArgument::REQUIRED, 'The migration name will be created.'],
@@ -60,7 +62,7 @@ class MigrationMakeCommand extends GeneratorCommand
      *
      * @return array
      */
-    protected function getOptions()
+    protected function getOptions(): array
     {
         return [
             ['fields', null, InputOption::VALUE_OPTIONAL, 'The specified fields table.', null],
@@ -69,46 +71,59 @@ class MigrationMakeCommand extends GeneratorCommand
     }
 
     /**
-     * @throws \InvalidArgumentException
-     *
-     * @return mixed
+     * @return Stub
      */
-    protected function getTemplateContents()
+    protected function getTemplateContents(): Stub
     {
         $parser = new NameParser($this->argument('name'));
         $module = $this->laravel['plugins']->findOrFail($this->getModuleName());
 
         if ($parser->isCreate()) {
-            return Stub::create('/migration/create.stub', [
+            return Stub::create(
+                '/migration/create.stub',
+                [
                 'class' => $this->getClass(),
-                'table' => $module->getDomainName() .'_' . $parser->getTableName(),
+                'table' => $module->getDomainName().'_'.$parser->getTableName(),
                 'fields' => $this->getSchemaParser()->render(),
-            ]);
+                ]
+            );
         } elseif ($parser->isAdd()) {
-            return Stub::create('/migration/add.stub', [
+            return Stub::create(
+                '/migration/add.stub',
+                [
                 'class' => $this->getClass(),
                 'table' => $parser->getTableName(),
                 'fields_up' => $this->getSchemaParser()->up(),
                 'fields_down' => $this->getSchemaParser()->down(),
-            ]);
+                ]
+            );
         } elseif ($parser->isDelete()) {
-            return Stub::create('/migration/delete.stub', [
+            return Stub::create(
+                '/migration/delete.stub',
+                [
                 'class' => $this->getClass(),
                 'table' => $parser->getTableName(),
                 'fields_down' => $this->getSchemaParser()->up(),
                 'fields_up' => $this->getSchemaParser()->down(),
-            ]);
+                ]
+            );
         } elseif ($parser->isDrop()) {
-            return Stub::create('/migration/drop.stub', [
+            return Stub::create(
+                '/migration/drop.stub',
+                [
                 'class' => $this->getClass(),
                 'table' => $parser->getTableName(),
                 'fields' => $this->getSchemaParser()->render(),
-            ]);
+                ]
+            );
         }
 
-        return Stub::create('/migration/plain.stub', [
+        return Stub::create(
+            '/migration/plain.stub',
+            [
             'class' => $this->getClass(),
-        ]);
+            ]
+        );
     }
 
     public function getClass()
@@ -135,15 +150,19 @@ class MigrationMakeCommand extends GeneratorCommand
     }
 
     /**
-     * @return mixed
+     * @return string
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    protected function getDestinationFilePath()
+    protected function getDestinationFilePath(): string
     {
         $path = $this->laravel['plugins']->getModulePath($this->getModuleName());
 
         $generatorPath = GenerateConfigReader::read('migration');
 
-        return $path . $generatorPath->getPath() . '/' . $this->getFileName() . '.php';
+        $monthPath = date('Y-m');
+
+        return $path.$generatorPath->getPath()."/{$monthPath}/".$this->getFileName().'.php';
     }
 
     /**
@@ -151,7 +170,7 @@ class MigrationMakeCommand extends GeneratorCommand
      */
     private function getFileName()
     {
-        return date('Y_m_d_His_') . $this->getSchemaName();
+        return date('Y_m_d_His_').$this->getSchemaName();
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Juzaweb\DevTool\Commands\Plugin;
+namespace Juzaweb\DevTool\Commands\Plugin\Makers;
 
 use Illuminate\Support\Str;
 use Juzaweb\CMS\Support\Config\GenerateConfigReader;
@@ -10,7 +10,7 @@ use Juzaweb\DevTool\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
-class CommandMakeCommand extends GeneratorCommand
+class ActionMakeCommand extends GeneratorCommand
 {
     use ModuleCommandTrait;
 
@@ -26,18 +26,18 @@ class CommandMakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'plugin:make-command';
+    protected $name = 'plugin:make-action';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Generate new Artisan command for the specified plugin.';
+    protected $description = 'Generate new action for the specified plugin.';
 
     public function getDefaultNamespace(): string
     {
-        return 'Commands';
+        return 'Actions';
     }
 
     /**
@@ -45,7 +45,7 @@ class CommandMakeCommand extends GeneratorCommand
      *
      * @return array
      */
-    protected function getArguments(): array
+    protected function getArguments()
     {
         return [
             ['name', InputArgument::REQUIRED, 'The name of the command.'],
@@ -58,7 +58,7 @@ class CommandMakeCommand extends GeneratorCommand
      *
      * @return array
      */
-    protected function getOptions(): array
+    protected function getOptions()
     {
         return [
             ['command', null, InputOption::VALUE_OPTIONAL, 'The terminal command that should be assigned.', null],
@@ -66,40 +66,29 @@ class CommandMakeCommand extends GeneratorCommand
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    protected function getTemplateContents(): string
+    protected function getTemplateContents()
     {
         $module = $this->laravel['plugins']->findOrFail($this->getModuleName());
 
-        return (
-            new Stub(
-                '/command.stub',
-                [
-                    'COMMAND_NAME' => $this->getCommandName(),
-                    'NAMESPACE' => $this->getClassNamespace($module),
-                    'CLASS' => $this->getClass(),
-                ]
-            )
-        )->render();
+        return (new Stub(
+            '/action.stub',
+            [
+                'NAMESPACE' => $this->getClassNamespace($module),
+                'CLASS' => $this->getClass(),
+            ]
+        ))->render();
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    private function getCommandName(): string
-    {
-        return $this->option('command') ?: 'command:name';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getDestinationFilePath(): string
+    protected function getDestinationFilePath()
     {
         $path = $this->laravel['plugins']->getModulePath($this->getModuleName());
 
-        $commandPath = GenerateConfigReader::read('command');
+        $commandPath = GenerateConfigReader::read('action');
 
         return $path . $commandPath->getPath() . '/' . $this->getFileName() . '.php';
     }
@@ -107,8 +96,16 @@ class CommandMakeCommand extends GeneratorCommand
     /**
      * @return string
      */
-    private function getFileName(): string
+    private function getFileName()
     {
         return Str::studly($this->argument('name'));
+    }
+
+    /**
+     * @return string
+     */
+    private function getCommandName()
+    {
+        return $this->option('command') ?: 'command:name';
     }
 }

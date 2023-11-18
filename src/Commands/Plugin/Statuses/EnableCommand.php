@@ -1,9 +1,8 @@
 <?php
 
-namespace Juzaweb\DevTool\Commands\Plugin;
+namespace Juzaweb\DevTool\Commands\Plugin\Statuses;
 
 use Illuminate\Console\Command;
-use Juzaweb\Backend\Events\DumpAutoloadPlugin;
 use Juzaweb\CMS\Support\Plugin;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -45,7 +44,7 @@ class EnableCommand extends Command
      *
      * @return array
      */
-    protected function getArguments()
+    protected function getArguments(): array
     {
         return [
             ['module', InputArgument::REQUIRED, 'Plugin name.'],

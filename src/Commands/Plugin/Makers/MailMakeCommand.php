@@ -1,6 +1,6 @@
 <?php
 
-namespace Juzaweb\DevTool\Commands\Plugin;
+namespace Juzaweb\DevTool\Commands\Plugin\Makers;
 
 use Illuminate\Support\Str;
 use Juzaweb\CMS\Support\Config\GenerateConfigReader;
@@ -9,34 +9,31 @@ use Juzaweb\DevTool\Abstracts\GeneratorCommand;
 use Juzaweb\DevTool\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
 
-class RequestMakeCommand extends GeneratorCommand
+class MailMakeCommand extends GeneratorCommand
 {
     use ModuleCommandTrait;
-
-    /**
-     * The name of argument name.
-     *
-     * @var string
-     */
-    protected string $argumentName = 'name';
 
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'plugin:make-request';
+    protected $name = 'plugin:make-mail';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a new form request class for the specified plugin.';
+    protected $description = 'Create a new email class for the specified plugin';
+
+    protected string $argumentName = 'name';
 
     public function getDefaultNamespace(): string
     {
-        return 'Http/Requests';
+        $module = $this->laravel['plugins'];
+
+        return $module->config('paths.generator.emails.namespace') ?: $module->config('paths.generator.emails.path', 'Emails');
     }
 
     /**
@@ -47,34 +44,38 @@ class RequestMakeCommand extends GeneratorCommand
     protected function getArguments()
     {
         return [
-            ['name', InputArgument::REQUIRED, 'The name of the form request class.'],
+            ['name', InputArgument::REQUIRED, 'The name of the mailable.'],
             ['module', InputArgument::OPTIONAL, 'The name of plugin will be used.'],
         ];
     }
 
     /**
-     * @return mixed
+     * Get template contents.
+     *
+     * @return string
      */
     protected function getTemplateContents()
     {
         $module = $this->laravel['plugins']->findOrFail($this->getModuleName());
 
-        return (new Stub('/request.stub', [
+        return (new Stub('/mail.stub', [
             'NAMESPACE' => $this->getClassNamespace($module),
             'CLASS' => $this->getClass(),
         ]))->render();
     }
 
     /**
-     * @return mixed
+     * Get the destination file path.
+     *
+     * @return string
      */
     protected function getDestinationFilePath()
     {
         $path = $this->laravel['plugins']->getModulePath($this->getModuleName());
 
-        $requestPath = GenerateConfigReader::read('request');
+        $mailPath = GenerateConfigReader::read('emails');
 
-        return $path . $requestPath->getPath() . '/' . $this->getFileName() . '.php';
+        return $path . $mailPath->getPath() . '/' . $this->getFileName() . '.php';
     }
 
     /**

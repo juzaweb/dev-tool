@@ -1,6 +1,6 @@
 <?php
 
-namespace Juzaweb\DevTool\Commands\Plugin;
+namespace Juzaweb\DevTool\Commands\Plugin\Makers;
 
 use Illuminate\Support\Str;
 use Juzaweb\CMS\Support\Config\GenerateConfigReader;
@@ -9,7 +9,7 @@ use Juzaweb\DevTool\Abstracts\GeneratorCommand;
 use Juzaweb\DevTool\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
 
-class FactoryMakeCommand extends GeneratorCommand
+class RequestMakeCommand extends GeneratorCommand
 {
     use ModuleCommandTrait;
 
@@ -25,14 +25,19 @@ class FactoryMakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'plugin:make-factory';
+    protected $name = 'plugin:make-request';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a new model factory for the specified plugin.';
+    protected $description = 'Create a new form request class for the specified plugin.';
+
+    public function getDefaultNamespace(): string
+    {
+        return 'Http/Requests';
+    }
 
     /**
      * Get the console command arguments.
@@ -42,7 +47,7 @@ class FactoryMakeCommand extends GeneratorCommand
     protected function getArguments()
     {
         return [
-            ['name', InputArgument::REQUIRED, 'The name of the factory.'],
+            ['name', InputArgument::REQUIRED, 'The name of the form request class.'],
             ['module', InputArgument::OPTIONAL, 'The name of plugin will be used.'],
         ];
     }
@@ -52,7 +57,12 @@ class FactoryMakeCommand extends GeneratorCommand
      */
     protected function getTemplateContents()
     {
-        return (new Stub('/factory.stub'))->render();
+        $module = $this->laravel['plugins']->findOrFail($this->getModuleName());
+
+        return (new Stub('/request.stub', [
+            'NAMESPACE' => $this->getClassNamespace($module),
+            'CLASS' => $this->getClass(),
+        ]))->render();
     }
 
     /**
@@ -62,9 +72,9 @@ class FactoryMakeCommand extends GeneratorCommand
     {
         $path = $this->laravel['plugins']->getModulePath($this->getModuleName());
 
-        $factoryPath = GenerateConfigReader::read('factory');
+        $requestPath = GenerateConfigReader::read('request');
 
-        return $path . $factoryPath->getPath() . '/' . $this->getFileName();
+        return $path . $requestPath->getPath() . '/' . $this->getFileName() . '.php';
     }
 
     /**
@@ -72,6 +82,6 @@ class FactoryMakeCommand extends GeneratorCommand
      */
     private function getFileName()
     {
-        return Str::studly($this->argument('name')) . '.php';
+        return Str::studly($this->argument('name'));
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Juzaweb\DevTool\Commands\Plugin;
+namespace Juzaweb\DevTool\Commands\Plugin\Makers;
 
 use Illuminate\Support\Str;
 use Juzaweb\CMS\Support\Config\GenerateConfigReader;
@@ -10,34 +10,17 @@ use Juzaweb\DevTool\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
-class ActionMakeCommand extends GeneratorCommand
+class ResourceMakeCommand extends GeneratorCommand
 {
     use ModuleCommandTrait;
 
-    /**
-     * The name of argument name.
-     *
-     * @var string
-     */
     protected string $argumentName = 'name';
-
-    /**
-     * The console command name.
-     *
-     * @var string
-     */
-    protected $name = 'plugin:make-action';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Generate new action for the specified plugin.';
+    protected $name = 'plugin:make-resource';
+    protected $description = 'Create a new resource class for the specified plugin.';
 
     public function getDefaultNamespace(): string
     {
-        return 'Actions';
+        return 'Transformers';
     }
 
     /**
@@ -48,20 +31,15 @@ class ActionMakeCommand extends GeneratorCommand
     protected function getArguments()
     {
         return [
-            ['name', InputArgument::REQUIRED, 'The name of the command.'],
+            ['name', InputArgument::REQUIRED, 'The name of the resource class.'],
             ['module', InputArgument::OPTIONAL, 'The name of plugin will be used.'],
         ];
     }
 
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
     protected function getOptions()
     {
         return [
-            ['command', null, InputOption::VALUE_OPTIONAL, 'The terminal command that should be assigned.', null],
+            ['collection', 'c', InputOption::VALUE_NONE, 'Create a resource collection.'],
         ];
     }
 
@@ -72,13 +50,33 @@ class ActionMakeCommand extends GeneratorCommand
     {
         $module = $this->laravel['plugins']->findOrFail($this->getModuleName());
 
-        return (new Stub(
-            '/action.stub',
-            [
-                'NAMESPACE' => $this->getClassNamespace($module),
-                'CLASS' => $this->getClass(),
-            ]
-        ))->render();
+        return (new Stub($this->getStubName(), [
+            'NAMESPACE' => $this->getClassNamespace($module),
+            'CLASS' => $this->getClass(),
+        ]))->render();
+    }
+
+    /**
+     * @return string
+     */
+    protected function getStubName(): string
+    {
+        if ($this->collection()) {
+            return '/resource-collection.stub';
+        }
+
+        return '/resource.stub';
+    }
+
+    /**
+     * Determine if the command is generating a resource collection.
+     *
+     * @return bool
+     */
+    protected function collection(): bool
+    {
+        return $this->option('collection') ||
+            Str::endsWith($this->argument('name'), 'Collection');
     }
 
     /**
@@ -88,9 +86,9 @@ class ActionMakeCommand extends GeneratorCommand
     {
         $path = $this->laravel['plugins']->getModulePath($this->getModuleName());
 
-        $commandPath = GenerateConfigReader::read('action');
+        $resourcePath = GenerateConfigReader::read('resource');
 
-        return $path . $commandPath->getPath() . '/' . $this->getFileName() . '.php';
+        return $path . $resourcePath->getPath() . '/' . $this->getFileName() . '.php';
     }
 
     /**
@@ -99,13 +97,5 @@ class ActionMakeCommand extends GeneratorCommand
     private function getFileName()
     {
         return Str::studly($this->argument('name'));
-    }
-
-    /**
-     * @return string
-     */
-    private function getCommandName()
-    {
-        return $this->option('command') ?: 'command:name';
     }
 }
