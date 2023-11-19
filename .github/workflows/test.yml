@@ -21,7 +21,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         php: [8.0, 8.1]
-        version: [dev-v4-beta]
+        version: [dev-develop]
     name: PHP${{ matrix.php }} - ${{ matrix.os }}
 
     steps:
