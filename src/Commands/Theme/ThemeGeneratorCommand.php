@@ -109,27 +109,13 @@ class ThemeGeneratorCommand extends Command
     }
 
     /**
-     * Make directory.
-     *
-     * @param  string  $directory
-     *
-     * @return void
-     */
-    protected function makeDir(string $directory): void
-    {
-        if (!File::isDirectory($directory)) {
-            File::makeDirectory($directory, 0755, true);
-        }
-    }
-
-    /**
      * Create theme stubs.
      *
      * @param  array  $themeStubFiles
      * @param  string  $createdThemePath
      * @throws FileNotFoundException
      */
-    public function createStubs($themeStubFiles, $createdThemePath): void
+    public function createStubs(array $themeStubFiles, string $createdThemePath): void
     {
         foreach ($themeStubFiles as $filename => $storePath) {
             if ($filename == 'changelog') {
@@ -149,6 +135,20 @@ class ThemeGeneratorCommand extends Command
     }
 
     /**
+     * Make directory.
+     *
+     * @param  string  $directory
+     *
+     * @return void
+     */
+    protected function makeDir(string $directory): void
+    {
+        if (!File::isDirectory($directory)) {
+            File::makeDirectory($directory, 0755, true);
+        }
+    }
+
+    /**
      * Make file.
      *
      * @param  string  $file
@@ -157,7 +157,7 @@ class ThemeGeneratorCommand extends Command
      * @return void
      * @throws FileNotFoundException
      */
-    protected function makeFile($file, $storePath): void
+    protected function makeFile(string $file, string $storePath): void
     {
         if (File::exists($file)) {
             $content = $this->replaceStubs(File::get($file));
@@ -172,7 +172,7 @@ class ThemeGeneratorCommand extends Command
      *
      * @return string
      */
-    protected function replaceStubs($contents): string
+    protected function replaceStubs(string $contents): string
     {
         $mainString = [
             '[NAME]',
@@ -198,7 +198,7 @@ class ThemeGeneratorCommand extends Command
 
     protected function getThemeStubPath(): string
     {
-        return __DIR__.'/../../stubs/theme';
+        return __DIR__.'/../../../stubs/theme';
     }
 
     protected function getArguments(): array
