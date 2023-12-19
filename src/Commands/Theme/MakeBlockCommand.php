@@ -31,7 +31,7 @@ class MakeBlockCommand extends Command
             return self::FAILURE;
         }
 
-        $register = json_decode($theme->getContents('register.json'), true);
+        $register = json_decode($theme->getContents('register.json'), true, 512, JSON_THROW_ON_ERROR);
         $blocks = Arr::get($register, 'blocks', []);
 
         if (Arr::get($blocks, $name)) {
@@ -47,13 +47,13 @@ class MakeBlockCommand extends Command
         $dataFile = $theme->getPath("data/blocks/{$name}.json");
         $viewFile = $theme->getPath("views/components/blocks/{$name}.twig");
         if (!file_exists($dataFile)) {
-            $dataPath = realpath(__DIR__ . '/../../stubs/theme/blocks/data.stub');
+            $dataPath = __DIR__ . '/../../../stubs/theme/blocks/data.stub';
             File::put($dataFile, File::get($dataPath));
             $this->info("Generate success file {$dataFile}");
         }
 
         if (!file_exists($viewFile)) {
-            $viewPath = realpath(__DIR__ . '/../../stubs/theme/blocks/view.stub');
+            $viewPath = __DIR__ . '/../../../stubs/theme/blocks/view.stub';
             File::put($viewFile, File::get($viewPath));
             $this->info("Generate success file {$viewFile}");
         }
@@ -61,7 +61,7 @@ class MakeBlockCommand extends Command
         $register['blocks'] = $blocks;
         File::put(
             $theme->getPath('register.json'),
-            json_encode($register, JSON_PRETTY_PRINT)
+            json_encode($register, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT)
         );
 
         $this->info("Update success data file register.json");

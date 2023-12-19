@@ -1,6 +1,6 @@
 <?php
 
-namespace Juzaweb\DevTool\Commands\Theme;
+namespace Juzaweb\DevTool\Commands\Abstracts;
 
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
@@ -46,7 +46,7 @@ abstract class DownloadTemplateCommandAbstract extends Command
         ];
     }
 
-    protected function downloadFile(string $url, string $path)
+    protected function downloadFile(string $url, string $path): void
     {
         $folder = dirname($path);
 

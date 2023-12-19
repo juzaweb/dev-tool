@@ -4,18 +4,26 @@ namespace Juzaweb\DevTool\Commands\Theme;
 
 use Illuminate\Support\Facades\File;
 use Juzaweb\CMS\Support\HtmlDom;
+use Juzaweb\DevTool\Commands\Abstracts\DownloadTemplateCommandAbstract;
+use Juzaweb\DevTool\Support\StyleDownloader;
 
 class DownloadStyleCommand extends DownloadTemplateCommandAbstract
 {
-    protected $signature = 'style:download';
+    protected $name = 'style:download';
 
-    protected array $data;
+    protected string $themeName;
 
-    public function handle()
+    protected string $url;
+
+    public function handle(): void
     {
+        dd(StyleDownloader::make()
+            ->setUrl('https://varient.codingest.com/assets/vendor/bootstrap/css/bootstrap.min.css')
+            ->download(storage_path('app/tests/bootstrap.min.css')));
+
         $this->sendAsks();
 
-        $html = $this->curlGet($this->data['url']);
+        $html = $this->curlGet($this->url);
 
         $domp = str_get_html($html);
 
@@ -26,31 +34,31 @@ class DownloadStyleCommand extends DownloadTemplateCommandAbstract
         $mix = "const mix = require('laravel-mix');
 
 mix.styles([
-    ". implode(",\n", $css) ."
-], 'themes/{$this->data['name']}/assets/public/css/main.css');
+    ".implode(",\n", $css)."
+], 'themes/{$this->themeName}/assets/public/css/main.min.css');
 
 mix.combine([
-    ". implode(",\n", $js) ."
-], 'themes/{$this->data['name']}/assets/public/js/main.js');";
+    ".implode(",\n", $js)."
+], 'themes/{$this->themeName}/assets/public/js/main.min.js');";
 
-        File::put("themes/{$this->data['name']}/assets/mix.js", $mix);
+        File::put("themes/{$this->themeName}/assets/mix.js", $mix);
     }
 
-    protected function sendAsks()
+    protected function sendAsks(): void
     {
-        $this->data['url'] = $this->ask(
+        $this->url = $this->ask(
             'Url Template?',
             $this->getDataDefault('url')
         );
 
-        $this->setDataDefault('url', $this->data['url']);
+        $this->setDataDefault('url', $this->url);
 
-        $this->data['name'] = $this->ask(
+        $this->themeName = $this->ask(
             'Theme Name?',
             $this->getDataDefault('name')
         );
 
-        $this->setDataDefault('name', $this->data['name']);
+        $this->setDataDefault('name', $this->themeName);
     }
 
     protected function downloadCss(HtmlDom $domp): array
@@ -66,7 +74,7 @@ mix.combine([
 
             $name = explode('?', basename($href))[0];
 
-            $path = "themes/{$this->data['name']}/assets/styles/css/{$name}";
+            $path = "themes/{$this->themeName}/assets/styles/css/{$name}";
 
             $this->downloadFile($href, base_path($path));
 
@@ -96,7 +104,7 @@ mix.combine([
 
             $name = explode('?', basename($href))[0];
 
-            $path = "themes/{$this->data['name']}/assets/styles/js/{$name}";
+            $path = "themes/{$this->themeName}/assets/styles/js/{$name}";
 
             try {
                 $this->downloadFile($href, base_path($path));
@@ -110,21 +118,23 @@ mix.combine([
         return $result;
     }
 
-    protected function parseHref($href): mixed
+    protected function parseHref(string $href, ?string $url = null): string
     {
+        $url = $url ?? $this->url;
+
         if (str_starts_with($href, '//')) {
-            $href = 'https:' . $href;
+            $href = 'https:'.$href;
         }
 
         if (!is_url($href)) {
-            $baseUrl = explode('/', $this->data['url'])[0];
-            $baseUrl .= '://' . get_domain_by_url($this->data['url']);
+            $baseUrl = explode('/', $url)[0];
+            $baseUrl .= '://'.get_domain_by_url($url);
 
             if (str_starts_with($href, '/')) {
-                $href = $baseUrl . trim($href);
+                $href = $baseUrl.trim($href);
             } else {
-                $dir = dirname($this->data['url']);
-                $href = "{$dir}/" . trim($href);
+                $dir = dirname($url);
+                $href = "{$dir}/".trim($href);
             }
         }
 

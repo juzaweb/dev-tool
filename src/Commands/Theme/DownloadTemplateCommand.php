@@ -3,6 +3,7 @@
 namespace Juzaweb\DevTool\Commands\Theme;
 
 use Illuminate\Support\Facades\File;
+use Juzaweb\DevTool\Commands\Abstracts\DownloadTemplateCommandAbstract;
 
 class DownloadTemplateCommand extends DownloadTemplateCommandAbstract
 {
@@ -10,7 +11,7 @@ class DownloadTemplateCommand extends DownloadTemplateCommandAbstract
 
     protected array $data;
 
-    public function handle()
+    public function handle(): void
     {
         $this->sendBaseDataAsks();
 
