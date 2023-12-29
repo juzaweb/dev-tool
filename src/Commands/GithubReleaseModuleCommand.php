@@ -26,6 +26,7 @@ class GithubReleaseModuleCommand extends Command
     public function handle(): void
     {
         $token = $this->getGithubToken();
+        //$this->runCmd("git fetch");
         $repo = $this->runCmd('git config --get remote.origin.url | sed \'s/.*[:|\/]\([^/]*\/[^/]*\)\.git$/\1/\'');
         $lastTag = $this->getLastTag();
 
@@ -82,12 +83,12 @@ class GithubReleaseModuleCommand extends Command
     protected function getLastTag(): string
     {
         try {
-            $lastTag = $this->runCmd('git describe --abbrev=0 --tags');
+            $lastTag = $this->runCmd('git ls-remote --tags --sort=committerdate | sort -r | head -1');
         } catch (\Exception $e) {
             $lastTag = '';
         }
 
-        return $lastTag;
+        return last(explode('/', $lastTag));
     }
 
     protected function getGithubToken(): string
@@ -114,13 +115,13 @@ class GithubReleaseModuleCommand extends Command
 
         $split = explode('.', $lastTag);
         if (count($split) > 2) {
-            $split[count($split) - 1] += 1;
+            ++$split[count($split) - 1];
             $newTag = implode('.', $split);
         } else {
             $newTag = $lastTag.'.1';
         }
 
-        return $newTag;
+        return get_version_by_tag($newTag);
     }
     
     protected function runCmd(string|array $command): string
