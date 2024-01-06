@@ -23,10 +23,12 @@ class TestMakeCommand extends GeneratorCommand
         $module = $this->laravel['plugins'];
 
         if ($this->option('feature')) {
-            return $module->config('paths.generator.test-feature.namespace') ?: $module->config('paths.generator.test-feature.path', 'Tests/Feature');
+            return $module->config('paths.generator.test-feature.namespace')
+                ?: $module->config('paths.generator.test-feature.path', 'Tests/Feature');
         }
 
-        return $module->config('paths.generator.test.namespace') ?: $module->config('paths.generator.test.path', 'Tests/Unit');
+        return $module->config('paths.generator.test.namespace')
+            ?: $module->config('paths.generator.test.path', 'Tests/Unit');
     }
 
     /**
@@ -34,7 +36,7 @@ class TestMakeCommand extends GeneratorCommand
      *
      * @return array
      */
-    protected function getArguments()
+    protected function getArguments(): array
     {
         return [
             ['name', InputArgument::REQUIRED, 'The name of the form request class.'],
@@ -47,7 +49,7 @@ class TestMakeCommand extends GeneratorCommand
      *
      * @return array
      */
-    protected function getOptions()
+    protected function getOptions(): array
     {
         return [
             ['feature', false, InputOption::VALUE_NONE, 'Create a feature test.'],
@@ -55,9 +57,9 @@ class TestMakeCommand extends GeneratorCommand
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    protected function getTemplateContents()
+    protected function getTemplateContents(): string
     {
         $module = $this->laravel['plugins']->findOrFail($this->getModuleName());
         $stub = '/unit-test.stub';
@@ -73,9 +75,9 @@ class TestMakeCommand extends GeneratorCommand
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    protected function getDestinationFilePath()
+    protected function getDestinationFilePath(): string
     {
         $path = $this->laravel['plugins']->getModulePath($this->getModuleName());
 
@@ -91,7 +93,7 @@ class TestMakeCommand extends GeneratorCommand
     /**
      * @return string
      */
-    private function getFileName()
+    private function getFileName(): string
     {
         return Str::studly($this->argument('name'));
     }

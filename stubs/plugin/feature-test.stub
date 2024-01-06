@@ -2,12 +2,13 @@
 
 namespace $NAMESPACE$;
 
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Juzaweb\Tests\TestCase;
 
 class $CLASS$ extends TestCase
 {
+    use WithFaker;
+
     /**
      * A basic feature test example.
      *

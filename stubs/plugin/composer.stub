@@ -5,7 +5,7 @@
     "description": "$DESCRIPTION$",
     "extra": {
         "juzaweb": {
-            "name": "$LOWER_NAME$",
+            "name": "$TITLE$",
             "domain": "$MODULE_DOMAIN$",
             "providers": [
                 "$MODULE_NAMESPACE$\\$PROVIDER_NAMESPACE$\\$MODULE_NAME$ServiceProvider"
@@ -15,6 +15,11 @@
     "autoload": {
         "psr-4": {
             "$MODULE_NAMESPACE$\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "$MODULE_NAMESPACE$\\Tests\\": "tests/"
         }
     },
     "require": {

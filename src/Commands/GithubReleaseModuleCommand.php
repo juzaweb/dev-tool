@@ -83,7 +83,7 @@ class GithubReleaseModuleCommand extends Command
     protected function getLastTag(): string
     {
         try {
-            $lastTag = $this->runCmd('git ls-remote --tags --sort=committerdate | sort -r | head -1');
+            $lastTag = $this->runCmd('git ls-remote --tags --sort=-v:refname | head -1');
         } catch (\Exception $e) {
             $lastTag = '';
         }
