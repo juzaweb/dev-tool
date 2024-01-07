@@ -26,8 +26,7 @@ class GithubReleaseModuleCommand extends Command
     public function handle(): void
     {
         $token = $this->getGithubToken();
-        //$this->runCmd("git fetch");
-        $repo = $this->runCmd('git config --get remote.origin.url | sed \'s/.*[:|\/]\([^/]*\/[^/]*\)\.git$/\1/\'');
+        $repo = $this->getRepo();
         $lastTag = $this->getLastTag();
 
         if (empty($lastTag)) {
@@ -83,7 +82,7 @@ class GithubReleaseModuleCommand extends Command
     protected function getLastTag(): string
     {
         try {
-            $lastTag = $this->runCmd('git ls-remote --tags --sort=-v:refname | head -1');
+            $lastTag = $this->runCmd('git ls-remote --tags --sort=-committerdate | head -1');
         } catch (\Exception $e) {
             $lastTag = '';
         }
@@ -139,6 +138,17 @@ class GithubReleaseModuleCommand extends Command
         $process->mustRun();
 
         return trim($process->getOutput());
+    }
+
+    protected function getRepo(): string
+    {
+        $repo = $this->runCmd('git config --get remote.origin.url | sed \'s/.*[:|\/]\([^/]*\/[^/]*\)\.git$/\1/\'');
+
+        if (is_url($repo)) {
+            $repo = ltrim(parse_url($repo, \PHP_URL_PATH), '/');
+        }
+
+        return $repo;
     }
 
     protected function getArguments(): array
