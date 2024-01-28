@@ -54,9 +54,9 @@ class GithubReleaseModuleCommand extends Command
                 "### v{$newTag} \n{$body}\n\n"
             );
 
-            $this->runCmd('git add changelog.md');
+            //$this->runCmd('git add changelog.md');
 
-            $this->runCmd("git commit -m 'Add changelog v{$newTag}'");
+            $this->runCmd("git commit -o changelog.md -m 'Add changelog v{$newTag}'");
 
             $this->runCmd('git push');
         }
