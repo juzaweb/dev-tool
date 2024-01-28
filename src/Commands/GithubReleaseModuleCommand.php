@@ -41,14 +41,25 @@ class GithubReleaseModuleCommand extends Command
         }
 
         $body = collect(explode("\n", $body))
-            ->filter(
-                function ($item) {
-                    return !empty($item) && !str_contains($item, ':construction:');
-                }
-            )
+            ->filter(fn ($item) => !empty($item) && !str_contains($item, ':construction:'))
             ->implode("\n");
 
         $newTag = $this->getReleaseVersion($lastTag);
+
+        if ($this->option('changelog')) {
+            $this->info('Add changelog');
+
+            File::prepend(
+                base_path($this->argument('path')."/changelog.md"),
+                "### v{$newTag} \n{$body}\n\n"
+            );
+
+            $this->runCmd('git add changelog.md');
+
+            $this->runCmd("git commit -m 'Add changelog v{$newTag}'");
+
+            $this->runCmd('git push');
+        }
 
         $this->info("Release v{$newTag}");
 
@@ -63,18 +74,11 @@ class GithubReleaseModuleCommand extends Command
                 [
                     'tag_name' => $newTag,
                     'name' => $newTag,
-                    'target_commitish' => 'master',
+                    'target_commitish' => $this->option('target'),
                     'body' => $body,
                 ]
             )
             ->throw();
-
-        if ($this->option('changelog')) {
-            File::prepend(
-                base_path($this->argument('path')."/changelog.md"),
-                "### v{$newTag} \n{$body}\n\n"
-            );
-        }
 
         $this->info('Released url: '. $release->json()['html_url']);
     }
@@ -163,6 +167,7 @@ class GithubReleaseModuleCommand extends Command
         return [
             ['ver', null, InputOption::VALUE_OPTIONAL, 'Version to release. Auto increment version if not set', null],
             ['changelog', null, InputOption::VALUE_OPTIONAL, 'Write to changelog.md. Default: true', true],
+            ['target', null, InputOption::VALUE_OPTIONAL, 'Target branch to release', 'master'],
         ];
     }
 }

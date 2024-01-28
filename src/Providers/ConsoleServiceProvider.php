@@ -88,6 +88,7 @@ class ConsoleServiceProvider extends ServiceProvider
         Resource\CRUDMakeCommand::class,
         GithubReleaseModuleCommand::class,
         Theme\ThemeActiveCommand::class,
+        Plugin\Statuses\EnableAllCommand::class,
     ];
 
     /**
