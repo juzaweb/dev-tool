@@ -1,3 +1,11 @@
+### v1.0.4 
+* :+1: Add changelog before release
+* :bug: Fix get last tag
+* :bug: Fix get last tags release github
+* :+1: Fix dev tool
+* :+1: Update stub template
+* :bug: Fix make block theme command
+
 ### v1.0.3 
 * :bug: Fix make theme command
 * :bug: Fix ci/cd
