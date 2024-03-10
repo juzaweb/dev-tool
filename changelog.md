@@ -1,3 +1,6 @@
+### v1.0.5 
+* :+1: Make Demo Content Command
+
 ### v1.0.4 
 * :+1: Add changelog before release
 * :bug: Fix get last tag
