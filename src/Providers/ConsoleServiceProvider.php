@@ -5,6 +5,7 @@ namespace Juzaweb\DevTool\Providers;
 use Illuminate\Support\ServiceProvider;
 use Juzaweb\DevTool\Commands\FindFillableColumnCommand;
 use Juzaweb\DevTool\Commands\GithubReleaseModuleCommand;
+use Juzaweb\DevTool\Commands\MakeDemoContentCommand;
 use Juzaweb\DevTool\Commands\Plugin;
 use Juzaweb\DevTool\Commands\Plugin\InstallCommand as PluginInstallCommand;
 use Juzaweb\DevTool\Commands\Plugin\ListCommand;
@@ -89,6 +90,7 @@ class ConsoleServiceProvider extends ServiceProvider
         GithubReleaseModuleCommand::class,
         Theme\ThemeActiveCommand::class,
         Plugin\Statuses\EnableAllCommand::class,
+        MakeDemoContentCommand::class,
     ];
 
     /**

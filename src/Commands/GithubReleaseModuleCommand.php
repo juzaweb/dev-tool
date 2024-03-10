@@ -131,10 +131,14 @@ class GithubReleaseModuleCommand extends Command
     {
         $path = $this->argument('path');
 
+        if (!File::isDirectory($path)) {
+            $path = base_path($path);
+        }
+
         if (is_array($command)) {
-            $process = new Process($command, base_path($path));
+            $process = new Process($command, $path);
         } else {
-            $process = Process::fromShellCommandline($command, base_path($path));
+            $process = Process::fromShellCommandline($command, $path);
         }
 
         $process->setTimeout(30);
