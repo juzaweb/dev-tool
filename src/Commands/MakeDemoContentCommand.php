@@ -25,6 +25,7 @@ class MakeDemoContentCommand extends Command
         DemoContentBuilder::make()
             ->setSiteId($this->option('site'))
             ->setLimit($this->option('limit'))
+            ->setPostType($this->option('post-type'))
             ->generate();
     }
 
