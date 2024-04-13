@@ -1,3 +1,7 @@
+### v1.0.6 
+* :bug: Fix resource stub
+* :+1: Make Demo Content Command
+
 ### v1.0.5 
 * :+1: Make Demo Content Command
 
