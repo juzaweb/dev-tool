@@ -1,3 +1,6 @@
+### v1.0.7 
+* :+1: Download style template
+
 ### v1.0.6 
 * :bug: Fix resource stub
 * :+1: Make Demo Content Command
