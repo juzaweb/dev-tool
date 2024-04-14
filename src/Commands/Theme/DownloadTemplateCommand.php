@@ -4,10 +4,11 @@ namespace Juzaweb\DevTool\Commands\Theme;
 
 use Illuminate\Support\Facades\File;
 use Juzaweb\DevTool\Commands\Abstracts\DownloadTemplateCommandAbstract;
+use Symfony\Component\Console\Input\InputArgument;
 
 class DownloadTemplateCommand extends DownloadTemplateCommandAbstract
 {
-    protected $signature = 'html:download';
+    protected $name = 'html:download';
 
     protected array $data;
 
@@ -15,17 +16,54 @@ class DownloadTemplateCommand extends DownloadTemplateCommandAbstract
     {
         $this->sendBaseDataAsks();
 
-        $this->downloadFileAsks();
+        if ($this->option('styles') === true) {
+            $this->call('style:download', [
+                '--theme' => $this->data['theme'],
+                '--url' => $this->data['url'],
+            ]);
+        }
+
+        $this->downloadFiles();
+    }
+
+    protected function downloadFiles(): void
+    {
+        $this->downloadTemplateFile('templates/home.twig', $this->data['url']);
+
+        $contents = $this->getFileContent($this->data['url']);
+
+        $dom = str_get_html($contents);
+
+        foreach ($dom->find('a') as $e) {
+            if (in_array($e->href, ['#', 'javascript:void(0)', 'javascript:', 'javascript:;'])) {
+                continue;
+            }
+
+            $url = get_full_url($e->href, $this->data['url']);
+            if (get_domain_by_url($url) !== get_domain_by_url($this->data['url'])) {
+                continue;
+            }
+
+            $fileName = basename_without_extension($url);
+            $this->downloadTemplateFile("templates/{$fileName}.twig", $url);
+        }
     }
 
     protected function sendBaseDataAsks(): void
     {
-        $this->data['name'] = $this->ask(
-            'Theme Name?',
-            $this->getDataDefault('name')
+        $this->data['url'] = $this->ask(
+            'Url Template?',
+            $this->getDataDefault('url')
         );
 
-        $this->setDataDefault('name', $this->data['name']);
+        $this->setDataDefault('url', $this->data['url']);
+
+        $this->data['theme'] = $this->ask(
+            'Theme Name?',
+            $this->getDataDefault('theme')
+        );
+
+        $this->setDataDefault('theme', $this->data['theme']);
 
         $this->data['container'] = $this->ask(
             'Theme Container?',
@@ -35,33 +73,19 @@ class DownloadTemplateCommand extends DownloadTemplateCommandAbstract
         $this->setDataDefault('container', $this->data['container']);
     }
 
-    protected function downloadFileAsks(): void
+    protected function downloadTemplateFile(string $file, string $url): void
     {
-        $this->data['url'] = $this->ask(
-            'Url Template?',
-            $this->getDataDefault('url')
-        );
+        $path = "themes/{$this->data['theme']}/views/{$file}";
 
-        $this->setDataDefault('url', $this->data['url']);
+        $this->info("Downloading file {$path}");
 
-        $this->data['file'] = $this->ask(
-            'Theme File?',
-            $this->getDataDefault('file', 'index.twig')
-        );
-
-        $this->setDataDefault('file', $this->data['file']);
-
-        $extension = pathinfo($this->data['file'], PATHINFO_EXTENSION);
-
-        if ($extension != 'twig') {
-            $this->data['file'] = "{$this->data['file']}.twig";
+        if (!File::isDirectory(dirname($path))) {
+            File::makeDirectory(dirname($path), 0777, true);
         }
 
-        $path = "themes/{$this->data['name']}/views/{$this->data['file']}";
+        $contents = $this->getFileContent($url);
 
-        $contents = $this->getFileContent($this->data['url']);
-
-        $content = str_get_html($contents)->find($this->data['container'], 0)->outertext;
+        $content = str_get_html($contents)->find($this->data['container'], 0)->innertext;
 
         File::put(
             $path,
@@ -71,5 +95,12 @@ class DownloadTemplateCommand extends DownloadTemplateCommandAbstract
                     {$content}
                 {% endblock %}"
         );
+    }
+
+    protected function getOptions(): array
+    {
+        return [
+            ['styles', null, InputArgument::OPTIONAL, 'Download styles', true],
+        ];
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\File;
 use Juzaweb\CMS\Support\HtmlDom;
 use Juzaweb\DevTool\Commands\Abstracts\DownloadTemplateCommandAbstract;
 use Juzaweb\DevTool\Support\StyleDownloader;
+use Symfony\Component\Console\Input\InputArgument;
 
 class DownloadStyleCommand extends DownloadTemplateCommandAbstract
 {
@@ -25,13 +26,13 @@ class DownloadStyleCommand extends DownloadTemplateCommandAbstract
 
         $cssUrls = $this->downloadCss($domp);
         $css = collect($cssUrls)
-            ->map(fn ($path, $index) => "\t'{$path}',")
-            ->implode("\n");
+            ->map(fn ($path, $index) => "\t{$path}")
+            ->implode(",\n");
 
         $jsUrls = $this->downloadJs($domp);
         $js = collect($jsUrls)
-            ->map(fn ($path, $index) => "\t'{$path}',")
-            ->implode("\n");
+            ->map(fn ($path, $index) => "\t{$path}")
+            ->implode(",\n");
 
         $mix = "const mix = require('laravel-mix');
 
@@ -48,19 +49,23 @@ mix.combine([
 
     protected function sendAsks(): void
     {
-        $this->url = $this->ask(
-            'Url Template?',
-            $this->getDataDefault('url')
-        );
+        if (!($this->url = $this->option('url'))) {
+            $this->url = $this->ask(
+                'Url Template?',
+                $this->getDataDefault('url')
+            );
 
-        $this->setDataDefault('url', $this->url);
+            $this->setDataDefault('url', $this->url);
+        }
 
-        $this->themeName = $this->ask(
-            'Theme Name?',
-            $this->getDataDefault('name')
-        );
+        if (!($this->themeName = $this->option('theme'))) {
+            $this->themeName = $this->ask(
+                'Theme Name?',
+                $this->getDataDefault('theme')
+            );
 
-        $this->setDataDefault('name', $this->themeName);
+            $this->setDataDefault('theme', $this->themeName);
+        }
     }
 
     protected function downloadCss(HtmlDom $domp): array
@@ -144,5 +149,13 @@ mix.combine([
         }
 
         return $href;
+    }
+
+    protected function getOptions(): array
+    {
+        return [
+            ['url', null, InputArgument::OPTIONAL, 'Url Template'],
+            ['theme', null, InputArgument::OPTIONAL, 'Theme Name'],
+        ];
     }
 }
