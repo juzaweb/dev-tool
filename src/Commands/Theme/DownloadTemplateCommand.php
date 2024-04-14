@@ -16,7 +16,7 @@ class DownloadTemplateCommand extends DownloadTemplateCommandAbstract
     {
         $this->sendBaseDataAsks();
 
-        if ($this->option('styles') === true) {
+        if (filter_var($this->option('styles'), FILTER_VALIDATE_BOOLEAN) === true) {
             $this->call('style:download', [
                 '--theme' => $this->data['theme'],
                 '--url' => $this->data['url'],
@@ -34,16 +34,24 @@ class DownloadTemplateCommand extends DownloadTemplateCommandAbstract
 
         $dom = str_get_html($contents);
 
+        $urls = [];
         foreach ($dom->find('a') as $e) {
             if (in_array($e->href, ['#', 'javascript:void(0)', 'javascript:', 'javascript:;'])) {
                 continue;
             }
 
             $url = get_full_url($e->href, $this->data['url']);
+
             if (get_domain_by_url($url) !== get_domain_by_url($this->data['url'])) {
                 continue;
             }
 
+            $urls[] = $url;
+        }
+
+        $urls = array_unique($urls);
+
+        foreach ($urls as $url) {
             $fileName = basename_without_extension($url);
             $this->downloadTemplateFile("templates/{$fileName}.twig", $url);
         }
@@ -83,17 +91,27 @@ class DownloadTemplateCommand extends DownloadTemplateCommandAbstract
             File::makeDirectory(dirname($path), 0777, true);
         }
 
-        $contents = $this->getFileContent($url);
+        try {
+            $contents = $this->getFileContent($url);
+        } catch (\Exception $e) {
+            $this->error("Cannot get url {$url}: ". $e->getMessage());
+            return;
+        }
 
-        $content = str_get_html($contents)->find($this->data['container'], 0)->innertext;
+        $content = str_get_html($contents)->find($this->data['container'], 0)?->innertext;
+
+        if (empty($content)) {
+            $this->warn("Cannot get content from {$url}");
+            return;
+        }
 
         File::put(
             $path,
             "{% extends 'cms::layouts.frontend' %}
 
-                {% block content %}
-                    {$content}
-                {% endblock %}"
+{% block content %}
+    {$content}
+{% endblock %}"
         );
     }
 
