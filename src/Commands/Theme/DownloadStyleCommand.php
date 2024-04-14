@@ -17,10 +17,6 @@ class DownloadStyleCommand extends DownloadTemplateCommandAbstract
 
     public function handle(): void
     {
-        dd(StyleDownloader::make()
-            ->setUrl('https://validtemplates.github.io/educom/assets/css/font-awesome.min.css')
-            ->download(storage_path('app/tests/font-awesome.min.css')));
-
         $this->sendAsks();
 
         $html = $this->curlGet($this->url);
