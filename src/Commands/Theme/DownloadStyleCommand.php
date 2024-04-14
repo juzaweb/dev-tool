@@ -23,18 +23,24 @@ class DownloadStyleCommand extends DownloadTemplateCommandAbstract
 
         $domp = str_get_html($html);
 
-        $css = $this->downloadCss($domp);
+        $cssUrls = $this->downloadCss($domp);
+        $css = collect($cssUrls)
+            ->map(fn ($path, $index) => "\t'{$path}',")
+            ->implode("\n");
 
-        $js = $this->downloadJs($domp);
+        $jsUrls = $this->downloadJs($domp);
+        $js = collect($jsUrls)
+            ->map(fn ($path, $index) => "\t'{$path}',")
+            ->implode("\n");
 
         $mix = "const mix = require('laravel-mix');
 
 mix.styles([
-    ".implode(",\n", $css)."
+{$css}
 ], 'themes/{$this->themeName}/assets/public/css/main.min.css');
 
 mix.combine([
-    ".implode(",\n", $js)."
+{$js}
 ], 'themes/{$this->themeName}/assets/public/js/main.min.js');";
 
         File::put("themes/{$this->themeName}/assets/mix.js", $mix);
@@ -72,8 +78,12 @@ mix.combine([
 
             $path = "themes/{$this->themeName}/assets/styles/css/{$name}";
 
-            if (StyleDownloader::make()->setUrl($href)->download(base_path($path))) {
+            if (StyleDownloader::make()->withOutputStyle($this->output)->setUrl($href)->download(base_path($path))) {
                 $result[] = "'{$path}'";
+
+                $this->info("-- Downloaded file {$path}");
+            } else {
+                $this->warn("Download error: {$href}");
             }
         }
 

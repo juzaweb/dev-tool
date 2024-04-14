@@ -11,7 +11,9 @@
 namespace Juzaweb\DevTool\Support;
 
 use GuzzleHttp\Client;
+use Illuminate\Console\OutputStyle;
 use Illuminate\Support\Facades\File;
+use const PHP_URL_PATH;
 
 class StyleDownloader
 {
@@ -21,9 +23,18 @@ class StyleDownloader
 
     protected string $extension;
 
+    protected OutputStyle $output;
+
     public static function make(...$args): static
     {
         return new static(...$args);
+    }
+
+    public function withOutputStyle(OutputStyle $output): static
+    {
+        $this->output = $output;
+
+        return $this;
     }
 
     public function download(string $path): bool
@@ -74,7 +85,7 @@ class StyleDownloader
             ->map(
                 function ($path) use ($filePath) {
                     $url = $this->parseHref($path);
-                    $newPath = abs_path(dirname($filePath) .'/'.$path);
+                    $newPath = abs_path(dirname($filePath) .'/'.explode('#', $path)[0]);
                     $this->downloadFile($url, $newPath);
                 }
             );
@@ -98,7 +109,7 @@ class StyleDownloader
         if (str_starts_with($href, '/')) {
             $href = $baseUrl.trim($href);
         } else {
-            $path = parse_url($this->url, \PHP_URL_PATH);
+            $path = parse_url($this->url, PHP_URL_PATH);
             $dir = dirname($path);
             $href = $baseUrl.abs_path("{$dir}/".trim($href));
         }
@@ -114,14 +125,23 @@ class StyleDownloader
             File::makeDirectory($folder, 0755, true);
         }
 
-        $this->getHttp()->request(
-            'GET',
-            $url,
-            [
-                'sink' => $path,
-                'verify' => false,
-            ]
-        );
+        try {
+            $this->getHttp()->request(
+                'GET',
+                $url,
+                [
+                    'sink' => $path,
+                    'verify' => false,
+                ]
+            );
+        } catch (\Exception $e) {
+            if (isset($this->output)) {
+                report($e);
+                $this->output->error("Download error: {$url}");
+            } else {
+                throw $e;
+            }
+        }
     }
 
     protected function getFileContent(string $url): string
