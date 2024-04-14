@@ -18,8 +18,8 @@ class DownloadStyleCommand extends DownloadTemplateCommandAbstract
     public function handle(): void
     {
         dd(StyleDownloader::make()
-            ->setUrl('https://varient.codingest.com/assets/vendor/bootstrap/css/bootstrap.min.css')
-            ->download(storage_path('app/tests/bootstrap.min.css')));
+            ->setUrl('https://validtemplates.github.io/educom/assets/css/font-awesome.min.css')
+            ->download(storage_path('app/tests/font-awesome.min.css')));
 
         $this->sendAsks();
 
@@ -76,12 +76,11 @@ mix.combine([
 
             $path = "themes/{$this->themeName}/assets/styles/css/{$name}";
 
-            $this->downloadFile($href, base_path($path));
-
-            $result[] = "'{$path}'";
-
-            $this->info("-- Downloaded file {$path}");
+            if (StyleDownloader::make()->setUrl($href)->download(base_path($path))) {
+                $result[] = "'{$path}'";
+            }
         }
+
         return $result;
     }
 

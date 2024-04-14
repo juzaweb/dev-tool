@@ -26,7 +26,7 @@ class StyleDownloader
         return new static(...$args);
     }
 
-    public function download(string $path): bool|string
+    public function download(string $path): bool
     {
         $this->downloadFile($this->url, $path);
 
@@ -70,15 +70,40 @@ class StyleDownloader
         preg_match_all('/url\((["\']?)(.*?)\1\)/i', $fileContents, $matches);
 
         collect($matches[2] ?? [])
-            ->filter(fn ($path) => !str_starts_with($path, 'data:'))
+            ->filter(fn ($path) => !str_starts_with($path, 'data:') && !is_url($path))
             ->map(
-                function ($path) {
+                function ($path) use ($filePath) {
                     $url = $this->parseHref($path);
-                    dd($path);
+                    $newPath = abs_path(dirname($filePath) .'/'.$path);
+                    $this->downloadFile($url, $newPath);
                 }
             );
 
         return $fileContents;
+    }
+
+    protected function parseHref(string $href): string
+    {
+        if (is_url($href)) {
+            return $href;
+        }
+
+        if (str_starts_with($href, '//')) {
+            $href = 'https:'.$href;
+        }
+
+        $baseUrl = explode('/', $this->url)[0];
+        $baseUrl .= '//'.get_domain_by_url($this->url);
+
+        if (str_starts_with($href, '/')) {
+            $href = $baseUrl.trim($href);
+        } else {
+            $path = parse_url($this->url, \PHP_URL_PATH);
+            $dir = dirname($path);
+            $href = $baseUrl.abs_path("{$dir}/".trim($href));
+        }
+
+        return $href;
     }
 
     protected function downloadFile(string $url, string $path): void
@@ -94,7 +119,7 @@ class StyleDownloader
             $url,
             [
                 'sink' => $path,
-                'verify' => false
+                'verify' => false,
             ]
         );
     }
@@ -112,6 +137,11 @@ class StyleDownloader
 
     protected function getHttp(): Client
     {
-        return $this->client ?? ($this->client = new Client());
+        return new Client(
+            [
+                'timeout' => 10,
+                'connect_timeout' => 10,
+            ]
+        );
     }
 }
