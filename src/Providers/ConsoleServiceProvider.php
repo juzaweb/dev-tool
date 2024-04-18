@@ -3,6 +3,7 @@
 namespace Juzaweb\DevTool\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Juzaweb\DevTool\Commands\ClearLogCommand;
 use Juzaweb\DevTool\Commands\FindFillableColumnCommand;
 use Juzaweb\DevTool\Commands\GithubReleaseModuleCommand;
 use Juzaweb\DevTool\Commands\MakeDemoContentCommand;
@@ -91,6 +92,7 @@ class ConsoleServiceProvider extends ServiceProvider
         Theme\ThemeActiveCommand::class,
         Plugin\Statuses\EnableAllCommand::class,
         MakeDemoContentCommand::class,
+        ClearLogCommand::class,
     ];
 
     /**
