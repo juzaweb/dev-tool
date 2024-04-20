@@ -15,6 +15,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Juzaweb\CMS\Facades\Theme;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class MakeBlockCommand extends Command
 {
@@ -22,11 +23,13 @@ class MakeBlockCommand extends Command
 
     public function handle(): int
     {
-        $name = preg_replace("/([^a-z0-9_]+)/", '_', $this->argument('name'));
-        $themeName = $this->argument('theme');
+        $name = preg_replace("/\W/", '_', $this->argument('name'));
+        $name = strtolower($name);
 
+        $themeName = $this->argument('theme');
         $theme = Theme::find($themeName);
-        if (empty($theme)) {
+
+        if ($theme === null) {
             $this->error("Theme {$themeName} does not exists.");
             return self::FAILURE;
         }
@@ -46,17 +49,27 @@ class MakeBlockCommand extends Command
 
         $dataFile = $theme->getPath("data/blocks/{$name}.json");
         $viewFile = $theme->getPath("views/components/blocks/{$name}.twig");
-        if (!file_exists($dataFile)) {
-            $dataPath = __DIR__ . '/../../../stubs/theme/blocks/data.stub';
-            File::put($dataFile, File::get($dataPath));
-            $this->info("Generate success file {$dataFile}");
+
+        if (!$this->option('force') && file_exists($dataFile)) {
+            $this->error("File {$dataFile} already exists.");
+            return self::FAILURE;
         }
 
-        if (!file_exists($viewFile)) {
-            $viewPath = __DIR__ . '/../../../stubs/theme/blocks/view.stub';
-            File::put($viewFile, File::get($viewPath));
-            $this->info("Generate success file {$viewFile}");
+        if (!$this->option('force') && file_exists($viewFile)) {
+            $this->error("File {$viewFile} already exists.");
+            return self::FAILURE;
         }
+
+        File::makeDirectory(dirname($dataFile), 0777, true, true);
+        File::makeDirectory(dirname($viewFile), 0777, true, true);
+
+        $dataPath = __DIR__ . '/../../../stubs/theme/blocks/data.stub';
+        File::put($dataFile, File::get($dataPath));
+        $this->info("Generate success file {$dataFile}");
+
+        $viewPath = __DIR__ . '/../../../stubs/theme/blocks/view.stub';
+        File::put($viewFile, File::get($viewPath));
+        $this->info("Generate success file {$viewFile}");
 
         $register['blocks'] = $blocks;
         File::put(
@@ -74,6 +87,13 @@ class MakeBlockCommand extends Command
         return [
             ['name', InputArgument::REQUIRED, 'The name of block will be make.'],
             ['theme', InputArgument::REQUIRED, 'The name of theme.'],
+        ];
+    }
+
+    protected function getOptions(): array
+    {
+        return [
+            ['force', 'f', InputOption::VALUE_NONE, 'Force overwrite existing files.'],
         ];
     }
 }
