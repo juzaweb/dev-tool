@@ -44,6 +44,11 @@ class GithubReleaseModuleCommand extends Command
             ->filter(fn ($item) => !empty($item) && !str_contains($item, ':construction:'))
             ->implode("\n");
 
+        if ($this->option('preview')) {
+            $this->info($body);
+            return;
+        }
+
         $newTag = $this->getReleaseVersion($lastTag);
 
         if ($this->option('changelog')) {
@@ -172,6 +177,7 @@ class GithubReleaseModuleCommand extends Command
             ['ver', null, InputOption::VALUE_OPTIONAL, 'Version to release. Auto increment version if not set', null],
             ['changelog', null, InputOption::VALUE_OPTIONAL, 'Write to changelog.md. Default: true', true],
             ['target', null, InputOption::VALUE_OPTIONAL, 'Target branch to release', 'master'],
+            ['preview', null, InputOption::VALUE_NONE, 'Preview release'],
         ];
     }
 }
