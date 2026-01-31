@@ -13,13 +13,16 @@
     "autoload": {
         "psr-4": {
             "Juzaweb\\DevTool\\": "src/"
-        }
+        },
+        "files": [
+            "helpers.php"
+        ]
     },
     "require": {
-        "php": "^8.0|^8.1"
+        "php": "^8.2"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
-        "juzaweb/modules": "dev-latest"
+        "juzaweb/core": "dev-master"
     }
 }
