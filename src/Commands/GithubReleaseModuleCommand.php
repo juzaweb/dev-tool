@@ -26,13 +26,19 @@ class GithubReleaseModuleCommand extends Command
     public function handle(): void
     {
         $token = $this->getGithubToken();
-        $repo = $this->getRepo();
-        $lastTag = $this->getLastTag();
+        $path = $this->argument('path');
+
+        if (!File::isDirectory($path)) {
+            $path = base_path($path);
+        }
+
+        $lastTag = $this->getLastTag($path);
+        $repo = $this->getRepo($path);
 
         if (empty($lastTag)) {
-            $body = $this->runCmd("git log --no-merges --pretty=format:\"* %s\" | uniq");
+            $body = $this->runCmd($path, "git log --no-merges --pretty=format:\"* %s\" | uniq");
         } else {
-            $body = $this->runCmd("git log --no-merges --pretty=format:\"* %s\" {$lastTag}..HEAD | uniq");
+            $body = $this->runCmd($path, "git log --no-merges --pretty=format:\"* %s\" {$lastTag}..HEAD | uniq");
         }
 
         if (empty($body)) {
@@ -50,15 +56,15 @@ class GithubReleaseModuleCommand extends Command
             $this->info('Add changelog');
 
             File::prepend(
-                base_path($this->argument('path')."/changelog.md"),
+                "{$path}/changelog.md",
                 "### v{$newTag} \n{$body}\n\n"
             );
 
-            $this->runCmd('git add changelog.md');
+            $this->runCmd($path, 'git add changelog.md');
 
-            $this->runCmd("git commit -o changelog.md -m ':memo: Add changelog v{$newTag}'");
+            $this->runCmd($path, "git commit -o changelog.md -m 'memo: Add changelog v{$newTag}'");
 
-            $this->runCmd('git push');
+            $this->runCmd($path, 'git push');
         }
 
         $this->info("Release v{$newTag}");
@@ -83,10 +89,10 @@ class GithubReleaseModuleCommand extends Command
         $this->info('Released url: '. $release->json()['html_url']);
     }
 
-    protected function getLastTag(): string
+    protected function getLastTag(string $path): string
     {
         try {
-            $lastTag = $this->runCmd('git ls-remote --tags --sort=-committerdate | head -1');
+            $lastTag = $this->runCmd($path, 'git ls-remote --tags --sort=-committerdate | head -1');
         } catch (\Exception $e) {
             $lastTag = '';
         }
@@ -97,7 +103,7 @@ class GithubReleaseModuleCommand extends Command
     protected function getGithubToken(): string
     {
         $token = config('dev-tool.release.github_token');
-        
+
         if (empty($token)) {
             do {
                 $token = $this->ask('Please enter your github token: ');
@@ -128,14 +134,8 @@ class GithubReleaseModuleCommand extends Command
         return get_version_by_tag($newTag);
     }
 
-    protected function runCmd(string|array $command): string
+    protected function runCmd(string $path, string|array $command): string
     {
-        $path = $this->argument('path');
-
-        if (!File::isDirectory($path)) {
-            $path = base_path($path);
-        }
-
         if (is_array($command)) {
             $process = new Process($command, $path);
         } else {
@@ -149,9 +149,9 @@ class GithubReleaseModuleCommand extends Command
         return trim($process->getOutput());
     }
 
-    protected function getRepo(): string
+    protected function getRepo(string $path): string
     {
-        $repo = $this->runCmd('git config --get remote.origin.url | sed \'s/.*[:|\/]\([^/]*\/[^/]*\)\.git$/\1/\'');
+        $repo = $this->runCmd($path, 'git config --get remote.origin.url | sed \'s/.*[:|\/]\([^/]*\/[^/]*\)\.git$/\1/\'');
 
         if (is_url($repo)) {
             $repo = ltrim(parse_url($repo, \PHP_URL_PATH), '/');
