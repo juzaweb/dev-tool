@@ -2,6 +2,7 @@
 
 namespace Juzaweb\DevTool\Providers;
 
+use Juzaweb\DevTool\Commands\GithubReleaseModuleCommand;
 use Juzaweb\Modules\Core\Providers\ServiceProvider;
 
 class DevToolServiceProvider extends ServiceProvider
@@ -13,6 +14,10 @@ class DevToolServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        //
+        $this->commands(
+            [
+                GithubReleaseModuleCommand::class,
+            ]
+        );
     }
 }
