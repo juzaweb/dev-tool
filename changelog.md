@@ -1,3 +1,16 @@
+### v2.0.0 
+* refactor(dev-tool): enable module path specification for github release command and merge dev-tool config.
+* feat(dev-tool): register GithubReleaseModuleCommand.
+* feat(dev-tool): allow GitHub token to be configured via environment variable.
+* tada: Begin v2
+* :+1: Add readme make plugin
+* :memo: Update readme
+* :+1: Preview release
+* :+1: Add theme route to plugin
+* :+1: Move translation to plugin
+* :+1: Make block command
+* :+1: Clear logs command
+
 ### v1.0.7 
 * :+1: Download style template
 
