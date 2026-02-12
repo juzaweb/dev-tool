@@ -16,12 +16,12 @@ class ComponentClassMakeCommandTest extends TestCase
         $this->app['config']->set('modules.paths.modules', base_path('modules'));
 
         // component-class configuration
-        $this->app['config']->set('modules.paths.generator.component-class.path', 'View/Components');
+        $this->app['config']->set('modules.paths.generator.component-class.path', 'src/View/Components');
         $this->app['config']->set('modules.paths.generator.component-class.generate', true);
         $this->app['config']->set('dev-tool.modules.paths.generator.component-class.namespace', 'View\\Components');
 
         // component-view configuration
-        $this->app['config']->set('modules.paths.generator.component-view.path', 'resources/views/components');
+        $this->app['config']->set('modules.paths.generator.component-view.path', 'src/resources/views/components');
         $this->app['config']->set('modules.paths.generator.component-view.generate', true);
 
         // Stubs path
