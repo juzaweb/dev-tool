@@ -14,9 +14,7 @@ class ConsoleServiceProvider extends ServiceProvider
     protected array $commands = [
         \Juzaweb\DevTool\Commands\Modules\CommandMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\ControllerMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\DisableCommand::class,
         \Juzaweb\DevTool\Commands\Modules\DumpCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\EnableCommand::class,
         \Juzaweb\DevTool\Commands\Modules\EventMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\JobMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\ListenerMakeCommand::class,
@@ -25,7 +23,6 @@ class ConsoleServiceProvider extends ServiceProvider
         \Juzaweb\DevTool\Commands\Modules\NotificationMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\ProviderMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\RouteProviderMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\ListCommand::class,
         \Juzaweb\DevTool\Commands\Modules\ModuleDeleteCommand::class,
         \Juzaweb\DevTool\Commands\Modules\ModuleMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\Databases\FactoryMakeCommand::class,
@@ -49,14 +46,12 @@ class ConsoleServiceProvider extends ServiceProvider
         \Juzaweb\DevTool\Commands\Modules\Databases\SeedMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\SetupCommand::class,
         \Juzaweb\DevTool\Commands\Modules\UnUseCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\UpdateCommand::class,
         \Juzaweb\DevTool\Commands\Modules\UseCommand::class,
         \Juzaweb\DevTool\Commands\Modules\ResourceMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\TestMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\ComponentClassMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\ComponentViewMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\DatatableMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\LinkCommand::class,
         \Juzaweb\DevTool\Commands\Modules\Cruds\AdminCrudMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\Cruds\CrudMakeCommand::class,
         // Theme commands
@@ -67,13 +62,8 @@ class ConsoleServiceProvider extends ServiceProvider
         \Juzaweb\DevTool\Commands\Themes\MakeTemplateCommand::class,
         \Juzaweb\DevTool\Commands\Themes\MakeViewCommand::class,
         \Juzaweb\DevTool\Commands\Themes\MakeWidgetCommand::class,
-        \Juzaweb\DevTool\Commands\Themes\ThemeActiveCommand::class,
         \Juzaweb\DevTool\Commands\Themes\ThemeGeneratorCommand::class,
-        \Juzaweb\DevTool\Commands\Themes\ThemeInstallCommand::class,
-        \Juzaweb\DevTool\Commands\Themes\ThemeListCommand::class,
-        \Juzaweb\DevTool\Commands\Themes\ThemePublishCommand::class,
         \Juzaweb\DevTool\Commands\Themes\ThemeSeedCommand::class,
-        \Juzaweb\DevTool\Commands\Themes\ThemeUpdateCommand::class,
     ];
 
     public function boot()
