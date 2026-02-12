@@ -56,12 +56,25 @@ class ConsoleServiceProvider extends ServiceProvider
         \Juzaweb\DevTool\Commands\Modules\TestMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\ComponentClassMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\ComponentViewMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\RepositoryMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\RepositoryEloquentMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\DatatableMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\LinkCommand::class,
         \Juzaweb\DevTool\Commands\Modules\Cruds\AdminCrudMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\Cruds\CrudMakeCommand::class,
+        // Theme commands
+        \Juzaweb\DevTool\Commands\Themes\DownloadStyleCommand::class,
+        \Juzaweb\DevTool\Commands\Themes\DownloadTemplateCommand::class,
+        \Juzaweb\DevTool\Commands\Themes\MakeControllerCommand::class,
+        \Juzaweb\DevTool\Commands\Themes\MakePageBlockCommand::class,
+        \Juzaweb\DevTool\Commands\Themes\MakeTemplateCommand::class,
+        \Juzaweb\DevTool\Commands\Themes\MakeViewCommand::class,
+        \Juzaweb\DevTool\Commands\Themes\MakeWidgetCommand::class,
+        \Juzaweb\DevTool\Commands\Themes\ThemeActiveCommand::class,
+        \Juzaweb\DevTool\Commands\Themes\ThemeGeneratorCommand::class,
+        \Juzaweb\DevTool\Commands\Themes\ThemeInstallCommand::class,
+        \Juzaweb\DevTool\Commands\Themes\ThemeListCommand::class,
+        \Juzaweb\DevTool\Commands\Themes\ThemePublishCommand::class,
+        \Juzaweb\DevTool\Commands\Themes\ThemeSeedCommand::class,
+        \Juzaweb\DevTool\Commands\Themes\ThemeUpdateCommand::class,
     ];
 
     public function boot()
