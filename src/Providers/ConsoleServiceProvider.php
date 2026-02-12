@@ -12,6 +12,7 @@ class ConsoleServiceProvider extends ServiceProvider
      * @var array
      */
     protected array $commands = [
+        \Juzaweb\DevTool\Commands\PublishAgentsCommand::class,
         \Juzaweb\DevTool\Commands\Modules\CommandMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\ControllerMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\DumpCommand::class,
