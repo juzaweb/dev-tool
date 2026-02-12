@@ -19,10 +19,11 @@
         ]
     },
     "require": {
-        "php": "^8.2"
+        "php": "^8.2",
+        "juzaweb/core": "^5.0"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
-        "juzaweb/core": "dev-master"
+        "laravel/framework": "^11.34"
     }
 }
