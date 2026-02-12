@@ -1,0 +1,4 @@
+@php
+    /** @var \Juzaweb\Modules\Core\Models\Pages\PageBlock $block */
+@endphp
+

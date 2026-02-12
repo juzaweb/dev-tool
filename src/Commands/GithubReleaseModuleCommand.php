@@ -19,7 +19,7 @@ use Symfony\Component\Process\Process;
 
 class GithubReleaseModuleCommand extends Command
 {
-    protected $name = 'github:release-module';
+    protected $name = 'github:release';
 
     protected $description = 'Create release module';
 
@@ -34,6 +34,8 @@ class GithubReleaseModuleCommand extends Command
 
         $lastTag = $this->getLastTag($path);
         $repo = $this->getRepo($path);
+
+        $this->runCmd($path, 'git pull');
 
         if (empty($lastTag)) {
             $body = $this->runCmd($path, "git log --no-merges --pretty=format:\"* %s\" | uniq");
