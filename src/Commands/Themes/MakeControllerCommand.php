@@ -41,7 +41,7 @@ class MakeControllerCommand extends GenerateCommand
             $controllerName .= 'Controller';
         }
 
-        Stub::setBasePath(config('themes.stubs.path') . '/');
+        Stub::setBasePath(config('dev-tool.themes.stubs.path') . '/');
         $controllerPath = $theme->path("src/Http/Controllers/{$controllerName}.php");
 
         if (file_exists($controllerPath) && !$this->option('force')) {

@@ -27,7 +27,7 @@ class MakeTemplateCommand extends GenerateCommand
             return self::FAILURE;
         }
 
-        Stub::setBasePath(config('themes.stubs.path') . '/');
+        Stub::setBasePath(config('dev-tool.themes.stubs.path') . '/');
         $templatePath = $theme->path("src/resources/views/templates/$name.blade.php");
 
         if (file_exists($templatePath) && !$this->option('force')) {

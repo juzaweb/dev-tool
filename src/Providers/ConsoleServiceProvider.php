@@ -25,7 +25,6 @@ class ConsoleServiceProvider extends ServiceProvider
         \Juzaweb\DevTool\Commands\Modules\NotificationMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\ProviderMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\RouteProviderMakeCommand::class,
-        \Juzaweb\Modules\Core\Modules\Commands\ModuleInstallCommand::class,
         \Juzaweb\DevTool\Commands\Modules\ListCommand::class,
         \Juzaweb\DevTool\Commands\Modules\ModuleDeleteCommand::class,
         \Juzaweb\DevTool\Commands\Modules\ModuleMakeCommand::class,
@@ -93,7 +92,7 @@ class ConsoleServiceProvider extends ServiceProvider
      */
     public function setupStubPath()
     {
-        $path = $this->app['config']->get('modules.stubs.path');
+        $path = $this->app['config']->get('dev-tool.modules.stubs.path');
 
         Stub::setBasePath($path);
 

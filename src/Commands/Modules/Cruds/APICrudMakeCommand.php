@@ -11,9 +11,9 @@ namespace Juzaweb\DevTool\Commands\Modules\Cruds;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
+use Juzaweb\DevTool\Generators\FileGenerator;
 use Juzaweb\Modules\Core\Modules\Contracts\RepositoryInterface;
 use Juzaweb\Modules\Core\Modules\Exceptions\FileAlreadyExistException;
-use Juzaweb\Modules\Core\Modules\Generators\FileGenerator;
 use Juzaweb\Modules\Core\Modules\Module;
 use Juzaweb\Modules\Core\Modules\Support\Config\GenerateConfigReader;
 use Juzaweb\Modules\Core\Modules\Support\Stub;

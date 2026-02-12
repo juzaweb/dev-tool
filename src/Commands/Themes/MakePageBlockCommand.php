@@ -29,7 +29,7 @@ class MakePageBlockCommand extends Command
             return self::FAILURE;
         }
 
-        Stub::setBasePath(config('dev-tool.themes.stubs.path'));
+        Stub::setBasePath(config('dev-tool.dev-tool.themes.stubs.path'));
 
         $formPath = $theme->path("src/resources/views/components/blocks/{$name}/form.blade.php");
         $viewPath = $theme->path("src/resources/views/components/blocks/{$name}/view.blade.php");

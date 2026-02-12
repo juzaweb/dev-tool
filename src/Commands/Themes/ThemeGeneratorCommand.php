@@ -56,7 +56,7 @@ class ThemeGeneratorCommand extends Command
     public function handle(): void
     {
         $this->themePath = config('themes.path');
-        $this->themeFolders = config('themes.stubs.folders');
+        $this->themeFolders = config('dev-tool.themes.stubs.folders');
         $this->theme['name'] = $this->argument('name');
         $this->themeStubPath = $this->getThemeStubPath();
         $this->init();
@@ -80,7 +80,7 @@ class ThemeGeneratorCommand extends Command
 
         $this->generateThemeInfo();
 
-        $themeStubFiles = config('themes.stubs.files');
+        $themeStubFiles = config('dev-tool.themes.stubs.files');
         $themeStubFiles['theme'] = 'theme.json';
         $themeStubFiles['changelog'] = 'changelog.md';
         $this->makeDir($createdThemePath);
@@ -215,7 +215,7 @@ class ThemeGeneratorCommand extends Command
 
     protected function getThemeStubPath(): string
     {
-        return config('themes.stubs.path');
+        return config('dev-tool.themes.stubs.path');
     }
 
     protected function getArguments(): array

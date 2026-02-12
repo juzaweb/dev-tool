@@ -26,7 +26,7 @@ class MakeViewCommand extends GenerateCommand
             return self::FAILURE;
         }
 
-        Stub::setBasePath(config('themes.stubs.path') . '/');
+        Stub::setBasePath(config('dev-tool.themes.stubs.path') . '/');
         $viewPath = $theme->path("src/resources/views/$name.blade.php");
 
         if (file_exists($viewPath) && !$this->option('force')) {

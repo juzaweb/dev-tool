@@ -3,8 +3,8 @@
 namespace Juzaweb\DevTool\Commands\Modules;
 
 use Illuminate\Console\Command;
+use Juzaweb\DevTool\Generators\ModuleGenerator;
 use Juzaweb\Modules\Core\Modules\Contracts\ActivatorInterface;
-use Juzaweb\Modules\Core\Modules\Generators\ModuleGenerator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
