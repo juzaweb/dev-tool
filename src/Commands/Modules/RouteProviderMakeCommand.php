@@ -110,7 +110,7 @@ class RouteProviderMakeCommand extends GeneratorCommand
     {
         $module = $this->laravel['modules'];
 
-        return $module->config('paths.generator.provider.namespace') ?: $module->config('paths.generator.provider.path', 'Providers');
+        return config('dev-tool.modules.paths.generator.provider.namespace') ?: config('dev-tool.modules.paths.generator.provider.path', 'Providers');
     }
 
     /**
@@ -120,6 +120,6 @@ class RouteProviderMakeCommand extends GeneratorCommand
     {
         $module = $this->laravel['modules'];
 
-        return str_replace('/', '\\', $module->config('paths.generator.controller.namespace') ?: $module->config('paths.generator.controller.path', 'Controller'));
+        return str_replace('/', '\\', config('dev-tool.modules.paths.generator.controller.namespace') ?: config('dev-tool.modules.paths.generator.controller.path', 'Controller'));
     }
 }

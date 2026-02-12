@@ -56,7 +56,7 @@ class ComponentClassMakeCommand extends GeneratorCommand
     {
         $module = $this->laravel['modules'];
 
-        return $module->config('paths.generator.component-class.namespace') ?: $module->config('paths.generator.component-class.path', 'View/Component');
+        return config('dev-tool.modules.paths.generator.component-class.namespace') ?: config('dev-tool.modules.paths.generator.component-class.path', 'View/Component');
     }
 
     /**

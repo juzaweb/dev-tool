@@ -38,7 +38,7 @@ class CommandMakeCommand extends GeneratorCommand
     {
         $module = $this->laravel['modules'];
 
-        return $module->config('paths.generator.command.namespace') ?: $module->config('paths.generator.command.path', 'Console');
+        return config('dev-tool.modules.paths.generator.command.namespace') ?: config('dev-tool.modules.paths.generator.command.path', 'Console');
     }
 
     /**

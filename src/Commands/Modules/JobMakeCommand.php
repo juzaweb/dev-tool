@@ -33,7 +33,7 @@ class JobMakeCommand extends GeneratorCommand
     {
         $module = $this->laravel['modules'];
 
-        return $module->config('paths.generator.jobs.namespace') ?: $module->config('paths.generator.jobs.path', 'Jobs');
+        return config('dev-tool.modules.paths.generator.jobs.namespace') ?: config('dev-tool.modules.paths.generator.jobs.path', 'Jobs');
     }
 
     /**

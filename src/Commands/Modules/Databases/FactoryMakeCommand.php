@@ -98,7 +98,7 @@ class FactoryMakeCommand extends GeneratorCommand
     {
         $module = $this->laravel['modules'];
 
-        return $module->config('paths.generator.factory.namespace') ?: $module->config('paths.generator.factory.path');
+        return config('dev-tool.modules.paths.generator.factory.namespace') ?: config('dev-tool.modules.paths.generator.factory.path');
     }
 
     /**

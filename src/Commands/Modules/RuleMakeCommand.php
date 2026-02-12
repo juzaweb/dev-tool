@@ -37,7 +37,7 @@ class RuleMakeCommand extends GeneratorCommand
     {
         $module = $this->laravel['modules'];
 
-        return $module->config('paths.generator.rules.namespace') ?: $module->config('paths.generator.rules.path', 'Rules');
+        return config('dev-tool.modules.paths.generator.rules.namespace') ?: config('dev-tool.modules.paths.generator.rules.path', 'Rules');
     }
 
     /**

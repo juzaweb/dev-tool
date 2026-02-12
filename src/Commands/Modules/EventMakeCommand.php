@@ -59,7 +59,7 @@ class EventMakeCommand extends GeneratorCommand
     {
         $module = $this->laravel['modules'];
 
-        return $module->config('paths.generator.event.namespace') ?: $module->config('paths.generator.event.path', 'Events');
+        return config('dev-tool.modules.paths.generator.event.namespace') ?: config('dev-tool.modules.paths.generator.event.path', 'Events');
     }
 
     /**

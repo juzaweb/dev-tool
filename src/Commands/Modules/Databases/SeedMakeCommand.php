@@ -112,6 +112,6 @@ class SeedMakeCommand extends GeneratorCommand
     {
         $module = $this->laravel['modules'];
 
-        return $module->config('paths.generator.seeder.namespace') ?: $module->config('paths.generator.seeder.path', 'Database/Seeders');
+        return config('dev-tool.modules.paths.generator.seeder.namespace') ?: config('dev-tool.modules.paths.generator.seeder.path', 'Database/Seeders');
     }
 }

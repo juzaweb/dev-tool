@@ -72,7 +72,7 @@ class ListenerMakeCommand extends GeneratorCommand
     {
         $module = $this->laravel['modules'];
 
-        return $module->config('paths.generator.listener.namespace') ?: $module->config('paths.generator.listener.path', 'Listeners');
+        return config('dev-tool.modules.paths.generator.listener.namespace') ?: config('dev-tool.modules.paths.generator.listener.path', 'Listeners');
     }
 
     protected function getEventName(Module $module)

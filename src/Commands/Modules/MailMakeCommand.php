@@ -32,7 +32,7 @@ class MailMakeCommand extends GeneratorCommand
     {
         $module = $this->laravel['modules'];
 
-        return $module->config('paths.generator.emails.namespace') ?: $module->config('paths.generator.emails.path', 'Emails');
+        return config('dev-tool.modules.paths.generator.emails.namespace') ?: config('dev-tool.modules.paths.generator.emails.path', 'Emails');
     }
 
     /**

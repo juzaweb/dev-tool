@@ -37,7 +37,7 @@ class PolicyMakeCommand extends GeneratorCommand
     {
         $module = $this->laravel['modules'];
 
-        return $module->config('paths.generator.policies.namespace') ?: $module->config('paths.generator.policies.path', 'Policies');
+        return config('dev-tool.modules.paths.generator.policies.namespace') ?: config('dev-tool.modules.paths.generator.policies.path', 'Policies');
     }
 
     /**

@@ -39,7 +39,7 @@ class ProviderMakeCommand extends GeneratorCommand
     {
         $module = $this->laravel['modules'];
 
-        return $module->config('paths.generator.provider.namespace') ?: $module->config('paths.generator.provider.path',
+        return config('dev-tool.modules.paths.generator.provider.namespace') ?: config('dev-tool.modules.paths.generator.provider.path',
             'Providers');
     }
 

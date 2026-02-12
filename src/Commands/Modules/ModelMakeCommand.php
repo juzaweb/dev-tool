@@ -224,7 +224,7 @@ class ModelMakeCommand extends GeneratorCommand
     {
         $module = $this->laravel['modules'];
 
-        return $module->config('paths.generator.model.namespace') ?: $module->config('paths.generator.model.path',
+        return config('dev-tool.modules.paths.generator.model.namespace') ?: config('dev-tool.modules.paths.generator.model.path',
             'Entities');
     }
 }

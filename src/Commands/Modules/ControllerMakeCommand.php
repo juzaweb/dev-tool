@@ -109,8 +109,8 @@ class ControllerMakeCommand extends GeneratorCommand
     {
         $module = app(FileRepository::class);
 
-        return $module->config('paths.generator.controller.namespace')
-            ?: $module->config('paths.generator.controller.path', 'Http/Controllers');
+        return config('dev-tool.modules.paths.generator.controller.namespace')
+            ?: config('dev-tool.modules.paths.generator.controller.path', 'Http/Controllers');
     }
 
     /**
