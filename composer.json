@@ -24,14 +24,14 @@
         }
     },
     "require": {
-        "php": "^8.2",
-        "juzaweb/core": "^5.0"
+        "php": "^8.2"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
         "laravel/framework": "^11.34",
         "orchestra/testbench": "^9.0",
         "phpunit/phpunit": "^11.0",
-        "mockery/mockery": "^1.6"
+        "mockery/mockery": "^1.6",
+        "juzaweb/core": "dev-master"
     }
 }
