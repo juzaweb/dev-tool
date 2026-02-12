@@ -82,7 +82,7 @@ class ConsoleServiceProvider extends ServiceProvider
      */
     public function setupStubPath()
     {
-        $path = $this->app['config']->get('dev-tool.modules.stubs.path');
+        $path = $this->app['config']->get('dev-tool.dev-tool.modules.stubs.path');
 
         Stub::setBasePath($path);
 

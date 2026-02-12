@@ -59,7 +59,7 @@ class ModelShowCommand extends ShowModelCommand
 
         $modelPath = glob($rootNamespace . DIRECTORY_SEPARATOR .
             '*' . DIRECTORY_SEPARATOR .
-            config('modules.paths.generator.model.path') . DIRECTORY_SEPARATOR .
+            config('dev-tool.modules.paths.generator.model.path') . DIRECTORY_SEPARATOR .
             "$model.php");
 
         if (!count($modelPath)) {
