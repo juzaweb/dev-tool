@@ -5,30 +5,9 @@ namespace Juzaweb\DevTool\Tests\Feature;
 use Illuminate\Support\Facades\File;
 use Juzaweb\DevTool\Tests\TestCase;
 use Juzaweb\Modules\Core\Modules\Support\Stub;
-use Juzaweb\Modules\Core\Providers\CoreServiceProvider;
-use Juzaweb\Modules\Core\Translations\TranslationsServiceProvider;
 
 class CommandMakeCommandTest extends TestCase
 {
-    protected function getPackageProviders($app)
-    {
-        return array_merge(
-            parent::getPackageProviders($app),
-            [
-                CoreServiceProvider::class,
-                TranslationsServiceProvider::class,
-            ]
-        );
-    }
-
-    protected function getPackageAliases($app)
-    {
-        return [
-            'Theme' => \Juzaweb\Modules\Core\Facades\Theme::class,
-            'Module' => \Juzaweb\Modules\Core\Facades\Module::class,
-        ];
-    }
-
     protected function setUp(): void
     {
         parent::setUp();
