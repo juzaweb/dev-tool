@@ -4,10 +4,12 @@ namespace Juzaweb\DevTool\Generators;
 
 use Illuminate\Config\Repository as Config;
 use Illuminate\Console\Command as Console;
+use Illuminate\Console\View\Components\Factory;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use Juzaweb\Modules\Core\Modules\Contracts\ActivatorInterface;
 use Juzaweb\Modules\Core\Modules\FileRepository;
+use Juzaweb\Modules\Core\Modules\Module;
 use Juzaweb\Modules\Core\Modules\Support\Config\GenerateConfigReader;
 use Juzaweb\Modules\Core\Modules\Support\Stub;
 
@@ -44,7 +46,7 @@ class ModuleGenerator extends Generator
     /**
      * The laravel component Factory instance.
      *
-     * @var \Illuminate\Console\View\Components\Factory
+     * @var Factory
      */
     protected $component;
 
@@ -59,7 +61,7 @@ class ModuleGenerator extends Generator
     /**
      * The module instance.
      *
-     * @var \Juzaweb\Modules\Core\Modules\Module
+     * @var Module
      */
     protected $module;
 
@@ -111,11 +113,11 @@ class ModuleGenerator extends Generator
     /**
      * Set type.
      *
-     * @param string $type
+     * @param  string  $type
      *
      * @return $this
      */
-    public function setType($type)
+    public function setType(string $type)
     {
         $this->type = $type;
 
@@ -137,7 +139,7 @@ class ModuleGenerator extends Generator
     }
 
     /**
-     * Get the name of module will created. By default in studly case.
+     * Get the name of module will create. By default, in studly case.
      *
      * @return string
      */
@@ -169,11 +171,11 @@ class ModuleGenerator extends Generator
     /**
      * Set the laravel config instance.
      *
-     * @param Config $config
+     * @param  Config  $config
      *
      * @return $this
      */
-    public function setConfig($config)
+    public function setConfig(Config $config)
     {
         $this->config = $config;
 
@@ -207,11 +209,11 @@ class ModuleGenerator extends Generator
     /**
      * Set the laravel filesystem instance.
      *
-     * @param Filesystem $filesystem
+     * @param  Filesystem  $filesystem
      *
      * @return $this
      */
-    public function setFilesystem($filesystem)
+    public function setFilesystem(Filesystem $filesystem)
     {
         $this->filesystem = $filesystem;
 
@@ -231,11 +233,11 @@ class ModuleGenerator extends Generator
     /**
      * Set the laravel console instance.
      *
-     * @param Console $console
+     * @param  Console  $console
      *
      * @return $this
      */
-    public function setConsole($console)
+    public function setConsole(Console $console)
     {
         $this->console = $console;
 
@@ -243,17 +245,18 @@ class ModuleGenerator extends Generator
     }
 
     /**
-     * @return \Illuminate\Console\View\Components\Factory
+     * @return Factory
      */
-    public function getComponent(): \Illuminate\Console\View\Components\Factory
+    public function getComponent(): Factory
     {
         return $this->component;
     }
 
     /**
-     * @param \Illuminate\Console\View\Components\Factory $component
+     * @param  Factory  $component
+     * @return ModuleGenerator
      */
-    public function setComponent(\Illuminate\Console\View\Components\Factory $component): self
+    public function setComponent(Factory $component): self
     {
         $this->component = $component;
         return $this;
@@ -262,7 +265,7 @@ class ModuleGenerator extends Generator
     /**
      * Get the module instance.
      *
-     * @return \Juzaweb\Modules\Core\Modules\Module
+     * @return Module
      */
     public function getModule()
     {
@@ -276,7 +279,7 @@ class ModuleGenerator extends Generator
      *
      * @return $this
      */
-    public function setModule($module)
+    public function setModule(mixed $module)
     {
         $this->module = $module;
 
@@ -290,7 +293,7 @@ class ModuleGenerator extends Generator
      */
     public function getFolders()
     {
-        return $this->module->config('paths.generator');
+        return config('dev-tool.modules.paths.generator');
     }
 
     /**
@@ -300,17 +303,17 @@ class ModuleGenerator extends Generator
      */
     public function getFiles()
     {
-        return $this->module->config('stubs.files');
+        return config('dev-tool.modules.stubs.files');
     }
 
     /**
      * Set force status.
      *
-     * @param bool|int $force
+     * @param  bool|int  $force
      *
      * @return $this
      */
-    public function setForce($force)
+    public function setForce(bool|int $force)
     {
         $this->force = $force;
 
@@ -381,9 +384,9 @@ class ModuleGenerator extends Generator
     /**
      * Generate git keep to the specified path.
      *
-     * @param string $path
+     * @param  string  $path
      */
-    public function generateGitKeep($path)
+    public function generateGitKeep(string $path)
     {
         $this->filesystem->put($path . '/.gitkeep', '');
     }
