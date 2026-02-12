@@ -36,8 +36,6 @@ class CommandMakeCommand extends GeneratorCommand
 
     public function getDefaultNamespace(): string
     {
-        $module = $this->laravel['modules'];
-
         return config('dev-tool.modules.paths.generator.command.namespace') ?: config('dev-tool.modules.paths.generator.command.path', 'Console');
     }
 
