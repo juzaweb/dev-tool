@@ -1,6 +1,6 @@
 <?php
 
-namespace Juzaweb\DevTool\Tests\Feature;
+namespace Juzaweb\DevTool\Tests\Unit;
 
 use Illuminate\Support\Facades\File;
 use Juzaweb\DevTool\Tests\TestCase;
