@@ -96,11 +96,11 @@ class ModuleGenerator extends Generator
      */
     public function __construct(
         $name,
-        FileRepository $module = null,
-        Config $config = null,
-        Filesystem $filesystem = null,
-        Console $console = null,
-        ActivatorInterface $activator = null
+        ?FileRepository $module = null,
+        ?Config $config = null,
+        ?Filesystem $filesystem = null,
+        ?Console $console = null,
+        ?ActivatorInterface $activator = null
     ) {
         $this->name = $name;
         $this->config = $config;
@@ -463,7 +463,7 @@ class ModuleGenerator extends Generator
      */
     public function getReplacements()
     {
-        return $this->module->config('stubs.replacements');
+        return config('dev-tool.modules.stubs.replacements');
     }
 
     /**
@@ -475,7 +475,7 @@ class ModuleGenerator extends Generator
      */
     protected function getReplacement($stub)
     {
-        $replacements = $this->module->config('stubs.replacements');
+        $replacements = config('dev-tool.modules.stubs.replacements');
 
         if (!isset($replacements[$stub])) {
             return [];
@@ -563,7 +563,7 @@ class ModuleGenerator extends Generator
      */
     protected function getVendorReplacement()
     {
-        return $this->module->config('composer.vendor');
+        return config('dev-tool.modules.composer.vendor');
     }
 
     /**
@@ -573,7 +573,7 @@ class ModuleGenerator extends Generator
      */
     protected function getModuleNamespaceReplacement()
     {
-        return str_replace('\\', '\\\\', $this->module->config('namespace'));
+        return str_replace('\\', '\\\\', config('dev-tool.modules.namespace'));
     }
 
     /**
@@ -583,7 +583,7 @@ class ModuleGenerator extends Generator
      */
     protected function getPhpModuleNamespaceReplacement()
     {
-        return $this->module->config('namespace');
+        return config('dev-tool.modules.namespace');
     }
 
     /**
@@ -593,7 +593,7 @@ class ModuleGenerator extends Generator
      */
     protected function getAuthorNameReplacement()
     {
-        return $this->module->config('composer.author.name');
+        return config('dev-tool.modules.composer.author.name');
     }
 
     /**
@@ -603,7 +603,7 @@ class ModuleGenerator extends Generator
      */
     protected function getAuthorEmailReplacement()
     {
-        return $this->module->config('composer.author.email');
+        return config('dev-tool.modules.composer.author.email');
     }
 
     protected function getProviderNamespaceReplacement(): string
