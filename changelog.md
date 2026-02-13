@@ -1,3 +1,6 @@
+### v2.0.2 
+* refactor: update module namespace config key
+
 ### v2.0.1 
 * Add unit tests for theme commands and fix generation bugs
 * Add unit tests for database module commands
