@@ -54,6 +54,7 @@ class ConsoleServiceProvider extends ServiceProvider
         \Juzaweb\DevTool\Commands\Modules\ComponentViewMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\DatatableMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\Cruds\AdminCrudMakeCommand::class,
+        \Juzaweb\DevTool\Commands\Modules\Cruds\APICrudMakeCommand::class,
         \Juzaweb\DevTool\Commands\Modules\Cruds\CrudMakeCommand::class,
         // Theme commands
         \Juzaweb\DevTool\Commands\Themes\DownloadStyleCommand::class,
