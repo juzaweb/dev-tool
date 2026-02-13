@@ -58,7 +58,7 @@ class EventMakeCommandTest extends TestCase
         $content = File::get(base_path('modules/Blog/src/Events/PostCreated.php'));
 
         $this->assertStringContainsString('class PostCreated', $content);
-        $this->assertStringContainsString('namespace Juzaweb\Blog\Events;', $content);
+        $this->assertStringContainsString('namespace Juzaweb\Modules\Blog\Events;', $content);
         $this->assertStringContainsString('use Illuminate\Queue\SerializesModels;', $content);
     }
 }
