@@ -43,13 +43,19 @@ class ResourceMakeCommand extends GeneratorCommand
 
         $module = app(RepositoryInterface::class)->findOrFail($this->getModuleName());
 
-        $model = $this->makeModel($module);
-
-        if ($model === false) {
-            return false;
+        try {
+            $model = $this->makeModel($module);
+        } catch (\Throwable $e) {
+            $model = false;
         }
 
-        $this->mapFieldsFromModel($model);
+        if ($model === false) {
+            if ($this->option('for-model')) {
+                return false;
+            }
+        } elseif ($model) {
+            $this->mapFieldsFromModel($model);
+        }
 
         if ($this->fields) {
             $this->withModel = true;
