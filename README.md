@@ -113,5 +113,23 @@ php artisan agents:publish
 
 Options:
 - `--force`: Overwrite existing files without confirmation
+- `--skills`: Publish only the skills folder
+- `--rules`: Publish only the rules folder
 
 This command copies agent configuration files from the dev-tool package to your project's `.agent` directory, enabling AI-powered development assistance.
+
+Examples:
+
+```bash
+# Publish all agents
+php artisan agents:publish
+
+# Publish only skills folder
+php artisan agents:publish --skills
+
+# Publish only rules folder
+php artisan agents:publish --rules
+
+# Force overwrite existing files
+php artisan agents:publish --force
+```
