@@ -75,7 +75,7 @@ class ThemeGeneratorCommand extends Command
 
         if (!$force && File::isDirectory($createdThemePath)) {
             $this->error('Sorry, ' . Str::kebab($this->theme['name']) . ' Theme Folder Already Exist !!!');
-            exit();
+            return;
         }
 
         $this->generateThemeInfo();

@@ -83,7 +83,7 @@ class MakeWidgetCommand extends Command
             }
         );\n";
 
-        $pattern = '/(public function boot\s*\(\)\s*\{)([\s\S]*?)(^\s*\})/m';
+        $pattern = '/(public function boot\s*\(\)(?:\s*:\s*void)?\s*\{)([\s\S]*?)(^\s*\})/m';
         if (preg_match($pattern, $content)) {
             $replacement = '$1$2' . "\n" . $stub . '$3';
             $newContent = preg_replace($pattern, $replacement, $content);
