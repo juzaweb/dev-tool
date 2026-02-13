@@ -46,12 +46,10 @@ class ResourceMakeCommand extends GeneratorCommand
         $model = $this->makeModel($module);
 
         if ($model === false) {
-            if ($this->option('for-model')) {
-                return false;
-            }
-        } elseif ($model) {
-            $this->mapFieldsFromModel($model);
+            return false;
         }
+
+        $this->mapFieldsFromModel($model);
 
         if ($this->fields) {
             $this->withModel = true;
