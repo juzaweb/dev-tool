@@ -29,7 +29,7 @@ class MakePageBlockCommand extends Command
             return self::FAILURE;
         }
 
-        Stub::setBasePath(config('dev-tool.dev-tool.themes.stubs.path'));
+        Stub::setBasePath(config('dev-tool.themes.stubs.path') . '/');
 
         $formPath = $theme->path("src/resources/views/components/blocks/{$name}/form.blade.php");
         $viewPath = $theme->path("src/resources/views/components/blocks/{$name}/view.blade.php");
@@ -72,7 +72,7 @@ class MakePageBlockCommand extends Command
             $content = file_get_contents($providerFile);
         }
 
-        $pattern = '/(public function boot\s*\(\)\s*\{)([\s\S]*?)(^\s*\})/m';
+        $pattern = '/(public function boot\s*\(\)(?:\s*:\s*void)?\s*\{)([\s\S]*?)(^\s*\})/m';
         $replacement = '$1$2' . "        PageBlock::make(
             '{$name}',
             function () {

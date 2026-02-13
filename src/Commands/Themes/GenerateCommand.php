@@ -20,7 +20,7 @@ abstract class GenerateCommand extends Command
 {
     protected function getStyleProviderContents(Theme $theme): false|string
     {
-        $providerFile = $theme->path('Providers/StyleServiceProvider.php');
+        $providerFile = $theme->path('src/Providers/StyleServiceProvider.php');
         if (!file_exists($providerFile)) {
             $content = $this->generateContents(
                 'provider.stub',
@@ -38,7 +38,7 @@ abstract class GenerateCommand extends Command
 
     protected function addToProviderBoot(string $code, string $content): string
     {
-        $pattern = '/(public function boot\s*\(\)\s*\{)([\s\S]*?)(^\s*\})/m';
+        $pattern = '/(public function boot\s*\(\)(?:\s*:\s*void)?\s*\{)([\s\S]*?)(^\s*\})/m';
 
         $replacement = '$1$2' . $code . '$3';
 
@@ -75,7 +75,7 @@ abstract class GenerateCommand extends Command
 
     protected function writeStyleProvider(Theme $theme, string $newContent): void
     {
-        file_put_contents($theme->path('Providers/StyleServiceProvider.php'), $newContent);
+        file_put_contents($theme->path('src/Providers/StyleServiceProvider.php'), $newContent);
     }
 
     protected function generateContents(string $stub, array $data): string
