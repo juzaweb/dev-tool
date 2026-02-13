@@ -573,7 +573,7 @@ class ModuleGenerator extends Generator
      */
     protected function getModuleNamespaceReplacement()
     {
-        return str_replace('\\', '\\\\', config('dev-tool.modules.namespace'));
+        return str_replace('\\', '\\\\', config('modules.namespace'));
     }
 
     /**
@@ -583,7 +583,7 @@ class ModuleGenerator extends Generator
      */
     protected function getPhpModuleNamespaceReplacement()
     {
-        return config('dev-tool.modules.namespace');
+        return config('modules.namespace');
     }
 
     /**
