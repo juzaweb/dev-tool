@@ -80,7 +80,7 @@ class ListenerMakeCommand extends GeneratorCommand
         $namespace = $this->laravel['modules']->config('namespace') . "\\" . $module->getStudlyName();
         $eventPath = GenerateConfigReader::read('event');
 
-        $eventName = $namespace . "\\" . $eventPath->getPath() . "\\" . $this->option('event');
+        $eventName = $namespace . "\\" . $eventPath->getNamespace() . "\\" . $this->option('event');
 
         return str_replace('/', '\\', $eventName);
     }
