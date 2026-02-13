@@ -14,7 +14,7 @@ class EventMakeCommandTest extends TestCase
 
         // Setup module configuration
         $this->app['config']->set('modules.paths.modules', base_path('modules'));
-        $this->app['config']->set('modules.namespace', 'Juzaweb');
+        $this->app['config']->set('modules.namespace', 'Juzaweb\\Modules');
         $this->app['config']->set('modules.paths.generator.event.path', 'src/Events');
         $this->app['config']->set('modules.paths.generator.event.generate', true);
         $this->app['config']->set('dev-tool.modules.stubs.path', dirname(__DIR__, 2) . '/stubs/modules/');
