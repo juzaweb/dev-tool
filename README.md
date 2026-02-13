@@ -102,3 +102,16 @@ Example:
 ```bash
 php artisan github:release modules/my-module --ver=1.0.1 --target=main
 ```
+
+### Agents Publishing
+
+Publish dev-tool agents to the `.agent` directory for development assistance:
+
+```bash
+php artisan agents:publish
+```
+
+Options:
+- `--force`: Overwrite existing files without confirmation
+
+This command copies agent configuration files from the dev-tool package to your project's `.agent` directory, enabling AI-powered development assistance.
