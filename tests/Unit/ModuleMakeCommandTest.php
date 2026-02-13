@@ -58,7 +58,7 @@ class ModuleMakeCommandTest extends TestCase
         $moduleJson = json_decode(File::get(base_path('modules/blog/module.json')), true);
         $this->assertEquals('Blog', $moduleJson['name']);
         // Check if provider is registered in module.json
-        $this->assertContains('Juzaweb\\Blog\\Providers\\BlogServiceProvider', $moduleJson['providers']);
+        $this->assertContains('Juzaweb\\Modules\\Blog\\Providers\\BlogServiceProvider', $moduleJson['providers']);
     }
 
     public function test_it_creates_module_plain()
