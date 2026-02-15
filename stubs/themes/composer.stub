@@ -6,8 +6,7 @@
     "license": "GPL-2.0",
     "homepage": "https://juzaweb.com/cms",
     "require": {
-        "php": "^8.2",
-        "juzaweb/core": "^5.0"
+        "php": "^8.2"
     },
     "autoload": {
         "psr-4": {
@@ -22,7 +21,8 @@
     },
     "require-dev": {
         "orchestra/testbench": "^9.0",
-        "phpunit/phpunit": "^11.0"
+        "phpunit/phpunit": "^11.0",
+        "juzaweb/core": "^5.0"
     },
     "autoload-dev": {
         "psr-4": {
