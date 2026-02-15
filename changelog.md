@@ -1,3 +1,11 @@
+### v2.0.3 
+* refactor(dev-tool): move juzaweb/core dependency to require-dev in module and theme composer stubs
+* feat(dev-tool): enhance gitignore stubs for themes and modules with common ignored files like `storage/`, `composer.lock`, and `node_modules/`
+* refactor: Update Blade view and component namespaces from `admin::` to `core::`.
+* fix(tests): update provider path in ModuleMakeCommandTest to reflect new namespace
+* fix(dev-tool): update modules namespace configuration in EventMakeCommandTest
+* fix(dev-tool): update expected event namespace assertion in `EventMakeCommandTest` to include 'Modules'.
+
 ### v2.0.2 
 * refactor: update module namespace config key
 
