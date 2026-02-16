@@ -63,9 +63,9 @@ return [
             'enabled' => true,
             'path' => base_path('vendor/juzaweb/dev-tool/stubs/modules/'),
             'files' => [
-                'routes/admin' => 'routes/admin.php',
-                'routes/web' => 'routes/web.php',
-                'routes/api' => 'routes/api.php',
+                'routes/admin' => 'src/routes/admin.php',
+                'routes/web' => 'src/routes/web.php',
+                'routes/api' => 'src/routes/api.php',
                 // 'views/index' => 'resources/views/index.blade.php',
                 // 'views/master' => 'resources/views/layouts/master.blade.php',
                 'scaffold/config' => 'config/config.php',
