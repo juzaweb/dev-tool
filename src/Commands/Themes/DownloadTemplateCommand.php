@@ -59,7 +59,7 @@ class DownloadTemplateCommand extends DownloadCommand
             $this->data['file'] = "{$this->data['file']}.blade.php";
         }
 
-        $output = $this->theme->path('resources/views');
+        $output = $this->theme->path('src/resources/views');
         $path = "{$output}/{$this->data['file']}";
 
         if (!File::isDirectory(dirname($path))) {
