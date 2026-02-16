@@ -104,7 +104,7 @@ mix.combine([
     protected function downloadCss(HtmlDom $domp): array
     {
         $result = [];
-        $output = "themes/{$this->theme->studlyName()}/assets";
+        $output = "themes/{$this->theme->name()}/assets";
 
         foreach ($domp->find('link[rel="stylesheet"]') as $e) {
             $href = $e->href;
@@ -138,7 +138,7 @@ mix.combine([
     protected function downloadJs(HtmlDom $domp): array
     {
         $result = [];
-        $output = "themes/{$this->theme->studlyName()}/assets";
+        $output = "themes/{$this->theme->name()}/assets";
 
         foreach ($domp->find('script') as $e) {
             $href = $e->src;
@@ -186,6 +186,7 @@ mix.combine([
 
             foreach ($matches[1] as $assetUrl) {
                 if (is_url($assetUrl) && $this->isExcludeDomain($assetUrl)) {
+                    $this->warn("Skip {$assetUrl}");
                     continue;
                 }
 
