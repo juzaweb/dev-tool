@@ -7,7 +7,7 @@
 
     @include('core::components.theme-head')
 
-    <title>@yield('title'){{ setting('sitename') ? ' - ' . setting('sitename') : '' }}</title>
+    <title>{{ $title }}{{ setting('sitename') ? ' - ' . setting('sitename') : '' }}</title>
 
     <x-theme-js-var view-page="{{ $viewPage ?? '' }}" />
 
