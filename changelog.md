@@ -1,3 +1,11 @@
+### v2.0.4 
+* refactor: add path module import in mix.stub for improved path handling
+* refactor: update theme layout stub to use `$title` variable instead of `@yield('title')` for page titles
+* feat(dev-tool): add database seeders autoload to module composer stub
+* fix(theme): Update path for template file retrieval in DownloadTemplateCommand
+* fix(dev-tool): Use theme name for asset paths instead of studly name and add a warning for skipped assets.
+* fix(dev-tool): update route file paths to reflect new directory structure
+
 ### v2.0.3 
 * refactor(dev-tool): move juzaweb/core dependency to require-dev in module and theme composer stubs
 * feat(dev-tool): enhance gitignore stubs for themes and modules with common ignored files like `storage/`, `composer.lock`, and `node_modules/`
