@@ -2,11 +2,15 @@
 
 namespace Juzaweb\DevTool\Tests\Unit\Commands;
 
-use Illuminate\Support\Facades\File;
+use Illuminate\Filesystem\Filesystem;
 use Juzaweb\DevTool\Tests\TestCase;
+use Mockery;
+use Mockery\MockInterface;
+use Symfony\Component\Finder\SplFileInfo;
 
 class PublishAgentsCommandTest extends TestCase
 {
+    protected MockInterface|Filesystem $files;
     protected string $baseSourcePath;
     protected string $destinationPath;
 
@@ -14,91 +18,111 @@ class PublishAgentsCommandTest extends TestCase
     {
         parent::setUp();
 
-        // The path in PublishAgentsCommand is:
-        // $baseSourcePath = dirname(__DIR__, 2) . '/agents';
-        // In the app container, the agents are located at /app/agents
-        // The command will resolve dirname(__DIR__, 2) internally
-        // We set up baseSourcePath to explicitly use the existing agents directory for our tests to check files
-        $this->baseSourcePath = '/app/agents';
+        $this->files = Mockery::mock(Filesystem::class);
+        $this->app->instance(Filesystem::class, $this->files);
+
+        // The command class calculates the source directory like this:
+        // dirname(__DIR__, 2) . '/agents' (where __DIR__ is src/Commands)
+        $commandDir = realpath(__DIR__ . '/../../../src/Commands');
+        $this->baseSourcePath = dirname($commandDir, 2) . '/agents';
 
         $this->destinationPath = base_path('.agent');
-
-        // Ensure destination base_path() is clean
-        if (File::isDirectory($this->destinationPath)) {
-            File::deleteDirectory($this->destinationPath);
-        }
     }
 
     public function test_it_publishes_all_agents()
     {
-        // Add a dummy file to ensure it's there
-        if (!File::isDirectory($this->baseSourcePath . '/rules')) {
-            File::makeDirectory($this->baseSourcePath . '/rules', 0755, true);
-        }
-        File::put($this->baseSourcePath . '/rules/test-rule.md', 'Dummy Rule');
+        $this->files->shouldReceive('isDirectory')->with($this->baseSourcePath)->once()->andReturn(true);
+        $this->files->shouldReceive('isDirectory')->with($this->destinationPath)->once()->andReturn(false);
+        $this->files->shouldReceive('makeDirectory')->with($this->destinationPath, 0755, true)->once()->andReturn(true);
+
+        $mockFile1 = Mockery::mock(SplFileInfo::class);
+        $mockFile1->shouldReceive('getPathname')->andReturn($this->baseSourcePath . DIRECTORY_SEPARATOR . 'rules/test-rule.md');
+
+        $this->files->shouldReceive('allFiles')->with($this->baseSourcePath)->once()->andReturn([$mockFile1]);
+
+        $this->files->shouldReceive('directories')->with($this->baseSourcePath)->once()->andReturn([$this->baseSourcePath . DIRECTORY_SEPARATOR . 'rules']);
+        $this->files->shouldReceive('directories')->with($this->baseSourcePath . DIRECTORY_SEPARATOR . 'rules')->once()->andReturn([]);
+
+        $targetDir = $this->destinationPath . DIRECTORY_SEPARATOR . 'rules';
+        $this->files->shouldReceive('isDirectory')->with($targetDir)->once()->andReturn(false);
+        $this->files->shouldReceive('makeDirectory')->with($targetDir, 0755, true)->once()->andReturn(true);
+
+        $targetPath = $this->destinationPath . DIRECTORY_SEPARATOR . 'rules/test-rule.md';
+        $this->files->shouldReceive('exists')->with($targetPath)->once()->andReturn(false);
+        $this->files->shouldReceive('copy')->with($this->baseSourcePath . DIRECTORY_SEPARATOR . 'rules/test-rule.md', $targetPath)->once()->andReturn(true);
 
         $this->artisan('agents:publish')
             ->expectsOutputToContain('Publishing dev-tool agents...')
             ->expectsOutputToContain('Agents published successfully!')
             ->assertExitCode(0);
-
-        $this->assertDirectoryExists($this->destinationPath);
-        $this->assertDirectoryExists($this->destinationPath . '/rules');
-        $this->assertFileExists($this->destinationPath . '/rules/test-rule.md');
     }
 
     public function test_it_publishes_only_skills()
     {
-        // For testing purpose, since we know 'rules' exists in /app/agents,
-        // we'll create a dummy 'skills' dir so the publish command has something to work with.
-        if (!File::isDirectory($this->baseSourcePath . '/skills')) {
-            File::makeDirectory($this->baseSourcePath . '/skills', 0755, true);
-        }
-        File::put($this->baseSourcePath . '/skills/test-skill.md', 'Dummy Skill');
+        $sourcePath = $this->baseSourcePath . DIRECTORY_SEPARATOR . 'skills';
+        $targetDestination = $this->destinationPath . DIRECTORY_SEPARATOR . 'skills';
+
+        $this->files->shouldReceive('isDirectory')->with($sourcePath)->once()->andReturn(true);
+        $this->files->shouldReceive('isDirectory')->with($targetDestination)->once()->andReturn(false);
+        $this->files->shouldReceive('makeDirectory')->with($targetDestination, 0755, true)->once()->andReturn(true);
+
+        $mockFile1 = Mockery::mock(SplFileInfo::class);
+        $mockFile1->shouldReceive('getPathname')->andReturn($sourcePath . DIRECTORY_SEPARATOR . 'test-skill.md');
+
+        $this->files->shouldReceive('allFiles')->with($sourcePath)->once()->andReturn([$mockFile1]);
+        $this->files->shouldReceive('directories')->with($sourcePath)->once()->andReturn([]);
+
+        $targetPath = $targetDestination . DIRECTORY_SEPARATOR . 'test-skill.md';
+        $this->files->shouldReceive('exists')->with($targetPath)->once()->andReturn(false);
+        $this->files->shouldReceive('copy')->with($sourcePath . DIRECTORY_SEPARATOR . 'test-skill.md', $targetPath)->once()->andReturn(true);
 
         $this->artisan('agents:publish', ['--skills' => true])
             ->expectsOutputToContain('Publishing skills...')
             ->expectsOutputToContain('Agents published successfully!')
             ->assertExitCode(0);
-
-        $this->assertDirectoryExists($this->destinationPath . '/skills');
-        $this->assertFileExists($this->destinationPath . '/skills/test-skill.md');
-        $this->assertFileDoesNotExist($this->destinationPath . '/rules/test-rule.md');
-
-        // Clean up dummy
-        File::deleteDirectory($this->baseSourcePath . '/skills');
     }
 
     public function test_it_publishes_only_rules()
     {
-        if (!File::isDirectory($this->baseSourcePath . '/rules')) {
-            File::makeDirectory($this->baseSourcePath . '/rules', 0755, true);
-        }
-        File::put($this->baseSourcePath . '/rules/test-rule.md', 'Dummy Rule');
+        $sourcePath = $this->baseSourcePath . DIRECTORY_SEPARATOR . 'rules';
+        $targetDestination = $this->destinationPath . DIRECTORY_SEPARATOR . 'rules';
+
+        $this->files->shouldReceive('isDirectory')->with($sourcePath)->once()->andReturn(true);
+        $this->files->shouldReceive('isDirectory')->with($targetDestination)->once()->andReturn(true);
+
+        $mockFile1 = Mockery::mock(SplFileInfo::class);
+        $mockFile1->shouldReceive('getPathname')->andReturn($sourcePath . DIRECTORY_SEPARATOR . 'test-rule.md');
+
+        $this->files->shouldReceive('allFiles')->with($sourcePath)->once()->andReturn([$mockFile1]);
+        $this->files->shouldReceive('directories')->with($sourcePath)->once()->andReturn([]);
+
+        $targetPath = $targetDestination . DIRECTORY_SEPARATOR . 'test-rule.md';
+        $this->files->shouldReceive('exists')->with($targetPath)->once()->andReturn(false);
+        $this->files->shouldReceive('copy')->with($sourcePath . DIRECTORY_SEPARATOR . 'test-rule.md', $targetPath)->once()->andReturn(true);
 
         $this->artisan('agents:publish', ['--rules' => true])
             ->expectsOutputToContain('Publishing rules...')
             ->expectsOutputToContain('Agents published successfully!')
             ->assertExitCode(0);
-
-        $this->assertDirectoryExists($this->destinationPath . '/rules');
-        $this->assertFileExists($this->destinationPath . '/rules/test-rule.md');
     }
 
     public function test_it_asks_for_confirmation_when_file_exists()
     {
-        if (!File::isDirectory($this->baseSourcePath . '/rules')) {
-            File::makeDirectory($this->baseSourcePath . '/rules', 0755, true);
-        }
-        File::put($this->baseSourcePath . '/rules/test-rule.md', 'Dummy Rule');
+        $this->files->shouldReceive('isDirectory')->with($this->baseSourcePath)->once()->andReturn(true);
+        $this->files->shouldReceive('isDirectory')->with($this->destinationPath)->once()->andReturn(true);
 
-        // First publish
-        $this->artisan('agents:publish', ['--rules' => true])
-            ->assertExitCode(0);
+        $mockFile1 = Mockery::mock(SplFileInfo::class);
+        $mockFile1->shouldReceive('getPathname')->andReturn($this->baseSourcePath . DIRECTORY_SEPARATOR . 'test-rule.md');
 
-        // Second publish, should ask for confirmation
-        // Note: the command outputs info using components, so it just asks using confirm
-        $this->artisan('agents:publish', ['--rules' => true])
+        $this->files->shouldReceive('allFiles')->with($this->baseSourcePath)->once()->andReturn([$mockFile1]);
+        $this->files->shouldReceive('directories')->with($this->baseSourcePath)->once()->andReturn([]);
+
+        $targetPath = $this->destinationPath . DIRECTORY_SEPARATOR . 'test-rule.md';
+
+        $this->files->shouldReceive('exists')->with($targetPath)->once()->andReturn(true);
+        $this->files->shouldNotReceive('copy');
+
+        $this->artisan('agents:publish')
             ->expectsConfirmation('File already exists: test-rule.md. Overwrite?', 'no')
             ->expectsOutputToContain('Agents published successfully!')
             ->assertExitCode(0);
@@ -106,57 +130,37 @@ class PublishAgentsCommandTest extends TestCase
 
     public function test_it_forces_overwrite_when_file_exists()
     {
-        if (!File::isDirectory($this->baseSourcePath . '/rules')) {
-            File::makeDirectory($this->baseSourcePath . '/rules', 0755, true);
-        }
-        File::put($this->baseSourcePath . '/rules/test-rule.md', 'Dummy Rule');
+        $this->files->shouldReceive('isDirectory')->with($this->baseSourcePath)->once()->andReturn(true);
+        $this->files->shouldReceive('isDirectory')->with($this->destinationPath)->once()->andReturn(true);
 
-        // First publish
-        $this->artisan('agents:publish', ['--rules' => true])
-            ->assertExitCode(0);
+        $mockFile1 = Mockery::mock(SplFileInfo::class);
+        $mockFile1->shouldReceive('getPathname')->andReturn($this->baseSourcePath . DIRECTORY_SEPARATOR . 'test-rule.md');
 
-        // Modify the published file
-        File::put($this->destinationPath . '/rules/test-rule.md', 'Modified Rule');
+        $this->files->shouldReceive('allFiles')->with($this->baseSourcePath)->once()->andReturn([$mockFile1]);
+        $this->files->shouldReceive('directories')->with($this->baseSourcePath)->once()->andReturn([]);
 
-        // Second publish with force option
-        $this->artisan('agents:publish', ['--rules' => true, '--force' => true])
+        $targetPath = $this->destinationPath . DIRECTORY_SEPARATOR . 'test-rule.md';
+
+        $this->files->shouldReceive('exists')->with($targetPath)->once()->andReturn(true);
+        $this->files->shouldReceive('copy')->with($this->baseSourcePath . DIRECTORY_SEPARATOR . 'test-rule.md', $targetPath)->once()->andReturn(true);
+
+        $this->artisan('agents:publish', ['--force' => true])
             ->expectsOutputToContain('Agents published successfully!')
             ->assertExitCode(0);
-
-        // Check if file was overwritten (should contain original content or at least not be our 'Modified Rule')
-        $this->assertNotEquals('Modified Rule', File::get($this->destinationPath . '/rules/test-rule.md'));
     }
 
     public function test_it_returns_error_if_source_directory_does_not_exist()
     {
-        // The command uses dirname(__DIR__, 2) . '/agents' to find the source.
-        // During testing, __DIR__ in the command might resolve to the symlinked package directory in vendor if this is run as a package.
-        // Let's write a small temporary class mock or just mock the Filesystem.
-        // Mocking the filesystem is easier since the command expects a Filesystem object injection.
-
-        $mockFilesystem = \Mockery::mock(\Illuminate\Filesystem\Filesystem::class);
-        $mockFilesystem->shouldReceive('isDirectory')->andReturn(false);
-        $this->app->instance(\Illuminate\Filesystem\Filesystem::class, $mockFilesystem);
-
-        // Get the path the command tries to check (dirname(__DIR__, 2) . '/agents' relative to the command class)
-        // Which is usually /app/agents or wherever the command file is located relative to
-        $expectedPath = dirname(__DIR__, 3) . '/src/Commands';
-        // We don't know the exact string, but it should output the "Source directory does not exist" message.
+        $this->files->shouldReceive('isDirectory')->with($this->baseSourcePath)->once()->andReturn(false);
 
         $this->artisan('agents:publish')
-            ->expectsOutputToContain("Source directory does not exist:")
+            ->expectsOutputToContain("Source directory does not exist: {$this->baseSourcePath}")
             ->assertExitCode(1);
-
-        // Clean up mock
-        \Mockery::close();
     }
 
     protected function tearDown(): void
     {
-        if (File::isDirectory($this->destinationPath)) {
-            File::deleteDirectory($this->destinationPath);
-        }
-
+        Mockery::close();
         parent::tearDown();
     }
 }
