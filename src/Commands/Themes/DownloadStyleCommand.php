@@ -28,7 +28,7 @@ class DownloadStyleCommand extends DownloadCommand
     {
         $this->theme = \Juzaweb\Modules\Core\Facades\Theme::find($this->argument('theme'));
         if ($this->theme === null) {
-            $this->error('Theme not found!');
+            $this->error("Theme {$this->argument('theme')} not found!");
             return;
         }
 
@@ -47,7 +47,7 @@ class DownloadStyleCommand extends DownloadCommand
 
     protected function generateMixFile(array $css, array $js): void
     {
-        $mixOutput = 'themes/' . $this->theme->studlyName() . '/assets';
+        $mixOutput = 'themes/' . $this->theme->name() . '/assets';
 
         $cssList = array_map(
             fn($item) => "basePath + '/css/" . basename(trim($item, "'")) . "'",
@@ -119,15 +119,16 @@ mix.combine([
             $path = "{$output}/css/{$name}";
 
             try {
-                $this->downloadFile($href, base_path($path));
-                File::put(base_path($path), $this->replaceContentCss(File::get(base_path($path))));
+                $content = $this->getFileContent($href);
+                $content = $this->replaceContentCss($content);
+                File::put(base_path($path), $content);
 
                 $result[] = "'{$path}'";
 
-                $this->downloadAssetsFromCss([$path], $href);
+                $this->downloadAssetsFromCssWithContent($content, $href);
 
                 $this->info("-- Downloaded file {$path}");
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->warn("Failed to download file: {$href}");
             }
         }
@@ -159,10 +160,11 @@ mix.combine([
             $path = "{$output}/js/{$name}";
 
             try {
-                $this->downloadFile($href, base_path($path));
+                $content = $this->getFileContent($href);
+                File::put(base_path($path), $content);
                 $result[] = "'{$path}'";
                 $this->info("-- Downloaded file {$path}");
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->warn("Download error: {$href}");
             }
         }
@@ -170,9 +172,45 @@ mix.combine([
         return $result;
     }
 
-    protected function downloadAssetsFromCss(array $cssFiles, string $cssUrl): void
+    protected function downloadAssetsFromCssWithContent(string $content, string $cssUrl): void
     {
         $output = "themes/{$this->theme->name()}/assets";
+        preg_match_all('/url\([\'"]?(.*?)[\'"]?\)/i', $content, $matches);
+
+        foreach ($matches[1] as $assetUrl) {
+            $assetUrl = trim($assetUrl, "\"'");
+            if (is_url($assetUrl) && $this->isExcludeDomain($assetUrl)) {
+                $this->warn("Skip {$assetUrl}");
+                continue;
+            }
+
+            if (str_starts_with($assetUrl, 'data:')) {
+                continue;
+            }
+
+            $parsedUrl = get_full_url($assetUrl, $cssUrl);
+            if ($this->isExcludeDomain($parsedUrl)) {
+                continue;
+            }
+
+            $urlPath = parse_url($assetUrl, PHP_URL_PATH);
+            if (! $urlPath) {
+                continue;
+            }
+
+            $savePath = $output . abs_path($urlPath);
+
+            try {
+                $this->downloadFile($parsedUrl, base_path($savePath));
+                $this->info("-- Downloaded asset {$savePath}");
+            } catch (\Throwable $e) {
+                $this->warn("Failed to download asset: {$parsedUrl}");
+            }
+        }
+    }
+
+    protected function downloadAssetsFromCss(array $cssFiles, string $cssUrl): void
+    {
         foreach ($cssFiles as $cssPath) {
             $fullPath = base_path(trim($cssPath, "'"));
 
@@ -182,38 +220,7 @@ mix.combine([
             }
 
             $content = File::get($fullPath);
-            preg_match_all('/url\(["\']?(.*?)["\']?\)/i', $content, $matches);
-
-            foreach ($matches[1] as $assetUrl) {
-                if (is_url($assetUrl) && $this->isExcludeDomain($assetUrl)) {
-                    $this->warn("Skip {$assetUrl}");
-                    continue;
-                }
-
-                if (Str::start($assetUrl, 'data:')) {
-                    continue;
-                }
-
-                $parsedUrl = get_full_url($assetUrl, $cssUrl);
-                if ($this->isExcludeDomain($parsedUrl)) {
-                    continue;
-                }
-
-                $urlPath = parse_url($assetUrl, PHP_URL_PATH);
-                if (! $urlPath) {
-                    continue;
-                }
-
-                $relativePath = ltrim($urlPath, '/');
-                $savePath = $output . abs_path($relativePath);
-
-                try {
-                    $this->downloadFile($parsedUrl, base_path($savePath));
-                    $this->info("-- Downloaded asset {$savePath}");
-                } catch (\Exception $e) {
-                    $this->warn("Failed to download asset: {$parsedUrl}");
-                }
-            }
+            $this->downloadAssetsFromCssWithContent($content, $cssUrl);
         }
     }
 
