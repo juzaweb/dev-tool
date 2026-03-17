@@ -30,7 +30,7 @@ class FileGenerator extends Generator
     /**
      * @var bool
      */
-    private bool $overwriteFile;
+    private bool $overwriteFile = false;
 
     /**
      * The constructor.
