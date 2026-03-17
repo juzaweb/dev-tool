@@ -31,6 +31,18 @@ class MakePageBlockCommand extends Command
 
         Stub::setBasePath(config('dev-tool.themes.stubs.path') . '/');
 
+        if ($this->makeViews($theme, $name) === self::FAILURE) {
+            return self::FAILURE;
+        }
+
+        $this->modifyProvider($theme, $name, $themeName);
+
+        $this->info("Block {$name} created successfully.");
+        return self::SUCCESS;
+    }
+
+    protected function makeViews($theme, string $name): int
+    {
         $formPath = $theme->path("src/resources/views/components/blocks/{$name}/form.blade.php");
         $viewPath = $theme->path("src/resources/views/components/blocks/{$name}/view.blade.php");
 
@@ -59,6 +71,11 @@ class MakePageBlockCommand extends Command
 
         $this->info("Generated {$viewPath}");
 
+        return self::SUCCESS;
+    }
+
+    protected function modifyProvider($theme, string $name, string $themeName): void
+    {
         $providerFile = $theme->path('src/Providers/StyleServiceProvider.php');
         if (!file_exists($providerFile)) {
             $content = $this->generateContents(
@@ -72,6 +89,14 @@ class MakePageBlockCommand extends Command
             $content = file_get_contents($providerFile);
         }
 
+        $newContent = $this->appendBlockToProvider($content, $name, $themeName);
+        $newContent = $this->addUseStatementToProvider($newContent);
+
+        file_put_contents($providerFile, $newContent);
+    }
+
+    protected function appendBlockToProvider(string $content, string $name, string $themeName): string
+    {
         $pattern = '/(public function boot\s*\(\)(?:\s*:\s*void)?\s*\{)([\s\S]*?)(^\s*\})/m';
         $replacement = '$1$2' . "        PageBlock::make(
             '{$name}',
@@ -84,12 +109,16 @@ class MakePageBlockCommand extends Command
             }
         );\n" . '$3';
 
-        $newContent = preg_replace($pattern, $replacement, $content);
+        return preg_replace($pattern, $replacement, $content);
+    }
+
+    protected function addUseStatementToProvider(string $content): string
+    {
         $useStatement = "use Juzaweb\\Modules\\Admin\\Facades\\PageBlock;";
 
-        if (!str_contains($newContent, $useStatement)) {
+        if (!str_contains($content, $useStatement)) {
             // Tìm vị trí cuối cùng của nhóm use hiện tại
-            if (preg_match_all('/^use\s+[^;]+;/m', $newContent, $allMatches, PREG_OFFSET_CAPTURE)) {
+            if (preg_match_all('/^use\s+[^;]+;/m', $content, $allMatches, PREG_OFFSET_CAPTURE)) {
                 // $allMatches[0] is an array of matches; pick the last one
                 $lastMatch = end($allMatches[0]);
                 // $lastMatch is [matchedString, offset]
@@ -97,21 +126,18 @@ class MakePageBlockCommand extends Command
                 $matchedOffset = $lastMatch[1];
 
                 $insertPos = $matchedOffset + strlen($matchedString);
-                $newContent = substr_replace($newContent, "\n{$useStatement}", $insertPos, 0);
+                $content = substr_replace($content, "\n{$useStatement}", $insertPos, 0);
             } else {
                 // If there is no use block, add after namespace
-                $newContent = preg_replace(
+                $content = preg_replace(
                     '/(namespace\s+[^\n;]+;)/',
                     "$1\n\n{$useStatement}",
-                    $newContent
+                    $content
                 );
             }
         }
 
-        file_put_contents($providerFile, $newContent);
-
-        $this->info("Block {$name} created successfully.");
-        return self::SUCCESS;
+        return $content;
     }
 
     protected function generateContents(string $stub, array $data): string
