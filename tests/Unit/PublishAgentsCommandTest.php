@@ -1,6 +1,6 @@
 <?php
 
-namespace Juzaweb\DevTool\Tests\Unit\Commands;
+namespace Juzaweb\DevTool\Tests\Unit;
 
 use Illuminate\Filesystem\Filesystem;
 use Juzaweb\DevTool\Tests\TestCase;
@@ -23,7 +23,7 @@ class PublishAgentsCommandTest extends TestCase
 
         // The command class calculates the source directory like this:
         // dirname(__DIR__, 2) . '/agents' (where __DIR__ is src/Commands)
-        $commandDir = realpath(__DIR__ . '/../../../src/Commands');
+        $commandDir = realpath(__DIR__ . '/../../src/Commands'); // Changed from ../../../ to ../../ since the test moved up one directory
         $this->baseSourcePath = dirname($commandDir, 2) . '/agents';
 
         $this->destinationPath = base_path('.agent');
