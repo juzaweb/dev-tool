@@ -29,6 +29,7 @@
     "require-dev": {
         "roave/security-advisories": "dev-latest",
         "laravel/framework": "^11.34",
+        "laravel/pint": "^1.13",
         "orchestra/testbench": "^9.0",
         "phpunit/phpunit": "^11.0",
         "mockery/mockery": "^1.6",
