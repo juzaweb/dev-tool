@@ -4,7 +4,6 @@ namespace $NAMESPACE$;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use $MODEL_NAMESPACE$;
 
 /**
  * @property-read $MODEL_NAME$ $resource
@@ -13,9 +12,6 @@ class $CLASS$ extends JsonResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param  Request  $request
-     * @return array
      */
     public function toArray(Request $request): array
     {
