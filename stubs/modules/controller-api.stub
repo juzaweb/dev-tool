@@ -2,14 +2,15 @@
 
 namespace $CLASS_NAMESPACE$;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Juzaweb\Modules\Core\Http\Controllers\APIController;
 
 class $CLASS$ extends APIController
 {
     /**
      * Display a listing of the resource.
+     *
      * @return JsonResponse
      */
     public function index(Request $request)
@@ -19,7 +20,8 @@ class $CLASS$ extends APIController
 
     /**
      * Store a newly created resource in storage.
-     * @param Request $request
+     *
+     * @param  Request  $request
      * @return JsonResponse
      */
     public function store(Request $request)
@@ -29,7 +31,8 @@ class $CLASS$ extends APIController
 
     /**
      * Show the specified resource.
-     * @param string $id
+     *
+     * @param  string  $id
      * @return JsonResponse
      */
     public function show(string $id)
@@ -39,8 +42,9 @@ class $CLASS$ extends APIController
 
     /**
      * Update the specified resource in storage.
-     * @param Request $request
-     * @param string $id
+     *
+     * @param  Request  $request
+     * @param  string  $id
      * @return JsonResponse
      */
     public function update(Request $request, string $id)
@@ -50,7 +54,8 @@ class $CLASS$ extends APIController
 
     /**
      * Remove the specified resource from storage.
-     * @param string $id
+     *
+     * @param  string  $id
      * @return JsonResponse
      */
     public function destroy(string $id)

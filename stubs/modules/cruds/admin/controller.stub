@@ -2,13 +2,13 @@
 
 namespace $CLASS_NAMESPACE$;
 
-use Juzaweb\Modules\Core\Facades\Breadcrumb;
-use Juzaweb\Modules\Core\Http\Controllers\AdminController;
-use Illuminate\Support\Facades\DB;
-use $MODEL_NAMESPACE$;
-use $REQUEST_NAMESPACE$;
 use $BULK_REQUEST_NAMESPACE$;
 use $DATATABLE_NAMESPACE$;
+use $MODEL_NAMESPACE$;
+use $REQUEST_NAMESPACE$;
+use Illuminate\Support\Facades\DB;
+use Juzaweb\Modules\Core\Facades\Breadcrumb;
+use Juzaweb\Modules\Core\Http\Controllers\AdminController;
 
 class $CLASS$ extends AdminController
 {
@@ -35,7 +35,7 @@ class $CLASS$ extends AdminController
         return view(
             '$RESOURCE_NAMESPCAE$::$KEBAB_SINGULAR_TITLE$.form',
             [
-                'model' => new $MODEL_CLASS$(),
+                'model' => new $MODEL_CLASS$,
                 'action' => action([static::class, 'store']),
                 'backUrl' => $backUrl,
             ]

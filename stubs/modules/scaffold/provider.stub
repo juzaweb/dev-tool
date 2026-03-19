@@ -2,8 +2,8 @@
 
 namespace $NAMESPACE$;
 
-use Juzaweb\Modules\Core\Providers\ServiceProvider;
 use Illuminate\Support\Facades\File;
+use Juzaweb\Modules\Core\Providers\ServiceProvider;
 
 class $CLASS$ extends ServiceProvider
 {
@@ -17,7 +17,7 @@ class $CLASS$ extends ServiceProvider
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
-        $this->loadMigrationsFrom(__DIR__ . '/../../$MIGRATIONS_PATH$');
+        $this->loadMigrationsFrom(__DIR__.'/../../$MIGRATIONS_PATH$');
         $this->app->register(RouteServiceProvider::class);
     }
 
@@ -29,25 +29,25 @@ class $CLASS$ extends ServiceProvider
     protected function registerConfig(): void
     {
         $this->publishes([
-            __DIR__ . '/../../$PATH_CONFIG$/config.php' => config_path('$KEBAB_SINGULAR_TITLE$.php'),
+            __DIR__.'/../../$PATH_CONFIG$/config.php' => config_path('$KEBAB_SINGULAR_TITLE$.php'),
         ], '$KEBAB_SINGULAR_TITLE$-config');
-        $this->mergeConfigFrom(__DIR__ . '/../../$PATH_CONFIG$/config.php', '$KEBAB_SINGULAR_TITLE$');
+        $this->mergeConfigFrom(__DIR__.'/../../$PATH_CONFIG$/config.php', '$KEBAB_SINGULAR_TITLE$');
     }
 
     protected function registerTranslations(): void
     {
-        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', '$KEBAB_SINGULAR_TITLE$');
-        $this->loadJsonTranslationsFrom(__DIR__ . '/../resources/lang');
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', '$KEBAB_SINGULAR_TITLE$');
+        $this->loadJsonTranslationsFrom(__DIR__.'/../resources/lang');
     }
 
     protected function registerViews(): void
     {
         $viewPath = resource_path('views/modules/$KEBAB_SINGULAR_TITLE$');
 
-        $sourcePath = __DIR__ . '/../resources/views';
+        $sourcePath = __DIR__.'/../resources/views';
 
         $this->publishes([
-            $sourcePath => $viewPath
+            $sourcePath => $viewPath,
         ], ['views', '$KEBAB_SINGULAR_TITLE$-module-views']);
 
         $this->loadViewsFrom($sourcePath, '$KEBAB_SINGULAR_TITLE$');

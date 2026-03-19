@@ -3,8 +3,8 @@
 namespace $NAMESPACE$;
 
 use $EVENTNAME$;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
 
 class $CLASS$ implements ShouldQueue
 {
