@@ -21,6 +21,7 @@ class $CLASS$ extends APIController
     /**
      * Store a newly created resource in storage.
      *
+     * @param  Request  $request
      * @return JsonResponse
      */
     public function store(Request $request)
@@ -31,6 +32,7 @@ class $CLASS$ extends APIController
     /**
      * Show the specified resource.
      *
+     * @param  string  $id
      * @return JsonResponse
      */
     public function show(string $id)
@@ -41,6 +43,8 @@ class $CLASS$ extends APIController
     /**
      * Update the specified resource in storage.
      *
+     * @param  Request  $request
+     * @param  string  $id
      * @return JsonResponse
      */
     public function update(Request $request, string $id)
@@ -51,6 +55,7 @@ class $CLASS$ extends APIController
     /**
      * Remove the specified resource from storage.
      *
+     * @param  string  $id
      * @return JsonResponse
      */
     public function destroy(string $id)

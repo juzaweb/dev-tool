@@ -10,6 +10,8 @@ class $CLASS$ extends ServiceProvider
 {
     /**
      * Define the routes for the application.
+     *
+     * @return void
      */
     public function boot(): void
     {

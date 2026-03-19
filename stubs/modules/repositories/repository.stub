@@ -11,6 +11,7 @@
 namespace $CLASS_NAMESPACE$;
 
 use App\Repositories\Repository;
+use $MODEL_NAMESPACE$;
 
 /**
  * @mixin $MODEL_CLASS$
@@ -19,6 +20,8 @@ interface $CLASS$ extends Repository
 {
     /**
      * Get model class name.
+     *
+     * @return string
      */
     public function model(): string;
 }

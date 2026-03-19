@@ -6,7 +6,9 @@ use Juzaweb\Modules\Core\Providers\ServiceProvider;
 
 class $CLASS$ extends ServiceProvider
 {
-    public function boot() {}
+    public function boot()
+    {
+    }
 
     public function register()
     {

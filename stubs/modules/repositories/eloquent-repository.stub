@@ -12,6 +12,7 @@ namespace $CLASS_NAMESPACE$;
 
 use App\Repositories\EloquentRepository;
 use App\Repositories\Traits\HasBulkActions;
+use $MODEL_NAMESPACE$;
 
 class $CLASS$ extends EloquentRepository implements $REPOSITORY_NAME$
 {

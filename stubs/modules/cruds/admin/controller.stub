@@ -2,6 +2,10 @@
 
 namespace $CLASS_NAMESPACE$;
 
+use $BULK_REQUEST_NAMESPACE$;
+use $DATATABLE_NAMESPACE$;
+use $MODEL_NAMESPACE$;
+use $REQUEST_NAMESPACE$;
 use Illuminate\Support\Facades\DB;
 use Juzaweb\Modules\Core\Facades\Breadcrumb;
 use Juzaweb\Modules\Core\Http\Controllers\AdminController;

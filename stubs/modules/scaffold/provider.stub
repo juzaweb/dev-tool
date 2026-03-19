@@ -2,6 +2,7 @@
 
 namespace $NAMESPACE$;
 
+use Illuminate\Support\Facades\File;
 use Juzaweb\Modules\Core\Providers\ServiceProvider;
 
 class $CLASS$ extends ServiceProvider

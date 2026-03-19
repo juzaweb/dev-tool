@@ -130,6 +130,7 @@ abstract class TestCase extends Orchestra
      * Get package aliases.
      *
      * @param  Application  $app
+     * @return array
      */
     protected function getPackageAliases($app): array
     {
@@ -150,6 +151,7 @@ abstract class TestCase extends Orchestra
      * Define environment setup.
      *
      * @param  Application  $app
+     * @return void
      */
     protected function getEnvironmentSetUp($app): void
     {
@@ -200,6 +202,8 @@ abstract class TestCase extends Orchestra
 
     /**
      * Define database migrations.
+     *
+     * @return void
      */
     protected function defineDatabaseMigrations(): void
     {
