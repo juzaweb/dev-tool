@@ -42,7 +42,6 @@ jobs:
 
       - name: Execute pint
         run: vendor/bin/pint --test
-        continue-on-error: true
 
       - name: Execute tests
         run: vendor/bin/phpunit
