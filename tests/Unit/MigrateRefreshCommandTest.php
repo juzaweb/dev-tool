@@ -15,7 +15,7 @@ class MigrateRefreshCommandTest extends TestCase
         $this->app['config']->set('modules.paths.modules', base_path('modules'));
 
         // Create a dummy module
-        if (!File::isDirectory(base_path('modules/Blog'))) {
+        if (! File::isDirectory(base_path('modules/Blog'))) {
             File::makeDirectory(base_path('modules/Blog'), 0755, true);
         }
 
@@ -30,7 +30,7 @@ class MigrateRefreshCommandTest extends TestCase
             'providers' => [],
             'aliases' => [],
             'files' => [],
-            'requires' => []
+            'requires' => [],
         ]));
 
         File::put(base_path('modules_statuses.json'), json_encode(['Blog' => true]));
@@ -50,6 +50,6 @@ class MigrateRefreshCommandTest extends TestCase
     public function test_it_migrates_refresh_module()
     {
         $this->artisan('module:migrate-refresh', ['module' => 'Blog'])
-             ->assertExitCode(0);
+            ->assertExitCode(0);
     }
 }

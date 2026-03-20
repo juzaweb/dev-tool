@@ -15,7 +15,7 @@ class MigrateRollbackCommandTest extends TestCase
         $this->app['config']->set('modules.paths.modules', base_path('modules'));
 
         // Create a dummy module
-        if (!File::isDirectory(base_path('modules/Blog'))) {
+        if (! File::isDirectory(base_path('modules/Blog'))) {
             File::makeDirectory(base_path('modules/Blog'), 0755, true);
         }
 
@@ -30,7 +30,7 @@ class MigrateRollbackCommandTest extends TestCase
             'providers' => [],
             'aliases' => [],
             'files' => [],
-            'requires' => []
+            'requires' => [],
         ]));
 
         File::put(base_path('modules_statuses.json'), json_encode(['Blog' => true]));
@@ -75,9 +75,9 @@ PHP;
 
         // Run migrate first
         $this->artisan('module:migrate', ['module' => 'Blog'])
-             ->assertExitCode(0);
+            ->assertExitCode(0);
 
         $this->artisan('module:migrate-rollback', ['module' => 'Blog'])
-             ->assertExitCode(0);
+            ->assertExitCode(0);
     }
 }

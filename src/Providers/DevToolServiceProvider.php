@@ -9,7 +9,7 @@ class DevToolServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../../config/dev-tool.php', 'dev-tool');
+        $this->mergeConfigFrom(__DIR__.'/../../config/dev-tool.php', 'dev-tool');
 
         $this->app->register(ConsoleServiceProvider::class);
     }

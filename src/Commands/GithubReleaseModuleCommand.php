@@ -1,10 +1,12 @@
 <?php
+
 /**
  * JUZAWEB CMS - Laravel CMS for Your Project
  *
- * @package    juzaweb/cms
  * @author     The Anh Dang
+ *
  * @link       https://juzaweb.com
+ *
  * @license    GNU V2
  */
 
@@ -28,7 +30,7 @@ class GithubReleaseModuleCommand extends Command
         $token = $this->getGithubToken();
         $path = $this->argument('path');
 
-        if (!File::isDirectory($path)) {
+        if (! File::isDirectory($path)) {
             $path = base_path($path);
         }
 
@@ -38,18 +40,19 @@ class GithubReleaseModuleCommand extends Command
         $this->runCmd($path, 'git pull');
 
         if (empty($lastTag)) {
-            $body = $this->runCmd($path, "git log --no-merges --pretty=format:\"* %s\" | uniq");
+            $body = $this->runCmd($path, 'git log --no-merges --pretty=format:"* %s" | uniq');
         } else {
             $body = $this->runCmd($path, "git log --no-merges --pretty=format:\"* %s\" {$lastTag}..HEAD | uniq");
         }
 
         if (empty($body)) {
             $this->info('Nothing to release');
+
             return;
         }
 
         $body = collect(explode("\n", $body))
-            ->filter(fn ($item) => !empty($item) && !str_contains($item, ':construction:'))
+            ->filter(fn ($item) => ! empty($item) && ! str_contains($item, ':construction:'))
             ->implode("\n");
 
         $newTag = $this->getReleaseVersion($lastTag);
@@ -88,7 +91,7 @@ class GithubReleaseModuleCommand extends Command
             )
             ->throw();
 
-        $this->info('Released url: '. $release->json()['html_url']);
+        $this->info('Released url: '.$release->json()['html_url']);
     }
 
     protected function getLastTag(string $path): string
@@ -127,7 +130,7 @@ class GithubReleaseModuleCommand extends Command
 
         $split = explode('.', $lastTag);
         if (count($split) > 2) {
-            ++$split[count($split) - 1];
+            $split[count($split) - 1]++;
             $newTag = implode('.', $split);
         } else {
             $newTag = $lastTag.'.1';

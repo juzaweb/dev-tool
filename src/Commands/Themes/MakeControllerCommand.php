@@ -3,9 +3,10 @@
 /**
  * JUZAWEB CMS - Laravel CMS for Your Project
  *
- * @package    juzaweb/cms
  * @author     The Anh Dang
+ *
  * @link       https://cms.juzaweb.com
+ *
  * @license    GNU V2
  */
 
@@ -32,6 +33,7 @@ class MakeControllerCommand extends GenerateCommand
 
         if ($theme === null) {
             $this->error("Theme {$themeName} does not exist.");
+
             return self::FAILURE;
         }
 
@@ -41,15 +43,16 @@ class MakeControllerCommand extends GenerateCommand
             $controllerName .= 'Controller';
         }
 
-        Stub::setBasePath(config('dev-tool.themes.stubs.path') . '/');
+        Stub::setBasePath(config('dev-tool.themes.stubs.path').'/');
         $controllerPath = $theme->path("src/Http/Controllers/{$controllerName}.php");
 
-        if (file_exists($controllerPath) && !$this->option('force')) {
+        if (file_exists($controllerPath) && ! $this->option('force')) {
             $this->error("Controller {$controllerName} already exists!");
+
             return self::FAILURE;
         }
 
-        if (!File::isDirectory(dirname($controllerPath))) {
+        if (! File::isDirectory(dirname($controllerPath))) {
             File::makeDirectory(dirname($controllerPath), 0755, true);
         }
 
@@ -62,6 +65,7 @@ class MakeControllerCommand extends GenerateCommand
         );
 
         $this->info("Controller {$controllerPath} created successfully.");
+
         return self::SUCCESS;
     }
 

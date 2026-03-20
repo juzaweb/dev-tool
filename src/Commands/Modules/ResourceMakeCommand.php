@@ -77,6 +77,7 @@ class ResourceMakeCommand extends GeneratorCommand
         foreach ($columns as $column) {
             if ($this->collection()) {
                 $this->fields[] = "'{$column}' => \$item->{$column}";
+
                 continue;
             }
 
@@ -99,9 +100,6 @@ class ResourceMakeCommand extends GeneratorCommand
         return "[\n\t\t\t\t\t".implode(",\n\t\t\t\t\t", $this->fields)."\n\t\t\t\t]";
     }
 
-    /**
-     * @return string
-     */
     protected function getTemplateContents(): string
     {
         $module = app(RepositoryInterface::class)->findOrFail($this->getModuleName());
@@ -115,9 +113,6 @@ class ResourceMakeCommand extends GeneratorCommand
         ]))->render();
     }
 
-    /**
-     * @return string
-     */
     protected function getDestinationFilePath(): string
     {
         $path = app(RepositoryInterface::class)->getModulePath($this->getModuleName());
@@ -127,9 +122,6 @@ class ResourceMakeCommand extends GeneratorCommand
         return $path.$resourcePath->getPath().'/'.$this->getFileName().'.php';
     }
 
-    /**
-     * @return string
-     */
     protected function getFileName(): string
     {
         return Str::studly($this->argument('name'));
@@ -137,8 +129,6 @@ class ResourceMakeCommand extends GeneratorCommand
 
     /**
      * Determine if the command is generating a resource collection.
-     *
-     * @return bool
      */
     protected function collection(): bool
     {
@@ -146,9 +136,6 @@ class ResourceMakeCommand extends GeneratorCommand
             Str::endsWith($this->argument('name'), 'Collection');
     }
 
-    /**
-     * @return string
-     */
     protected function getStubName(): string
     {
         if ($this->collection()) {
@@ -168,8 +155,6 @@ class ResourceMakeCommand extends GeneratorCommand
 
     /**
      * Get the console command arguments.
-     *
-     * @return array
      */
     protected function getArguments(): array
     {

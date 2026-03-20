@@ -10,6 +10,7 @@ use ReflectionMethod;
 class ModelShowCommandTest extends TestCase
 {
     protected string $originalCwd;
+
     protected string $tempDir;
 
     protected function setUp(): void
@@ -18,9 +19,9 @@ class ModelShowCommandTest extends TestCase
 
         // Create a temporary directory for testing
         $this->originalCwd = getcwd();
-        $this->tempDir = sys_get_temp_dir() . '/juzaweb_test_' . uniqid();
+        $this->tempDir = sys_get_temp_dir().'/juzaweb_test_'.uniqid();
 
-        if (!file_exists($this->tempDir)) {
+        if (! file_exists($this->tempDir)) {
             mkdir($this->tempDir, 0755, true);
         }
 
@@ -33,10 +34,10 @@ class ModelShowCommandTest extends TestCase
 
         // Create a dummy module in the temp dir
         // Since we chdir'd, 'modules' is relative to tempDir
-        $modulesPath = $this->tempDir . '/modules';
+        $modulesPath = $this->tempDir.'/modules';
 
-        if (!File::isDirectory($modulesPath . '/Blog/src/Models')) {
-            File::makeDirectory($modulesPath . '/Blog/src/Models', 0755, true);
+        if (! File::isDirectory($modulesPath.'/Blog/src/Models')) {
+            File::makeDirectory($modulesPath.'/Blog/src/Models', 0755, true);
         }
 
         // Create a dummy model file
@@ -52,7 +53,7 @@ class Post extends Model
     //
 }
 PHP;
-        File::put($modulesPath . '/Blog/src/Models/Post.php', $content);
+        File::put($modulesPath.'/Blog/src/Models/Post.php', $content);
     }
 
     protected function tearDown(): void
@@ -70,7 +71,7 @@ PHP;
 
     public function test_qualify_model_finds_model_in_module()
     {
-        $command = new ModelShowCommand();
+        $command = new ModelShowCommand;
         $command->setLaravel($this->app);
 
         $method = new ReflectionMethod(ModelShowCommand::class, 'qualifyModel');
@@ -83,7 +84,7 @@ PHP;
 
     public function test_qualify_model_returns_fully_qualified_class_if_exists()
     {
-        $command = new ModelShowCommand();
+        $command = new ModelShowCommand;
         $command->setLaravel($this->app);
 
         $method = new ReflectionMethod(ModelShowCommand::class, 'qualifyModel');
@@ -97,7 +98,7 @@ PHP;
 
     public function test_qualify_model_returns_original_if_not_found()
     {
-        $command = new ModelShowCommand();
+        $command = new ModelShowCommand;
         $command->setLaravel($this->app);
 
         $method = new ReflectionMethod(ModelShowCommand::class, 'qualifyModel');

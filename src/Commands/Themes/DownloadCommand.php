@@ -1,10 +1,12 @@
 <?php
+
 /**
  * JUZAWEB CMS - Laravel CMS for Your Project
  *
- * @package    juzaweb/cms
  * @author     The Anh Dang
+ *
  * @link       https://cms.juzaweb.com
+ *
  * @license    GNU V2
  */
 
@@ -48,13 +50,13 @@ abstract class DownloadCommand extends Command
     {
         $folder = dirname($path);
 
-        if (!is_dir($folder)) {
+        if (! is_dir($folder)) {
             File::makeDirectory($folder, 0755, true);
         }
 
         try {
             // Normalize URL: đảm bảo là URL tuyệt đối
-            if (!preg_match('/^https?:\/\//i', $url)) {
+            if (! preg_match('/^https?:\/\//i', $url)) {
                 throw new \InvalidArgumentException("Invalid URL: {$url}");
             }
 
@@ -88,7 +90,7 @@ abstract class DownloadCommand extends Command
                 File::delete($path);
             }
 
-            throw new \RuntimeException("HTTP request failed for {$url}: " . $e->getMessage(), 0, $e);
+            throw new \RuntimeException("HTTP request failed for {$url}: ".$e->getMessage(), 0, $e);
         } catch (\Throwable $e) {
             if (File::exists($path)) {
                 File::delete($path);
@@ -104,7 +106,7 @@ abstract class DownloadCommand extends Command
             'GET',
             $url,
             [
-                'verify' => false
+                'verify' => false,
             ]
         )->getBody()->getContents();
     }
@@ -115,7 +117,7 @@ abstract class DownloadCommand extends Command
             $url,
             [
                 'timeout' => 10,
-                'verify' => false
+                'verify' => false,
             ]
         );
 

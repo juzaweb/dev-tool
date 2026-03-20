@@ -4,6 +4,7 @@ namespace Juzaweb\DevTool\Commands\Modules;
 
 use Illuminate\Console\Command;
 use Juzaweb\Modules\Core\Modules\Migrations\Migrator;
+use Juzaweb\Modules\Core\Modules\Module;
 use Juzaweb\Modules\Core\Modules\Publishing\MigrationPublisher;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -48,7 +49,7 @@ class PublishMigrationCommand extends Command
     /**
      * Publish migration for the specified module.
      *
-     * @param \Juzaweb\Modules\Core\Modules\Module $module
+     * @param  Module  $module
      */
     public function publish($module)
     {

@@ -19,12 +19,12 @@ class PublishTranslationCommandTest extends TestCase
         $this->app['config']->set('modules.paths.generator.lang.generate', true);
 
         // Create a dummy module
-        if (!File::isDirectory(base_path('modules/Blog'))) {
+        if (! File::isDirectory(base_path('modules/Blog'))) {
             File::makeDirectory(base_path('modules/Blog'), 0755, true);
         }
 
         // Create lang source
-        if (!File::isDirectory(base_path('modules/Blog/src/resources/lang/en'))) {
+        if (! File::isDirectory(base_path('modules/Blog/src/resources/lang/en'))) {
             File::makeDirectory(base_path('modules/Blog/src/resources/lang/en'), 0755, true, true);
         }
         File::put(base_path('modules/Blog/src/resources/lang/en/messages.php'), "<?php return ['welcome' => 'Welcome'];");
@@ -39,7 +39,7 @@ class PublishTranslationCommandTest extends TestCase
             'providers' => [],
             'aliases' => [],
             'files' => [],
-            'requires' => []
+            'requires' => [],
         ]));
     }
 

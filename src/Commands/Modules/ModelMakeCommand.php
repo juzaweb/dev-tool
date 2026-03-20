@@ -15,8 +15,6 @@ class ModelMakeCommand extends GeneratorCommand
 
     /**
      * The name of argument name.
-     *
-     * @var string
      */
     protected string $argumentName = 'model';
 
@@ -52,7 +50,6 @@ class ModelMakeCommand extends GeneratorCommand
      * Create a proper migration name:
      * ProductDetail: product_details
      * Product: products
-     * @return string
      */
     private function createMigrationName(): string
     {
@@ -72,8 +69,6 @@ class ModelMakeCommand extends GeneratorCommand
 
     /**
      * Get the console command arguments.
-     *
-     * @return array
      */
     protected function getArguments(): array
     {
@@ -85,8 +80,6 @@ class ModelMakeCommand extends GeneratorCommand
 
     /**
      * Get the console command options.
-     *
-     * @return array
      */
     protected function getOptions(): array
     {
@@ -95,7 +88,7 @@ class ModelMakeCommand extends GeneratorCommand
             ['migration', 'm', InputOption::VALUE_NONE, 'Flag to create associated migrations', null],
             ['controller', 'c', InputOption::VALUE_NONE, 'Flag to create associated controllers', null],
             ['seed', 's', InputOption::VALUE_NONE, 'Create a new seeder for the model', null],
-            ['request', 'r', InputOption::VALUE_NONE, 'Create a new request for the model', null]
+            ['request', 'r', InputOption::VALUE_NONE, 'Create a new request for the model', null],
         ];
     }
 
@@ -137,7 +130,7 @@ class ModelMakeCommand extends GeneratorCommand
 
             $this->call('module:make-seed', array_filter([
                 'name' => $seedName,
-                'module' => $this->argument('module')
+                'module' => $this->argument('module'),
             ]));
         }
     }
@@ -154,7 +147,7 @@ class ModelMakeCommand extends GeneratorCommand
 
             $this->call('module:make-request', array_filter([
                 'name' => $requestName,
-                'module' => $this->argument('module')
+                'module' => $this->argument('module'),
             ]));
         }
     }
@@ -199,14 +192,11 @@ class ModelMakeCommand extends GeneratorCommand
         return Str::studly($this->argument('model'));
     }
 
-    /**
-     * @return string
-     */
     private function getFillable(): string
     {
         $fillable = $this->option('fillable');
 
-        if (!is_null($fillable)) {
+        if (! is_null($fillable)) {
             $arrays = explode(',', $fillable);
 
             return json_encode($arrays, JSON_THROW_ON_ERROR);
@@ -217,8 +207,6 @@ class ModelMakeCommand extends GeneratorCommand
 
     /**
      * Get default namespace.
-     *
-     * @return string
      */
     public function getDefaultNamespace(): string
     {

@@ -25,6 +25,7 @@ class MakeWidgetCommand extends Command
 
         if ($theme === null) {
             $this->error("Theme {$themeName} does not exist.");
+
             return self::FAILURE;
         }
 
@@ -32,13 +33,14 @@ class MakeWidgetCommand extends Command
         $formPath = $theme->path("src/resources/views/components/widgets/{$name}/form.blade.php");
 
         if (file_exists($viewPath) || file_exists($formPath)) {
-            if (!$this->option('force')) {
+            if (! $this->option('force')) {
                 $this->error("Widget {$name} already exists!");
+
                 return self::FAILURE;
             }
         }
 
-        if (!File::isDirectory(dirname($viewPath))) {
+        if (! File::isDirectory(dirname($viewPath))) {
             File::makeDirectory(dirname($viewPath), 0755, true);
         }
 
@@ -62,8 +64,9 @@ class MakeWidgetCommand extends Command
     {
         $providerFile = $theme->path('src/Providers/ThemeServiceProvider.php');
 
-        if (!file_exists($providerFile)) {
+        if (! file_exists($providerFile)) {
             $this->warn("ThemeServiceProvider.php not found at {$providerFile}");
+
             return;
         }
 
@@ -75,8 +78,8 @@ class MakeWidgetCommand extends Command
             '{$name}',
             function () {
                 return [
-                    'label' => __('" . $title . "'),
-                    'description' => __('" . $title . " Widget'),
+                    'label' => __('".$title."'),
+                    'description' => __('".$title." Widget'),
                     'view' => '{$themeName}::components.widgets.{$name}.show',
                     'form' => '{$themeName}::components.widgets.{$name}.form',
                 ];
@@ -85,12 +88,12 @@ class MakeWidgetCommand extends Command
 
         $pattern = '/(public function boot\s*\(\)(?:\s*:\s*void)?\s*\{)([\s\S]*?)(^\s*\})/m';
         if (preg_match($pattern, $content)) {
-            $replacement = '$1$2' . "\n" . $stub . '$3';
+            $replacement = '$1$2'."\n".$stub.'$3';
             $newContent = preg_replace($pattern, $replacement, $content);
 
             // Add Use statement
-            $useStatement = "use Juzaweb\\Modules\\Core\\Facades\\Widget;";
-            if (!str_contains($newContent, $useStatement)) {
+            $useStatement = 'use Juzaweb\\Modules\\Core\\Facades\\Widget;';
+            if (! str_contains($newContent, $useStatement)) {
                 if (preg_match_all('/^use\s+[^;]+;/m', $newContent, $allMatches, PREG_OFFSET_CAPTURE)) {
                     $lastMatch = end($allMatches[0]);
                     $insertPos = $lastMatch[1] + strlen($lastMatch[0]);
@@ -104,9 +107,9 @@ class MakeWidgetCommand extends Command
                 }
             }
             file_put_contents($providerFile, $newContent);
-            $this->info("Registered widget in ThemeServiceProvider.");
+            $this->info('Registered widget in ThemeServiceProvider.');
         } else {
-            $this->warn("Could not find boot method in ThemeServiceProvider to register widget.");
+            $this->warn('Could not find boot method in ThemeServiceProvider to register widget.');
         }
     }
 

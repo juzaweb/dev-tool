@@ -26,10 +26,11 @@ class MakePageBlockCommand extends Command
 
         if ($theme === null) {
             $this->error("Theme {$themeName} does not exists.");
+
             return self::FAILURE;
         }
 
-        Stub::setBasePath(config('dev-tool.themes.stubs.path') . '/');
+        Stub::setBasePath(config('dev-tool.themes.stubs.path').'/');
 
         if ($this->makeViews($theme, $name) === self::FAILURE) {
             return self::FAILURE;
@@ -38,6 +39,7 @@ class MakePageBlockCommand extends Command
         $this->modifyProvider($theme, $name, $themeName);
 
         $this->info("Block {$name} created successfully.");
+
         return self::SUCCESS;
     }
 
@@ -47,13 +49,14 @@ class MakePageBlockCommand extends Command
         $viewPath = $theme->path("src/resources/views/components/blocks/{$name}/view.blade.php");
 
         if (file_exists($formPath) || file_exists($viewPath)) {
-            if (!$this->option('force')) {
+            if (! $this->option('force')) {
                 $this->error("Block {$name} already exists!");
+
                 return self::FAILURE;
             }
         }
 
-        if (!File::isDirectory(dirname($viewPath))) {
+        if (! File::isDirectory(dirname($viewPath))) {
             File::makeDirectory(dirname($viewPath), 0755, true);
         }
 
@@ -77,11 +80,11 @@ class MakePageBlockCommand extends Command
     protected function modifyProvider($theme, string $name, string $themeName): void
     {
         $providerFile = $theme->path('src/Providers/StyleServiceProvider.php');
-        if (!file_exists($providerFile)) {
+        if (! file_exists($providerFile)) {
             $content = $this->generateContents(
                 'provider.stub',
                 [
-                    'NAMESPACE' => 'Juzaweb\\Themes\\' . Str::studly($theme->name()) . '\\Providers',
+                    'NAMESPACE' => 'Juzaweb\\Themes\\'.Str::studly($theme->name()).'\\Providers',
                     'CLASS' => 'StyleServiceProvider',
                 ]
             );
@@ -98,25 +101,25 @@ class MakePageBlockCommand extends Command
     protected function appendBlockToProvider(string $content, string $name, string $themeName): string
     {
         $pattern = '/(public function boot\s*\(\)(?:\s*:\s*void)?\s*\{)([\s\S]*?)(^\s*\})/m';
-        $replacement = '$1$2' . "        PageBlock::make(
+        $replacement = '$1$2'."        PageBlock::make(
             '{$name}',
             function () {
                 return [
-                    'label' => __('" . title_from_key($name) . "'),
+                    'label' => __('".title_from_key($name)."'),
                     'form' => '{$themeName}::components.blocks.{$name}.form',
                     'view' => '{$themeName}::components.blocks.{$name}.view',
                 ];
             }
-        );\n" . '$3';
+        );\n".'$3';
 
         return preg_replace($pattern, $replacement, $content);
     }
 
     protected function addUseStatementToProvider(string $content): string
     {
-        $useStatement = "use Juzaweb\\Modules\\Admin\\Facades\\PageBlock;";
+        $useStatement = 'use Juzaweb\\Modules\\Admin\\Facades\\PageBlock;';
 
-        if (!str_contains($content, $useStatement)) {
+        if (! str_contains($content, $useStatement)) {
             // Tìm vị trí cuối cùng của nhóm use hiện tại
             if (preg_match_all('/^use\s+[^;]+;/m', $content, $allMatches, PREG_OFFSET_CAPTURE)) {
                 // $allMatches[0] is an array of matches; pick the last one

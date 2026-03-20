@@ -3,8 +3,8 @@
 /**
  * JUZAWEB CMS - Laravel CMS for Your Project
  *
- * @package    juzaweb/cms
  * @author     The Anh Dang
+ *
  * @link       https://cms.juzaweb.com
  */
 
@@ -29,6 +29,7 @@ class DownloadStyleCommand extends DownloadCommand
         $this->theme = \Juzaweb\Modules\Core\Facades\Theme::find($this->argument('theme'));
         if ($this->theme === null) {
             $this->error("Theme {$this->argument('theme')} not found!");
+
             return;
         }
 
@@ -47,15 +48,15 @@ class DownloadStyleCommand extends DownloadCommand
 
     protected function generateMixFile(array $css, array $js): void
     {
-        $mixOutput = 'themes/' . $this->theme->name() . '/assets';
+        $mixOutput = 'themes/'.$this->theme->name().'/assets';
 
         $cssList = array_map(
-            fn($item) => "basePath + '/css/" . basename(trim($item, "'")) . "'",
+            fn ($item) => "basePath + '/css/".basename(trim($item, "'"))."'",
             $css
         );
 
         $jsList = array_map(
-            fn($item) => "basePath + '/js/" . basename(trim($item, "'")) . "'",
+            fn ($item) => "basePath + '/js/".basename(trim($item, "'"))."'",
             $js
         );
 
@@ -79,11 +80,11 @@ const publishPath = basePath + '/public';
 mix.setPublicPath(publishPath);
 
 mix.styles([
-    " . implode(",\n    ", $cssList) . "
+    ".implode(",\n    ", $cssList)."
 ], publishPath + '/css/main.min.css');
 
 mix.combine([
-    " . implode(",\n    ", $jsList) . "
+    ".implode(",\n    ", $jsList)."
 ], publishPath + '/js/main.min.js');";
 
         File::put(base_path("{$mixOutput}/webpack.mix.js"), $mix);
@@ -181,6 +182,7 @@ mix.combine([
             $assetUrl = trim($assetUrl, "\"'");
             if (is_url($assetUrl) && $this->isExcludeDomain($assetUrl)) {
                 $this->warn("Skip {$assetUrl}");
+
                 continue;
             }
 
@@ -198,7 +200,7 @@ mix.combine([
                 continue;
             }
 
-            $savePath = $output . abs_path($urlPath);
+            $savePath = $output.abs_path($urlPath);
 
             try {
                 $this->downloadFile($parsedUrl, base_path($savePath));
@@ -214,8 +216,9 @@ mix.combine([
         foreach ($cssFiles as $cssPath) {
             $fullPath = base_path(trim($cssPath, "'"));
 
-            if (!File::exists($fullPath)) {
+            if (! File::exists($fullPath)) {
                 $this->warn("File {$fullPath} don't exists.");
+
                 continue;
             }
 
@@ -227,18 +230,18 @@ mix.combine([
     protected function parseHref(string $href): string
     {
         if (str_starts_with($href, '//')) {
-            $href = 'https:' . $href;
+            $href = 'https:'.$href;
         }
 
-        if (!is_url($href)) {
+        if (! is_url($href)) {
             $baseUrl = explode('/', $this->data['url'])[0];
-            $baseUrl .= '://' . get_domain_by_url($this->data['url']);
+            $baseUrl .= '://'.get_domain_by_url($this->data['url']);
 
             if (str_starts_with($href, '/')) {
-                $href = $baseUrl . trim($href);
+                $href = $baseUrl.trim($href);
             } else {
                 $dir = dirname($this->data['url']);
-                $href = "{$dir}/" . trim($href);
+                $href = "{$dir}/".trim($href);
             }
         }
 

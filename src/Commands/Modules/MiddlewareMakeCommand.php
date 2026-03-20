@@ -14,8 +14,6 @@ class MiddlewareMakeCommand extends GeneratorCommand
 
     /**
      * The name of argument name.
-     *
-     * @var string
      */
     protected string $argumentName = 'name';
 
@@ -62,7 +60,7 @@ class MiddlewareMakeCommand extends GeneratorCommand
 
         return (new Stub('/middleware.stub', [
             'NAMESPACE' => $this->getClassNamespace($module),
-            'CLASS'     => $this->getClass(),
+            'CLASS' => $this->getClass(),
         ]))->render();
     }
 
@@ -75,7 +73,7 @@ class MiddlewareMakeCommand extends GeneratorCommand
 
         $middlewarePath = GenerateConfigReader::read('filter');
 
-        return $path . $middlewarePath->getPath() . '/' . $this->getFileName() . '.php';
+        return $path.$middlewarePath->getPath().'/'.$this->getFileName().'.php';
     }
 
     /**

@@ -19,8 +19,6 @@ class RequestMakeCommand extends GeneratorCommand
 
     /**
      * The name of argument name.
-     *
-     * @var string
      */
     protected string $argumentName = 'name';
 
@@ -81,9 +79,6 @@ class RequestMakeCommand extends GeneratorCommand
         return app(RepositoryInterface::class)->config('paths.generator.request.namespace', 'Http/Requests');
     }
 
-    /**
-     * @return string
-     */
     protected function getTemplateContents(): string
     {
         $module = app(RepositoryInterface::class)->findOrFail($this->getModuleName());
@@ -102,9 +97,6 @@ class RequestMakeCommand extends GeneratorCommand
         return "[\n\t\t\t".implode(",\n\t\t\t", $this->rules)."\n\t\t]";
     }
 
-    /**
-     * @return string
-     */
     protected function getDestinationFilePath(): string
     {
         $path = app(RepositoryInterface::class)->getModulePath($this->getModuleName());
@@ -123,9 +115,6 @@ class RequestMakeCommand extends GeneratorCommand
         return '/requests/request.stub';
     }
 
-    /**
-     * @return string
-     */
     protected function getFileName(): string
     {
         return Str::studly($this->argument('name'));
@@ -133,8 +122,6 @@ class RequestMakeCommand extends GeneratorCommand
 
     /**
      * Get the console command arguments.
-     *
-     * @return array
      */
     protected function getArguments(): array
     {

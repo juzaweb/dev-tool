@@ -20,13 +20,13 @@ class MigrationMakeCommandTest extends TestCase
         $this->app['config']->set('modules.paths.generator.migration.generate', true);
 
         // Stubs path
-        $this->app['config']->set('dev-tool.modules.stubs.path', dirname(__DIR__, 2) . '/stubs/modules/');
-        $this->app['config']->set('modules.stubs.path', dirname(__DIR__, 2) . '/stubs/modules/');
+        $this->app['config']->set('dev-tool.modules.stubs.path', dirname(__DIR__, 2).'/stubs/modules/');
+        $this->app['config']->set('modules.stubs.path', dirname(__DIR__, 2).'/stubs/modules/');
 
-        Stub::setBasePath(dirname(__DIR__, 2) . '/stubs/modules/');
+        Stub::setBasePath(dirname(__DIR__, 2).'/stubs/modules/');
 
         // Create a dummy module
-        if (!File::isDirectory(base_path('modules/Blog'))) {
+        if (! File::isDirectory(base_path('modules/Blog'))) {
             File::makeDirectory(base_path('modules/Blog'), 0755, true);
         }
 
@@ -41,7 +41,7 @@ class MigrationMakeCommandTest extends TestCase
             'providers' => [],
             'aliases' => [],
             'files' => [],
-            'requires' => []
+            'requires' => [],
         ]));
     }
 
@@ -72,7 +72,7 @@ class MigrationMakeCommandTest extends TestCase
         $this->artisan('module:make-migration', [
             'name' => 'create_posts_table',
             'module' => 'Blog',
-            '--fields' => 'title:string, body:text'
+            '--fields' => 'title:string, body:text',
         ])
             ->assertExitCode(0);
 
@@ -93,7 +93,7 @@ class MigrationMakeCommandTest extends TestCase
         $this->artisan('module:make-migration', [
             'name' => 'add_active_to_posts_table',
             'module' => 'Blog',
-            '--fields' => 'active:boolean'
+            '--fields' => 'active:boolean',
         ])
             ->assertExitCode(0);
 
@@ -113,7 +113,7 @@ class MigrationMakeCommandTest extends TestCase
         $this->artisan('module:make-migration', [
             'name' => 'remove_title_from_posts_table',
             'module' => 'Blog',
-            '--fields' => 'title:string'
+            '--fields' => 'title:string',
         ])
             ->assertExitCode(0);
 
@@ -132,7 +132,7 @@ class MigrationMakeCommandTest extends TestCase
     {
         $this->artisan('module:make-migration', [
             'name' => 'drop_posts_table',
-            'module' => 'Blog'
+            'module' => 'Blog',
         ])
             ->assertExitCode(0);
 

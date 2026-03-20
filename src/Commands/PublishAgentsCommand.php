@@ -27,23 +27,24 @@ class PublishAgentsCommand extends Command
      */
     public function handle(Filesystem $files): int
     {
-        $baseSourcePath = dirname(__DIR__, 2) . '/agents';
+        $baseSourcePath = dirname(__DIR__, 2).'/agents';
         $destinationPath = base_path('.agent');
 
         // Determine which folder to publish
         $folder = $this->getPublishFolder();
-        $sourcePath = $folder ? $baseSourcePath . DIRECTORY_SEPARATOR . $folder : $baseSourcePath;
+        $sourcePath = $folder ? $baseSourcePath.DIRECTORY_SEPARATOR.$folder : $baseSourcePath;
 
-        if (!$files->isDirectory($sourcePath)) {
+        if (! $files->isDirectory($sourcePath)) {
             $this->components->error("Source directory does not exist: {$sourcePath}");
+
             return 1;
         }
 
         $this->components->info($folder ? "Publishing {$folder}..." : 'Publishing dev-tool agents...');
 
         // Create destination directory if it doesn't exist
-        $targetDestination = $folder ? $destinationPath . DIRECTORY_SEPARATOR . $folder : $destinationPath;
-        if (!$files->isDirectory($targetDestination)) {
+        $targetDestination = $folder ? $destinationPath.DIRECTORY_SEPARATOR.$folder : $destinationPath;
+        if (! $files->isDirectory($targetDestination)) {
             $files->makeDirectory($targetDestination, 0755, true);
         }
 
@@ -53,27 +54,27 @@ class PublishAgentsCommand extends Command
 
         // Create directories first
         foreach ($directories as $directory) {
-            $relativePath = str_replace($sourcePath . DIRECTORY_SEPARATOR, '', $directory);
-            $targetDir = $targetDestination . DIRECTORY_SEPARATOR . $relativePath;
+            $relativePath = str_replace($sourcePath.DIRECTORY_SEPARATOR, '', $directory);
+            $targetDir = $targetDestination.DIRECTORY_SEPARATOR.$relativePath;
 
-            if (!$files->isDirectory($targetDir)) {
+            if (! $files->isDirectory($targetDir)) {
                 $files->makeDirectory($targetDir, 0755, true);
             }
         }
 
         // Copy files
         foreach ($items as $file) {
-            $relativePath = str_replace($sourcePath . DIRECTORY_SEPARATOR, '', $file->getPathname());
-            $targetPath = $targetDestination . DIRECTORY_SEPARATOR . $relativePath;
+            $relativePath = str_replace($sourcePath.DIRECTORY_SEPARATOR, '', $file->getPathname());
+            $targetPath = $targetDestination.DIRECTORY_SEPARATOR.$relativePath;
 
-            if ($files->exists($targetPath) && !$this->option('force')) {
-                if (!$this->components->confirm("File already exists: {$relativePath}. Overwrite?")) {
+            if ($files->exists($targetPath) && ! $this->option('force')) {
+                if (! $this->components->confirm("File already exists: {$relativePath}. Overwrite?")) {
                     continue;
                 }
             }
 
             $files->copy($file->getPathname(), $targetPath);
-            $this->components->task($relativePath, fn() => true);
+            $this->components->task($relativePath, fn () => true);
         }
 
         $this->components->info('Agents published successfully!');
