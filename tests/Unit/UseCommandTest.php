@@ -15,7 +15,7 @@ class UseCommandTest extends TestCase
         $this->app['config']->set('modules.paths.modules', base_path('modules'));
 
         // Create a dummy module
-        if (!File::isDirectory(base_path('modules/Blog'))) {
+        if (! File::isDirectory(base_path('modules/Blog'))) {
             File::makeDirectory(base_path('modules/Blog'), 0755, true);
         }
 
@@ -29,7 +29,7 @@ class UseCommandTest extends TestCase
             'providers' => [],
             'aliases' => [],
             'files' => [],
-            'requires' => []
+            'requires' => [],
         ]));
     }
 

@@ -32,7 +32,7 @@ class MigrateRefreshCommand extends Command
     {
         $module = $this->argument('module');
 
-        if ($module && !$this->getModuleName()) {
+        if ($module && ! $this->getModuleName()) {
             $this->error("Module [$module] does not exists.");
 
             return E_ERROR;
@@ -89,7 +89,7 @@ class MigrateRefreshCommand extends Command
     {
         $module = $this->argument('module');
 
-        if (!$module) {
+        if (! $module) {
             return null;
         }
 

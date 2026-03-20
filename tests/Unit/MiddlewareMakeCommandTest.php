@@ -20,13 +20,13 @@ class MiddlewareMakeCommandTest extends TestCase
         $this->app['config']->set('modules.paths.generator.filter.generate', true);
 
         // Stubs path
-        $this->app['config']->set('dev-tool.modules.stubs.path', dirname(__DIR__, 2) . '/stubs/modules/');
-        $this->app['config']->set('modules.stubs.path', dirname(__DIR__, 2) . '/stubs/modules/');
+        $this->app['config']->set('dev-tool.modules.stubs.path', dirname(__DIR__, 2).'/stubs/modules/');
+        $this->app['config']->set('modules.stubs.path', dirname(__DIR__, 2).'/stubs/modules/');
 
-        Stub::setBasePath(dirname(__DIR__, 2) . '/stubs/modules/');
+        Stub::setBasePath(dirname(__DIR__, 2).'/stubs/modules/');
 
         // Create a dummy module
-        if (!File::isDirectory(base_path('modules/Blog'))) {
+        if (! File::isDirectory(base_path('modules/Blog'))) {
             File::makeDirectory(base_path('modules/Blog'), 0755, true);
         }
 
@@ -41,7 +41,7 @@ class MiddlewareMakeCommandTest extends TestCase
             'providers' => [],
             'aliases' => [],
             'files' => [],
-            'requires' => []
+            'requires' => [],
         ]));
     }
 

@@ -16,7 +16,7 @@ class ThemeGeneratorCommandTest extends TestCase
         $this->app['config']->set('themes.path', base_path('themes'));
 
         // Setup stubs path
-        $stubsPath = dirname(__DIR__, 2) . '/stubs/themes';
+        $stubsPath = dirname(__DIR__, 2).'/stubs/themes';
         $this->app['config']->set('dev-tool.themes.stubs.path', $stubsPath);
 
         // Ensure stub base path is set for Stub class
@@ -51,7 +51,7 @@ class ThemeGeneratorCommandTest extends TestCase
     public function test_it_fails_if_theme_exists()
     {
         // Create dummy theme
-        if (!File::isDirectory(base_path('themes/test-theme'))) {
+        if (! File::isDirectory(base_path('themes/test-theme'))) {
             File::makeDirectory(base_path('themes/test-theme'), 0755, true);
         }
 
@@ -64,15 +64,15 @@ class ThemeGeneratorCommandTest extends TestCase
     {
         // Create dummy theme
         $themePath = base_path('themes/test-theme');
-        if (!File::isDirectory($themePath)) {
+        if (! File::isDirectory($themePath)) {
             File::makeDirectory($themePath, 0755, true);
         }
-        File::put($themePath . '/dummy.txt', 'content');
+        File::put($themePath.'/dummy.txt', 'content');
 
         $this->artisan('theme:make', ['name' => 'test-theme', '--force' => true])
             ->assertExitCode(0);
 
-        $this->assertFileExists($themePath . '/theme.json');
+        $this->assertFileExists($themePath.'/theme.json');
         // The dummy file should be gone if directory was deleted and recreated
         // But looking at ThemeGeneratorCommand.php, it does NOT delete directory first.
         // It calls generateThemeInfo(), makeDir(), createStubs().
@@ -94,6 +94,6 @@ class ThemeGeneratorCommandTest extends TestCase
         // The test assertion should verify that theme files exist, not that dummy files are gone, unless we expect clean slate.
         // I will just check theme.json exists.
 
-        $this->assertFileExists($themePath . '/theme.json');
+        $this->assertFileExists($themePath.'/theme.json');
     }
 }

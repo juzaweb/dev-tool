@@ -44,7 +44,7 @@ class PublishConfigurationCommand extends Command
     }
 
     /**
-     * @param string $module
+     * @param  string  $module
      * @return string
      */
     private function getServiceProviderForModule($module)
@@ -56,7 +56,7 @@ class PublishConfigurationCommand extends Command
     }
 
     /**
-     * @param string $module
+     * @param  string  $module
      */
     private function publishConfiguration($module)
     {

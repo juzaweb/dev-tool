@@ -19,12 +19,12 @@ class PublishMigrationCommandTest extends TestCase
         $this->app['config']->set('modules.paths.generator.migration.generate', true);
 
         // Create a dummy module
-        if (!File::isDirectory(base_path('modules/Blog'))) {
+        if (! File::isDirectory(base_path('modules/Blog'))) {
             File::makeDirectory(base_path('modules/Blog'), 0755, true);
         }
 
         // Create migration source
-        if (!File::isDirectory(base_path('modules/Blog/database/migrations'))) {
+        if (! File::isDirectory(base_path('modules/Blog/database/migrations'))) {
             File::makeDirectory(base_path('modules/Blog/database/migrations'), 0755, true);
         }
         File::put(base_path('modules/Blog/database/migrations/2023_01_01_000000_create_posts_table.php'), '<?php class CreatePostsTable {}');
@@ -39,7 +39,7 @@ class PublishMigrationCommandTest extends TestCase
             'providers' => [],
             'aliases' => [],
             'files' => [],
-            'requires' => []
+            'requires' => [],
         ]));
     }
 

@@ -34,8 +34,6 @@ class DatatableMakeCommand extends GeneratorCommand
 
     /**
      * The name of argument being used.
-     *
-     * @var string
      */
     protected string $argumentName = 'datatable';
 
@@ -78,7 +76,7 @@ class DatatableMakeCommand extends GeneratorCommand
             return;
         }
 
-        if (!method_exists($repository, 'bulkActions')) {
+        if (! method_exists($repository, 'bulkActions')) {
             return;
         }
 
@@ -95,9 +93,9 @@ class DatatableMakeCommand extends GeneratorCommand
 
         $makeColumns = array_diff($makeColumns, $config->get('excludeColumns', []));
 
-        $this->columns[] = "Column::checkbox()";
-        $this->columns[] = "Column::id()";
-        $this->columns[] = "Column::actions()";
+        $this->columns[] = 'Column::checkbox()';
+        $this->columns[] = 'Column::id()';
+        $this->columns[] = 'Column::actions()';
 
         $hasTitle = false;
         foreach ($makeColumns as $item) {
@@ -106,6 +104,7 @@ class DatatableMakeCommand extends GeneratorCommand
                 $prefix = $this->getUrlPrefix();
                 $this->columns[] = "Column::editLink('{$item}', admin_url('{$prefix}/{id}/edit'), __('core::translation.label'))";
                 $hasTitle = true;
+
                 continue;
             }
 
@@ -113,7 +112,7 @@ class DatatableMakeCommand extends GeneratorCommand
         }
 
         if ($model->usesTimestamps()) {
-            $this->columns[] = "Column::createdAt()";
+            $this->columns[] = 'Column::createdAt()';
         }
     }
 
@@ -163,7 +162,7 @@ class DatatableMakeCommand extends GeneratorCommand
 
         $datatablePath = GenerateConfigReader::read('datatable');
 
-        return $path . $datatablePath->getPath() . '/' . $this->getDatatableName() . '.php';
+        return $path.$datatablePath->getPath().'/'.$this->getDatatableName().'.php';
     }
 
     protected function getDatatableName(): string
@@ -182,9 +181,6 @@ class DatatableMakeCommand extends GeneratorCommand
         return \Juzaweb\Modules\Core\Facades\Module::config('paths.generator.datatable.namespace', 'Http/DataTables');
     }
 
-    /**
-     * @return string
-     */
     protected function getDatatableNameWithoutNamespace(): string
     {
         return class_basename($this->getDatatableName());
@@ -192,7 +188,6 @@ class DatatableMakeCommand extends GeneratorCommand
 
     /**
      * Get the stub file name based on the options
-     * @return string
      */
     protected function getStubName(): string
     {
@@ -201,8 +196,6 @@ class DatatableMakeCommand extends GeneratorCommand
 
     /**
      * Get the console command arguments.
-     *
-     * @return array
      */
     protected function getArguments(): array
     {
@@ -214,8 +207,6 @@ class DatatableMakeCommand extends GeneratorCommand
 
     /**
      * Get the console command options.
-     *
-     * @return array
      */
     protected function getOptions(): ?array
     {

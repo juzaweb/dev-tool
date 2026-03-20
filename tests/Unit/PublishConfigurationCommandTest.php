@@ -16,7 +16,7 @@ class PublishConfigurationCommandTest extends TestCase
         $this->app['config']->set('modules.namespace', 'Juzaweb\\Modules');
 
         // Create a dummy module
-        if (!File::isDirectory(base_path('modules/Blog'))) {
+        if (! File::isDirectory(base_path('modules/Blog'))) {
             File::makeDirectory(base_path('modules/Blog'), 0755, true);
         }
 
@@ -30,7 +30,7 @@ class PublishConfigurationCommandTest extends TestCase
             'providers' => [],
             'aliases' => [],
             'files' => [],
-            'requires' => []
+            'requires' => [],
         ]));
     }
 

@@ -14,8 +14,6 @@ class ComponentClassMakeCommand extends GeneratorCommand
 
     /**
      * The name of argument name.
-     *
-     * @var string
      */
     protected string $argumentName = 'name';
 
@@ -42,6 +40,7 @@ class ComponentClassMakeCommand extends GeneratorCommand
 
         return 0;
     }
+
     /**
      * Write the view template for the component.
      *
@@ -49,7 +48,7 @@ class ComponentClassMakeCommand extends GeneratorCommand
      */
     protected function writeComponentViewTemplate()
     {
-        $this->call('module:make-component-view', ['name' => $this->argument('name') , 'module' => $this->argument('module')]);
+        $this->call('module:make-component-view', ['name' => $this->argument('name'), 'module' => $this->argument('module')]);
     }
 
     public function getDefaultNamespace(): string
@@ -71,6 +70,7 @@ class ComponentClassMakeCommand extends GeneratorCommand
             ['module', InputArgument::OPTIONAL, 'The name of module will be used.'],
         ];
     }
+
     /**
      * @return mixed
      */
@@ -79,10 +79,10 @@ class ComponentClassMakeCommand extends GeneratorCommand
         $module = $this->laravel['modules']->findOrFail($this->getModuleName());
 
         return (new Stub('/component-class.stub', [
-            'NAMESPACE'         => $this->getClassNamespace($module),
-            'CLASS'             => $this->getClass(),
-            'LOWER_NAME'        => $module->getLowerName(),
-            'COMPONENT_NAME'    => 'components.' . Str::lower($this->argument('name')),
+            'NAMESPACE' => $this->getClassNamespace($module),
+            'CLASS' => $this->getClass(),
+            'LOWER_NAME' => $module->getLowerName(),
+            'COMPONENT_NAME' => 'components.'.Str::lower($this->argument('name')),
         ]))->render();
     }
 
@@ -94,7 +94,7 @@ class ComponentClassMakeCommand extends GeneratorCommand
         $path = $this->laravel['modules']->getModulePath($this->getModuleName());
         $factoryPath = GenerateConfigReader::read('component-class');
 
-        return $path . $factoryPath->getPath() . '/' . $this->getFileName();
+        return $path.$factoryPath->getPath().'/'.$this->getFileName();
     }
 
     /**
@@ -102,6 +102,6 @@ class ComponentClassMakeCommand extends GeneratorCommand
      */
     private function getFileName()
     {
-        return Str::studly($this->argument('name')) . '.php';
+        return Str::studly($this->argument('name')).'.php';
     }
 }

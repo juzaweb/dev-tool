@@ -27,7 +27,7 @@ class ModuleMakeCommandTest extends TestCase
         $this->app['config']->set('dev-tool.modules.namespace', 'Juzaweb');
 
         // Setup stubs path
-        $stubsPath = dirname(__DIR__, 2) . '/stubs/modules/';
+        $stubsPath = dirname(__DIR__, 2).'/stubs/modules/';
         $this->app['config']->set('dev-tool.modules.stubs.path', $stubsPath);
         $this->app['config']->set('modules.stubs.path', $stubsPath);
 
@@ -88,7 +88,7 @@ class ModuleMakeCommandTest extends TestCase
     public function test_it_fails_if_module_exists()
     {
         // Create a dummy module
-        if (!File::isDirectory(base_path('modules/blog'))) {
+        if (! File::isDirectory(base_path('modules/blog'))) {
             File::makeDirectory(base_path('modules/blog'), 0755, true);
         }
         File::put(base_path('modules/blog/module.json'), json_encode(['name' => 'Blog', 'alias' => 'blog', 'providers' => [], 'files' => []]));
@@ -100,7 +100,7 @@ class ModuleMakeCommandTest extends TestCase
     public function test_it_overwrites_if_force()
     {
         // Create a dummy module
-        if (!File::isDirectory(base_path('modules/blog'))) {
+        if (! File::isDirectory(base_path('modules/blog'))) {
             File::makeDirectory(base_path('modules/blog'), 0755, true);
         }
         File::put(base_path('modules/blog/module.json'), json_encode(['name' => 'Blog', 'alias' => 'blog', 'providers' => [], 'files' => []]));

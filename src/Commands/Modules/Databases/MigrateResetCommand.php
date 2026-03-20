@@ -3,6 +3,7 @@
 namespace Juzaweb\DevTool\Commands\Modules\Databases;
 
 use Illuminate\Console\Command;
+use Juzaweb\Modules\Core\Modules\Contracts\RepositoryInterface;
 use Juzaweb\Modules\Core\Modules\Migrations\Migrator;
 use Juzaweb\Modules\Core\Modules\Traits\MigrationLoaderTrait;
 use Symfony\Component\Console\Input\InputArgument;
@@ -27,7 +28,7 @@ class MigrateResetCommand extends Command
     protected $description = 'Reset the modules migrations.';
 
     /**
-     * @var \Juzaweb\Modules\Core\Modules\Contracts\RepositoryInterface
+     * @var RepositoryInterface
      */
     protected $module;
 
@@ -40,14 +41,14 @@ class MigrateResetCommand extends Command
 
         $name = $this->argument('module');
 
-        if (!empty($name)) {
+        if (! empty($name)) {
             $this->reset($name);
 
             return 0;
         }
 
         foreach ($this->module->getOrdered($this->option('direction')) as $module) {
-            $this->line('Running for module: <info>' . $module->getName() . '</info>');
+            $this->line('Running for module: <info>'.$module->getName().'</info>');
 
             $this->reset($module);
         }
@@ -57,8 +58,6 @@ class MigrateResetCommand extends Command
 
     /**
      * Rollback migration from the specified module.
-     *
-     * @param $module
      */
     public function reset($module)
     {
@@ -70,7 +69,7 @@ class MigrateResetCommand extends Command
 
         $database = $this->option('database');
 
-        if (!empty($database)) {
+        if (! empty($database)) {
             $migrator->setDatabase($database);
         }
 

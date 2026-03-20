@@ -2,6 +2,7 @@
 
 namespace Juzaweb\DevTool\Tests\Unit;
 
+use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Juzaweb\DevTool\Commands\GithubReleaseModuleCommand;
@@ -10,9 +11,9 @@ use Mockery;
 
 class GithubReleaseModuleCommandTest extends TestCase
 {
-    public function testNothingToRelease()
+    public function test_nothing_to_release()
     {
-        $command = Mockery::mock(GithubReleaseModuleCommand::class . '[runCmd,getGithubToken]')
+        $command = Mockery::mock(GithubReleaseModuleCommand::class.'[runCmd,getGithubToken]')
             ->shouldAllowMockingProtectedMethods();
 
         $command->shouldReceive('getGithubToken')->andReturn('fake-token');
@@ -42,20 +43,20 @@ class GithubReleaseModuleCommandTest extends TestCase
             })
             ->andReturn('');
 
-        $this->app[\Illuminate\Contracts\Console\Kernel::class]->registerCommand($command);
+        $this->app[Kernel::class]->registerCommand($command);
 
         File::shouldReceive('isDirectory')->andReturn(true);
 
         $this->artisan('github:release', [
-            'path' => '/fake/path'
+            'path' => '/fake/path',
         ])
             ->expectsOutput('Nothing to release')
             ->assertExitCode(0);
     }
 
-    public function testReleaseWithChangelog()
+    public function test_release_with_changelog()
     {
-        $command = Mockery::mock(GithubReleaseModuleCommand::class . '[runCmd,getGithubToken]')
+        $command = Mockery::mock(GithubReleaseModuleCommand::class.'[runCmd,getGithubToken]')
             ->shouldAllowMockingProtectedMethods();
 
         $command->shouldReceive('getGithubToken')->andReturn('fake-token');
@@ -103,12 +104,12 @@ class GithubReleaseModuleCommandTest extends TestCase
             })
             ->andReturn('');
 
-        $this->app[\Illuminate\Contracts\Console\Kernel::class]->registerCommand($command);
+        $this->app[Kernel::class]->registerCommand($command);
 
         File::shouldReceive('isDirectory')->andReturn(true);
         File::shouldReceive('prepend')
             ->withArgs(function ($path, $content) {
-                return str_contains($path, 'changelog.md') && str_contains($content, 'v1.0.1') && str_contains($content, 'Feature 1') && !str_contains($content, ':construction:');
+                return str_contains($path, 'changelog.md') && str_contains($content, 'v1.0.1') && str_contains($content, 'Feature 1') && ! str_contains($content, ':construction:');
             })
             ->once();
 
@@ -117,7 +118,7 @@ class GithubReleaseModuleCommandTest extends TestCase
         ]);
 
         $this->artisan('github:release', [
-            'path' => '/fake/path'
+            'path' => '/fake/path',
         ])
             ->expectsOutput('Add changelog')
             ->expectsOutput('Release v1.0.1')
@@ -132,9 +133,9 @@ class GithubReleaseModuleCommandTest extends TestCase
         });
     }
 
-    public function testReleaseWithoutChangelog()
+    public function test_release_without_changelog()
     {
-        $command = Mockery::mock(GithubReleaseModuleCommand::class . '[runCmd,getGithubToken]')
+        $command = Mockery::mock(GithubReleaseModuleCommand::class.'[runCmd,getGithubToken]')
             ->shouldAllowMockingProtectedMethods();
 
         $command->shouldReceive('getGithubToken')->andReturn('fake-token');
@@ -162,9 +163,9 @@ class GithubReleaseModuleCommandTest extends TestCase
             ->withArgs(function ($path, $cmd) {
                 return is_string($cmd) && str_contains($cmd, 'git log');
             })
-            ->andReturn("* Fix bug 1");
+            ->andReturn('* Fix bug 1');
 
-        $this->app[\Illuminate\Contracts\Console\Kernel::class]->registerCommand($command);
+        $this->app[Kernel::class]->registerCommand($command);
 
         File::shouldReceive('isDirectory')->andReturn(true);
         // Prepend shouldn't be called
@@ -185,7 +186,7 @@ class GithubReleaseModuleCommandTest extends TestCase
         Http::assertSent(function ($request) {
             return $request->url() == 'https://api.github.com/repos/fake/repo/releases' &&
                    $request['tag_name'] == '1.0.1' &&
-                   $request['body'] == "* Fix bug 1" &&
+                   $request['body'] == '* Fix bug 1' &&
                    $request->header('Authorization')[0] == 'Bearer fake-token';
         });
     }

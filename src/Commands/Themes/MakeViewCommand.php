@@ -23,18 +23,20 @@ class MakeViewCommand extends GenerateCommand
 
         if ($theme === null) {
             $this->error("Theme {$themeName} does not exist.");
+
             return self::FAILURE;
         }
 
-        Stub::setBasePath(config('dev-tool.themes.stubs.path') . '/');
+        Stub::setBasePath(config('dev-tool.themes.stubs.path').'/');
         $viewPath = $theme->path("src/resources/views/$name.blade.php");
 
-        if (file_exists($viewPath) && !$this->option('force')) {
+        if (file_exists($viewPath) && ! $this->option('force')) {
             $this->error("View {$name} already exists!");
+
             return self::FAILURE;
         }
 
-        if (!File::isDirectory(dirname($viewPath))) {
+        if (! File::isDirectory(dirname($viewPath))) {
             File::makeDirectory(dirname($viewPath), 0755, true);
         }
 
@@ -46,6 +48,7 @@ class MakeViewCommand extends GenerateCommand
         );
 
         $this->info("View {$viewPath} created successfully.");
+
         return self::SUCCESS;
     }
 

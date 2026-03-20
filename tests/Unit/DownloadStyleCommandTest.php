@@ -7,8 +7,11 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Facades\File;
+use Juzaweb\DevTool\Commands\Themes\DownloadStyleCommand;
 use Juzaweb\DevTool\Tests\TestCase;
 use Juzaweb\Modules\Core\Facades\Theme;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 
 class DownloadStyleCommandTest extends TestCase
 {
@@ -17,7 +20,7 @@ class DownloadStyleCommandTest extends TestCase
         parent::setUp();
 
         $this->app['config']->set('themes.path', base_path('themes'));
-        $stubsPath = dirname(__DIR__, 2) . '/stubs/themes';
+        $stubsPath = dirname(__DIR__, 2).'/stubs/themes';
         $this->app['config']->set('dev-tool.themes.stubs.path', $stubsPath);
 
         if (File::isDirectory(base_path('themes'))) {
@@ -49,7 +52,7 @@ class DownloadStyleCommandTest extends TestCase
         $handlerStack = HandlerStack::create($mock);
         $client = new Client(['handler' => $handlerStack]);
 
-        $command = $this->getMockBuilder(\Juzaweb\DevTool\Commands\Themes\DownloadStyleCommand::class)
+        $command = $this->getMockBuilder(DownloadStyleCommand::class)
             ->setConstructorArgs([$client])
             ->onlyMethods(['ask'])
             ->getMock();
@@ -57,14 +60,14 @@ class DownloadStyleCommandTest extends TestCase
         $command->method('ask')->willReturn('http://example.com');
         $command->setLaravel($this->app);
 
-        $input = new \Symfony\Component\Console\Input\ArrayInput([
+        $input = new ArrayInput([
             'theme' => 'test-theme',
         ]);
-        $output = new \Symfony\Component\Console\Output\BufferedOutput();
+        $output = new BufferedOutput;
 
         // Create necessary directory for generateMixFile
         $mixDir = base_path('themes/test-theme/assets');
-        if (!File::isDirectory($mixDir)) {
+        if (! File::isDirectory($mixDir)) {
             File::makeDirectory($mixDir, 0755, true);
         }
 

@@ -4,8 +4,8 @@ namespace Juzaweb\DevTool\Tests\Unit;
 
 use Illuminate\Support\Facades\File;
 use Juzaweb\DevTool\Tests\TestCase;
-use Juzaweb\Modules\Core\Modules\Support\Stub;
 use Juzaweb\Modules\Core\Models\Model;
+use Juzaweb\Modules\Core\Modules\Support\Stub;
 
 class CrudMakeCommandTest extends TestCase
 {
@@ -37,7 +37,7 @@ class CrudMakeCommandTest extends TestCase
         $this->app['config']->set('modules.paths.generator.routes.generate', true);
 
         // Stubs path
-        $stubsPath = dirname(__DIR__, 2) . '/stubs/modules/';
+        $stubsPath = dirname(__DIR__, 2).'/stubs/modules/';
         $this->app['config']->set('dev-tool.modules.stubs.path', $stubsPath);
         $this->app['config']->set('modules.stubs.path', $stubsPath);
 
@@ -61,7 +61,7 @@ class CrudMakeCommandTest extends TestCase
             'providers' => [],
             'aliases' => [],
             'files' => [],
-            'requires' => []
+            'requires' => [],
         ]));
 
         // Create routes file

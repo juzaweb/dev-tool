@@ -53,8 +53,6 @@ class PublishCommand extends Command
 
     /**
      * Publish assets from the specified module.
-     *
-     * @param  string|Module  $name
      */
     public function publish(string|Module $name)
     {
@@ -69,7 +67,7 @@ class PublishCommand extends Command
             ->setConsole($this)
             ->publish();
 
-        $this->components->task($module->getStudlyName(), fn()=>true);
+        $this->components->task($module->getStudlyName(), fn () => true);
     }
 
     /**

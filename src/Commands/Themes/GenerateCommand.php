@@ -3,9 +3,10 @@
 /**
  * JUZAWEB CMS - Laravel CMS for Your Project
  *
- * @package    juzaweb/cms
  * @author     The Anh Dang
+ *
  * @link       https://cms.juzaweb.com
+ *
  * @license    GNU V2
  */
 
@@ -21,11 +22,11 @@ abstract class GenerateCommand extends Command
     protected function getStyleProviderContents(Theme $theme): false|string
     {
         $providerFile = $theme->path('src/Providers/StyleServiceProvider.php');
-        if (!file_exists($providerFile)) {
+        if (! file_exists($providerFile)) {
             $content = $this->generateContents(
                 'provider.stub',
                 [
-                    'NAMESPACE' => 'Juzaweb\\Themes\\' . Str::studly($theme->name()) . '\\Providers',
+                    'NAMESPACE' => 'Juzaweb\\Themes\\'.Str::studly($theme->name()).'\\Providers',
                     'CLASS' => 'StyleServiceProvider',
                 ]
             );
@@ -40,7 +41,7 @@ abstract class GenerateCommand extends Command
     {
         $pattern = '/(public function boot\s*\(\)(?:\s*:\s*void)?\s*\{)([\s\S]*?)(^\s*\})/m';
 
-        $replacement = '$1$2' . $code . '$3';
+        $replacement = '$1$2'.$code.'$3';
 
         return preg_replace($pattern, $replacement, $content);
     }
@@ -49,7 +50,7 @@ abstract class GenerateCommand extends Command
     {
         $useStatement = "use {$className};";
 
-        if (!str_contains($content, $useStatement)) {
+        if (! str_contains($content, $useStatement)) {
             // Tìm vị trí cuối cùng của nhóm use hiện tại
             if (preg_match_all('/^use\s+[^;]+;/m', $content, $allMatches, PREG_OFFSET_CAPTURE)) {
                 // $allMatches[0] is an array of matches; pick the last one

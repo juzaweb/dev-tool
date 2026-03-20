@@ -18,12 +18,12 @@ class PublishCommandTest extends TestCase
         $this->app['config']->set('modules.paths.generator.assets.generate', true);
 
         // Create a dummy module
-        if (!File::isDirectory(base_path('modules/Blog'))) {
+        if (! File::isDirectory(base_path('modules/Blog'))) {
             File::makeDirectory(base_path('modules/Blog'), 0755, true);
         }
 
         // Create assets directory in module
-        if (!File::isDirectory(base_path('modules/Blog/assets/public'))) {
+        if (! File::isDirectory(base_path('modules/Blog/assets/public'))) {
             File::makeDirectory(base_path('modules/Blog/assets/public'), 0755, true);
         }
         File::put(base_path('modules/Blog/assets/public/style.css'), 'body { color: red; }');
@@ -38,7 +38,7 @@ class PublishCommandTest extends TestCase
             'providers' => [],
             'aliases' => [],
             'files' => [],
-            'requires' => []
+            'requires' => [],
         ]));
     }
 

@@ -4,8 +4,8 @@ namespace Juzaweb\DevTool\Tests\Unit;
 
 use Illuminate\Support\Facades\File;
 use Juzaweb\DevTool\Tests\TestCase;
-use Juzaweb\Modules\Core\Modules\Support\Stub;
 use Juzaweb\Modules\Core\Facades\Theme;
+use Juzaweb\Modules\Core\Modules\Support\Stub;
 
 class ThemeMakeCommandsTest extends TestCase
 {
@@ -16,7 +16,7 @@ class ThemeMakeCommandsTest extends TestCase
         // Setup theme configuration
         $this->app['config']->set('themes.path', base_path('themes'));
 
-        $stubsPath = dirname(__DIR__, 2) . '/stubs/themes';
+        $stubsPath = dirname(__DIR__, 2).'/stubs/themes';
         $this->app['config']->set('dev-tool.themes.stubs.path', $stubsPath);
 
         // Ensure stub base path is set for Stub class
@@ -67,13 +67,13 @@ class ThemeMakeCommandsTest extends TestCase
         $this->assertFileExists($providerPath);
 
         $providerContent = File::get($providerPath);
-        $this->assertStringContainsString("PageTemplate::make(", $providerContent);
+        $this->assertStringContainsString('PageTemplate::make(', $providerContent);
         $this->assertStringContainsString("'custom-page',", $providerContent);
     }
 
     public function test_it_fails_create_template_home()
     {
-         $this->artisan('theme:make-template', [
+        $this->artisan('theme:make-template', [
             'name' => 'home',
             'theme' => 'test-theme',
         ])->assertExitCode(1);
@@ -104,7 +104,7 @@ class ThemeMakeCommandsTest extends TestCase
         $this->assertFileExists($providerPath);
 
         $providerContent = File::get($providerPath);
-        $this->assertStringContainsString("Widget::make(", $providerContent);
+        $this->assertStringContainsString('Widget::make(', $providerContent);
         $this->assertStringContainsString("'testwidget',", $providerContent);
     }
 
@@ -123,7 +123,7 @@ class ThemeMakeCommandsTest extends TestCase
         $this->assertFileExists($providerPath);
 
         $providerContent = File::get($providerPath);
-        $this->assertStringContainsString("PageBlock::make(", $providerContent);
+        $this->assertStringContainsString('PageBlock::make(', $providerContent);
         $this->assertStringContainsString("'testblock',", $providerContent);
     }
 }

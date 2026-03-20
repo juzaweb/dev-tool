@@ -3,69 +3,121 @@
 namespace Juzaweb\DevTool\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Juzaweb\DevTool\Commands\Modules\CommandMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\ComponentClassMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\ComponentViewMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\ControllerMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\Cruds\AdminCrudMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\Cruds\APICrudMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\Cruds\CrudMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\Databases\FactoryMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\Databases\MigrateCommand;
+use Juzaweb\DevTool\Commands\Modules\Databases\MigrateFreshCommand;
+use Juzaweb\DevTool\Commands\Modules\Databases\MigrateRefreshCommand;
+use Juzaweb\DevTool\Commands\Modules\Databases\MigrateResetCommand;
+use Juzaweb\DevTool\Commands\Modules\Databases\MigrateRollbackCommand;
+use Juzaweb\DevTool\Commands\Modules\Databases\MigrateStatusCommand;
+use Juzaweb\DevTool\Commands\Modules\Databases\MigrationMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\Databases\SeedCommand;
+use Juzaweb\DevTool\Commands\Modules\Databases\SeedMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\DatatableMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\DumpCommand;
+use Juzaweb\DevTool\Commands\Modules\EventMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\JobMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\ListenerMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\MailMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\MiddlewareMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\ModelMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\ModelShowCommand;
+use Juzaweb\DevTool\Commands\Modules\ModuleDeleteCommand;
+use Juzaweb\DevTool\Commands\Modules\ModuleMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\NotificationMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\PolicyMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\ProviderMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\PublishCommand;
+use Juzaweb\DevTool\Commands\Modules\PublishConfigurationCommand;
+use Juzaweb\DevTool\Commands\Modules\PublishMigrationCommand;
+use Juzaweb\DevTool\Commands\Modules\PublishTranslationCommand;
+use Juzaweb\DevTool\Commands\Modules\RequestMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\ResourceMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\RouteProviderMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\RuleMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\SetupCommand;
+use Juzaweb\DevTool\Commands\Modules\TestMakeCommand;
+use Juzaweb\DevTool\Commands\Modules\UnUseCommand;
+use Juzaweb\DevTool\Commands\Modules\UseCommand;
+use Juzaweb\DevTool\Commands\PublishAgentsCommand;
+use Juzaweb\DevTool\Commands\Themes\DownloadStyleCommand;
+use Juzaweb\DevTool\Commands\Themes\DownloadTemplateCommand;
+use Juzaweb\DevTool\Commands\Themes\MakeControllerCommand;
+use Juzaweb\DevTool\Commands\Themes\MakePageBlockCommand;
+use Juzaweb\DevTool\Commands\Themes\MakeTemplateCommand;
+use Juzaweb\DevTool\Commands\Themes\MakeViewCommand;
+use Juzaweb\DevTool\Commands\Themes\MakeWidgetCommand;
+use Juzaweb\DevTool\Commands\Themes\ThemeGeneratorCommand;
+use Juzaweb\DevTool\Commands\Themes\ThemeSeedCommand;
 use Juzaweb\Modules\Core\Modules\Support\Stub;
 
 class ConsoleServiceProvider extends ServiceProvider
 {
     /**
      * The available commands
-     * @var array
      */
     protected array $commands = [
-        \Juzaweb\DevTool\Commands\PublishAgentsCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\CommandMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\ControllerMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\DumpCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\EventMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\JobMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\ListenerMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\MailMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\MiddlewareMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\NotificationMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\ProviderMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\RouteProviderMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\ModuleDeleteCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\ModuleMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\Databases\FactoryMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\PolicyMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\RequestMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\RuleMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\Databases\MigrateCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\Databases\MigrateRefreshCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\Databases\MigrateResetCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\Databases\MigrateFreshCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\Databases\MigrateRollbackCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\Databases\MigrateStatusCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\Databases\MigrationMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\ModelMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\ModelShowCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\PublishCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\PublishConfigurationCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\PublishMigrationCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\PublishTranslationCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\Databases\SeedCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\Databases\SeedMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\SetupCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\UnUseCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\UseCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\ResourceMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\TestMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\ComponentClassMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\ComponentViewMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\DatatableMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\Cruds\AdminCrudMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\Cruds\APICrudMakeCommand::class,
-        \Juzaweb\DevTool\Commands\Modules\Cruds\CrudMakeCommand::class,
+        PublishAgentsCommand::class,
+        CommandMakeCommand::class,
+        ControllerMakeCommand::class,
+        DumpCommand::class,
+        EventMakeCommand::class,
+        JobMakeCommand::class,
+        ListenerMakeCommand::class,
+        MailMakeCommand::class,
+        MiddlewareMakeCommand::class,
+        NotificationMakeCommand::class,
+        ProviderMakeCommand::class,
+        RouteProviderMakeCommand::class,
+        ModuleDeleteCommand::class,
+        ModuleMakeCommand::class,
+        FactoryMakeCommand::class,
+        PolicyMakeCommand::class,
+        RequestMakeCommand::class,
+        RuleMakeCommand::class,
+        MigrateCommand::class,
+        MigrateRefreshCommand::class,
+        MigrateResetCommand::class,
+        MigrateFreshCommand::class,
+        MigrateRollbackCommand::class,
+        MigrateStatusCommand::class,
+        MigrationMakeCommand::class,
+        ModelMakeCommand::class,
+        ModelShowCommand::class,
+        PublishCommand::class,
+        PublishConfigurationCommand::class,
+        PublishMigrationCommand::class,
+        PublishTranslationCommand::class,
+        SeedCommand::class,
+        SeedMakeCommand::class,
+        SetupCommand::class,
+        UnUseCommand::class,
+        UseCommand::class,
+        ResourceMakeCommand::class,
+        TestMakeCommand::class,
+        ComponentClassMakeCommand::class,
+        ComponentViewMakeCommand::class,
+        DatatableMakeCommand::class,
+        AdminCrudMakeCommand::class,
+        APICrudMakeCommand::class,
+        CrudMakeCommand::class,
         // Theme commands
-        \Juzaweb\DevTool\Commands\Themes\DownloadStyleCommand::class,
-        \Juzaweb\DevTool\Commands\Themes\DownloadTemplateCommand::class,
-        \Juzaweb\DevTool\Commands\Themes\MakeControllerCommand::class,
-        \Juzaweb\DevTool\Commands\Themes\MakePageBlockCommand::class,
-        \Juzaweb\DevTool\Commands\Themes\MakeTemplateCommand::class,
-        \Juzaweb\DevTool\Commands\Themes\MakeViewCommand::class,
-        \Juzaweb\DevTool\Commands\Themes\MakeWidgetCommand::class,
-        \Juzaweb\DevTool\Commands\Themes\ThemeGeneratorCommand::class,
-        \Juzaweb\DevTool\Commands\Themes\ThemeSeedCommand::class,
+        DownloadStyleCommand::class,
+        DownloadTemplateCommand::class,
+        MakeControllerCommand::class,
+        MakePageBlockCommand::class,
+        MakeTemplateCommand::class,
+        MakeViewCommand::class,
+        MakeWidgetCommand::class,
+        ThemeGeneratorCommand::class,
+        ThemeSeedCommand::class,
     ];
 
     public function boot()
@@ -107,7 +159,7 @@ class ConsoleServiceProvider extends ServiceProvider
      */
     protected function registerNamespaces()
     {
-        $stubsPath = dirname(__DIR__, 2) . '/stubs';
+        $stubsPath = dirname(__DIR__, 2).'/stubs';
 
         $this->publishes([
             $stubsPath => resource_path('stubs'),

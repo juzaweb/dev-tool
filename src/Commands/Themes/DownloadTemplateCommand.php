@@ -19,6 +19,7 @@ class DownloadTemplateCommand extends DownloadCommand
         $this->theme = \Juzaweb\Modules\Core\Facades\Theme::find($this->argument('theme'));
         if ($this->theme === null) {
             $this->error('Theme not found!');
+
             return;
         }
 
@@ -62,7 +63,7 @@ class DownloadTemplateCommand extends DownloadCommand
         $output = $this->theme->path('src/resources/views');
         $path = "{$output}/{$this->data['file']}";
 
-        if (!File::isDirectory(dirname($path))) {
+        if (! File::isDirectory(dirname($path))) {
             File::makeDirectory(dirname($path), 0755, true);
         }
 

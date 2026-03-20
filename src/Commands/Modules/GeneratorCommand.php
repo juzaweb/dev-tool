@@ -11,8 +11,6 @@ abstract class GeneratorCommand extends Command
 {
     /**
      * The name of 'name' argument.
-     *
-     * @var string
      */
     protected string $argumentName = '';
 
@@ -45,14 +43,14 @@ abstract class GeneratorCommand extends Command
 
         $path = str_replace('\\', '/', $this->getDestinationFilePath());
 
-        if (!$this->laravel['files']->isDirectory($dir = dirname($path))) {
+        if (! $this->laravel['files']->isDirectory($dir = dirname($path))) {
             $this->laravel['files']->makeDirectory($dir, 0777, true);
         }
 
         $contents = $this->getTemplateContents();
 
         try {
-            $this->components->task("Generating file {$path}",function () use ($path,$contents) {
+            $this->components->task("Generating file {$path}", function () use ($path, $contents) {
                 $overwriteFile = $this->hasOption('force') ? $this->option('force') : false;
                 (new FileGenerator($path, $contents))->withFileOverwrite($overwriteFile)->generate();
             });
@@ -82,8 +80,6 @@ abstract class GeneratorCommand extends Command
 
     /**
      * Get default namespace.
-     *
-     * @return string
      */
     public function getDefaultNamespace(): string
     {
@@ -92,19 +88,14 @@ abstract class GeneratorCommand extends Command
 
     /**
      * Get class namespace.
-     *
-     * @param  Module  $module
-     * @param  string|null  $defaultNamespace
-     * @param  string|null  $extra
-     * @return string
      */
     public function getClassNamespace(Module $module, ?string $defaultNamespace = null, ?string $extra = null): string
     {
         $namespace = $this->laravel['modules']->config('namespace');
 
-        $namespace .= '\\' . $module->getStudlyName();
+        $namespace .= '\\'.$module->getStudlyName();
 
-        $namespace .= '\\' . ($defaultNamespace ?? $this->getDefaultNamespace());
+        $namespace .= '\\'.($defaultNamespace ?? $this->getDefaultNamespace());
 
         if (! $extra) {
             $extra = str_replace($this->getClass(), '', $this->argument($this->argumentName));
@@ -112,7 +103,7 @@ abstract class GeneratorCommand extends Command
             $extra = str_replace('/', '\\', $extra);
         }
 
-        $namespace .= '\\' . $extra;
+        $namespace .= '\\'.$extra;
 
         $namespace = str_replace('/', '\\', $namespace);
 

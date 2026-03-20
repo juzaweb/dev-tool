@@ -15,8 +15,6 @@ class ComponentViewMakeCommand extends GeneratorCommand
 
     /**
      * The name of argument name.
-     *
-     * @var string
      */
     protected string $argumentName = 'name';
 
@@ -52,7 +50,7 @@ class ComponentViewMakeCommand extends GeneratorCommand
      */
     protected function getTemplateContents()
     {
-        return (new Stub('/component-view.stub', ['QUOTE'=> Inspiring::quote()]))->render();
+        return (new Stub('/component-view.stub', ['QUOTE' => Inspiring::quote()]))->render();
     }
 
     /**
@@ -63,7 +61,7 @@ class ComponentViewMakeCommand extends GeneratorCommand
         $path = $this->laravel['modules']->getModulePath($this->getModuleName());
         $factoryPath = GenerateConfigReader::read('component-view');
 
-        return $path . $factoryPath->getPath() . '/' . $this->getFileName();
+        return $path.$factoryPath->getPath().'/'.$this->getFileName();
     }
 
     /**
@@ -71,6 +69,6 @@ class ComponentViewMakeCommand extends GeneratorCommand
      */
     private function getFileName()
     {
-        return Str::lower($this->argument('name')) . '.blade.php';
+        return Str::lower($this->argument('name')).'.blade.php';
     }
 }

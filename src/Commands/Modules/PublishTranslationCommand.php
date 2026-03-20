@@ -54,7 +54,7 @@ class PublishTranslationCommand extends Command
     /**
      * Publish assets from the specified module.
      *
-     * @param string $name
+     * @param  string  $name
      */
     public function publish($name)
     {

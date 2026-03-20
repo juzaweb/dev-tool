@@ -3,6 +3,7 @@
 namespace Juzaweb\DevTool\Commands\Modules\Databases;
 
 use Illuminate\Console\Command;
+use Juzaweb\Modules\Core\Modules\Contracts\RepositoryInterface;
 use Juzaweb\Modules\Core\Modules\Migrations\Migrator;
 use Juzaweb\Modules\Core\Modules\Module;
 use Symfony\Component\Console\Input\InputArgument;
@@ -25,7 +26,7 @@ class MigrateCommand extends Command
     protected $description = 'Migrate the migrations from the specified module or from all modules.';
 
     /**
-     * @var \Juzaweb\Modules\Core\Modules\Contracts\RepositoryInterface
+     * @var RepositoryInterface
      */
     protected $module;
 
@@ -49,7 +50,7 @@ class MigrateCommand extends Command
         }
 
         foreach ($this->module->getOrdered($this->option('direction')) as $module) {
-            $this->line('Running for module: <info>' . $module->getName() . '</info>');
+            $this->line('Running for module: <info>'.$module->getName().'</info>');
 
             $this->migrate($module);
         }
@@ -59,15 +60,13 @@ class MigrateCommand extends Command
 
     /**
      * Run the migration from the specified module.
-     *
-     * @param Module $module
      */
     protected function migrate(Module $module)
     {
         $path = str_replace(base_path(), '', (new Migrator($module, $this->getLaravel()))->getPath());
 
         if ($this->option('subpath')) {
-            $path = $path . "/" . $this->option("subpath");
+            $path = $path.'/'.$this->option('subpath');
         }
 
         $this->call('migrate', [

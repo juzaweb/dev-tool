@@ -1,9 +1,10 @@
 <?php
+
 /**
  * LARABIZ CMS - Full SPA Laravel CMS
  *
- * @package    larabizcms/larabiz
  * @author     The Anh Dang
+ *
  * @link       https://larabiz.com
  */
 
@@ -45,8 +46,6 @@ class CrudMakeCommand extends Command
 
     /**
      * Get the console command arguments.
-     *
-     * @return array
      */
     protected function getArguments(): array
     {

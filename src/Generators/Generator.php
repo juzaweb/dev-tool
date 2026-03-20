@@ -2,6 +2,4 @@
 
 namespace Juzaweb\DevTool\Generators;
 
-abstract class Generator
-{
-}
+abstract class Generator {}

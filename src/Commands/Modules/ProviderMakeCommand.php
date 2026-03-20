@@ -16,8 +16,6 @@ class ProviderMakeCommand extends GeneratorCommand
 
     /**
      * The name of argument name.
-     *
-     * @var string
      */
     protected string $argumentName = 'name';
 

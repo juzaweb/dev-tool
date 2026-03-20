@@ -15,7 +15,7 @@ class MigrateStatusCommandTest extends TestCase
         $this->app['config']->set('modules.paths.modules', base_path('modules'));
 
         // Create a dummy module
-        if (!File::isDirectory(base_path('modules/Blog'))) {
+        if (! File::isDirectory(base_path('modules/Blog'))) {
             File::makeDirectory(base_path('modules/Blog'), 0755, true);
         }
 
@@ -30,7 +30,7 @@ class MigrateStatusCommandTest extends TestCase
             'providers' => [],
             'aliases' => [],
             'files' => [],
-            'requires' => []
+            'requires' => [],
         ]));
 
         File::put(base_path('modules_statuses.json'), json_encode(['Blog' => true]));
@@ -52,6 +52,6 @@ class MigrateStatusCommandTest extends TestCase
         // migrate:status might fail if table not found, but default is creating migrations table.
         // It outputs a table.
         $this->artisan('module:migrate-status', ['module' => 'Blog'])
-             ->assertExitCode(0);
+            ->assertExitCode(0);
     }
 }

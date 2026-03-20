@@ -24,23 +24,26 @@ class MakeTemplateCommand extends GenerateCommand
 
         if ($theme === null) {
             $this->error("Theme {$themeName} does not exists.");
+
             return self::FAILURE;
         }
 
-        Stub::setBasePath(config('dev-tool.themes.stubs.path') . '/');
+        Stub::setBasePath(config('dev-tool.themes.stubs.path').'/');
         $templatePath = $theme->path("src/resources/views/templates/$name.blade.php");
 
-        if (file_exists($templatePath) && !$this->option('force')) {
+        if (file_exists($templatePath) && ! $this->option('force')) {
             $this->error("Block {$name} already exists!");
+
             return self::FAILURE;
         }
 
         if ($name === 'home') {
             $this->error("Template name 'home' is index page reserved!");
+
             return self::FAILURE;
         }
 
-        if (!File::isDirectory(dirname($templatePath))) {
+        if (! File::isDirectory(dirname($templatePath))) {
             File::makeDirectory(dirname($templatePath), 0755, true);
         }
 
@@ -57,7 +60,7 @@ class MakeTemplateCommand extends GenerateCommand
             '{$name}',
             function () {
                 return [
-                    'label' => __('" . title_from_key($name) . "'),
+                    'label' => __('".title_from_key($name)."'),
                     'view' => '{$theme->name()}::templates.{$name}',
                     'blocks' => [
                         'content' => __('core::translation.content'),
@@ -67,12 +70,13 @@ class MakeTemplateCommand extends GenerateCommand
         );\n";
 
         $content = $this->addToProviderBoot($addContent, $content);
-        $useStatement = "Juzaweb\\Modules\\Admin\\Facades\\PageTemplate;";
+        $useStatement = 'Juzaweb\\Modules\\Admin\\Facades\\PageTemplate;';
 
         $newContent = $this->addUseClass($content, $useStatement);
         $this->writeStyleProvider($theme, $newContent);
 
         $this->info("Template {$templatePath} created successfully.");
+
         return self::SUCCESS;
     }
 
